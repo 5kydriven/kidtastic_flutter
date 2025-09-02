@@ -1,122 +1,175 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
+import 'pages/home/view/view.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  late final GoRouter router;
+
+  @override
+  void initState() {
+    super.initState();
+
+    router = GoRouter(
+      initialLocation: HomePage.route,
+      routes: <RouteBase>[
+        GoRoute(
+          path: HomePage.route,
+          builder: (context, state) {
+            return HomePage();
+          },
+        ),
+      ],
     );
   }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+    return MaterialApp.router(
+      routerConfig: router,
+      debugShowCheckedModeBanner: false,
+
+      theme: ThemeData(
+        appBarTheme: const AppBarTheme(backgroundColor: Colors.transparent),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color(0xFFBC5D19),
+          primary: const Color(0xFFBC5D19),
+          onPrimary: const Color(0xFFFFFFFF),
+          surface: const Color(0xFF051C22),
+          secondary: const Color(0xFFE9C46A),
+          onSecondary: const Color(0xFFEAB308),
+          tertiary: const Color(0xFFBAFFBE),
+          onTertiary: const Color(0xFF22C55E),
+          onTertiaryContainer: const Color(0xFF14532D),
+          primaryContainer: const Color(0xFF3F3F46),
+          secondaryContainer: const Color(0xFF27272A),
+          onSecondaryContainer: const Color(0xFFFEF9C3),
+          tertiaryContainer: const Color(0xFF000000),
+          error: const Color(0xFFEF4444),
+          outline: const Color(0xFFA1A1AA),
+          outlineVariant: const Color(0xFFD9D9D9),
+          onSurface: const Color(0xFF3B82F6),
+          onSurfaceVariant: const Color(0xFF1D3557),
+          onInverseSurface: const Color(0xFFD8EAFE),
+          surfaceTint: const Color(0xFF474D66),
+        ),
+        inputDecorationTheme: InputDecorationTheme(
+          contentPadding: const EdgeInsets.symmetric(horizontal: 16.0),
+          hintStyle: TextStyle(color: Colors.white),
+          labelStyle: TextStyle(color: Colors.white),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(16.0)),
+          enabledBorder: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(16.0)),
+            borderSide: BorderSide(color: Colors.transparent),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderSide: const BorderSide(color: Color(0xFFEF4444)),
+            borderRadius: BorderRadius.circular(16.0),
+          ),
+          floatingLabelBehavior: FloatingLabelBehavior.never,
+          focusedBorder: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(16.0)),
+            borderSide: BorderSide(color: Color(0xFFBC5D19)),
+          ),
+          focusedErrorBorder: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(16.0)),
+            borderSide: BorderSide(color: Color(0xFFEF4444)),
+          ),
+          filled: true,
+          fillColor: const Color(0xFF27272A),
+          prefixIconColor: const Color(0xFFFFFFFF),
+          suffixIconColor: const Color(0xFFBC5D19),
+        ),
+        textButtonTheme: TextButtonThemeData(
+          style: TextButton.styleFrom(
+            backgroundColor: const Color(0xFFBC5D19),
+            foregroundColor: Theme.of(context).colorScheme.onPrimary,
+            padding: const EdgeInsets.all(12.0),
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(16.0)),
             ),
-          ],
+            splashFactory: NoSplash.splashFactory,
+            overlayColor: WidgetStateColor.resolveWith(
+              (states) => Colors.transparent,
+            ),
+          ),
+        ),
+        outlinedButtonTheme: OutlinedButtonThemeData(
+          style: OutlinedButton.styleFrom(
+            foregroundColor: Color(0xFFFFFFFF),
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(16.0)),
+            ),
+            side: const BorderSide(color: Color(0xFFBC5D19)),
+          ),
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            padding: EdgeInsets.zero,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(16.0)),
+            ),
+            backgroundColor: const Color(0xFFBC5D19),
+            foregroundColor: Color(0xFFFFFFFF),
+            iconColor: const Color(0xFFFFFFFF),
+            disabledBackgroundColor: const Color(0xFF3F3F46),
+            disabledForegroundColor: const Color(0xFFFFFFFF),
+            disabledIconColor: const Color(0xFFFFFFFF),
+          ),
+        ),
+        datePickerTheme: DatePickerThemeData(
+          backgroundColor: const Color(0xFF051C22),
+          headerBackgroundColor: const Color(0xFF051C22),
+          headerForegroundColor: const Color(0xFFFFFFFF),
+          dividerColor: const Color(0xFFFFFFFF),
+          yearForegroundColor: WidgetStatePropertyAll(Colors.white),
+          weekdayStyle: TextStyle(color: const Color(0xFFBC5D19)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16.0),
+          ),
+          dayForegroundColor: WidgetStatePropertyAll(Colors.white),
+          dayBackgroundColor: WidgetStateProperty.resolveWith((states) {
+            if (states.contains(WidgetState.selected)) {
+              return const Color(0xFFBC5D19);
+            }
+            return Colors.transparent;
+          }),
+        ),
+        checkboxTheme: CheckboxThemeData(
+          checkColor: WidgetStatePropertyAll(Color(0xFFFFFFFF)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+          side: BorderSide(color: const Color(0xFFBC5D19)),
+        ),
+        listTileTheme: ListTileThemeData(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(16.0)),
+          ),
+          contentPadding: EdgeInsets.symmetric(horizontal: 16.0),
+          tileColor: const Color(0xFF27272A),
+          selectedTileColor: const Color(0xFF27272A),
+        ),
+        bottomNavigationBarTheme: BottomNavigationBarThemeData(
+          selectedItemColor: Color(0xFFBC5D19),
+          unselectedItemColor: Color(0xFFFFFFFF),
+          type: BottomNavigationBarType.fixed,
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
+          selectedIconTheme: const IconThemeData(color: Color(0xFFBC5D19)),
+          unselectedIconTheme: const IconThemeData(color: Color(0xFFFFFFFF)),
+          backgroundColor: const Color(0xFF27272A),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
