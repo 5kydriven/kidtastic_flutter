@@ -1,9 +1,15 @@
+import 'dart:io';
+
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
+import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
+
+import '../tables/tables.dart';
 
 part 'app_database.g.dart';
 
-@DriftDatabase()
+@DriftDatabase(tables: [StudentTable])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
@@ -13,6 +19,10 @@ class AppDatabase extends _$AppDatabase {
 
 LazyDatabase _openConnection() {
   return LazyDatabase(() async {
-    return NativeDatabase.memory();
+    final dbFolder = await getApplicationDocumentsDirectory();
+
+    final file = File(p.join(dbFolder.path, 'kidtasticdb.sqlite'));
+
+    return NativeDatabase.createInBackground(file, logStatements: true);
   });
 }

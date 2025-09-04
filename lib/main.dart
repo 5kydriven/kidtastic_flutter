@@ -1,9 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:kidtastic_flutter/pages/initial_screen/view/view.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 import 'pages/home/view/view.dart';
 
 void main() {
+  // WidgetsFlutterBinding.ensureInitialized();
+  // await windowManager.ensureInitialized();
+
+  // WindowOptions windowOptions = const WindowOptions(
+  //   size: Size(800, 600),
+  //   center: true,
+  //   backgroundColor: Colors.transparent,
+  //   skipTaskbar: false,
+  //   titleBarStyle: TitleBarStyle.hidden,
+  //   windowButtonVisibility: false,
+  // );
+  // windowManager.waitUntilReadyToShow(windowOptions, () async {
+  //   await windowManager.show();
+  //   await windowManager.focus();
+  // });
+
   runApp(const MyApp());
 }
 
@@ -22,12 +40,18 @@ class _MyAppState extends State<MyApp> {
     super.initState();
 
     router = GoRouter(
-      initialLocation: HomePage.route,
+      initialLocation: InitialScreenPage.route,
       routes: <RouteBase>[
         GoRoute(
           path: HomePage.route,
           builder: (context, state) {
             return HomePage();
+          },
+        ),
+        GoRoute(
+          path: InitialScreenPage.route,
+          builder: (context, state) {
+            return InitialScreenPage();
           },
         ),
       ],
@@ -39,14 +63,40 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp.router(
       routerConfig: router,
       debugShowCheckedModeBanner: false,
-
+      builder: (context, child) => ResponsiveBreakpoints.builder(
+        child: child!,
+        breakpoints: const [
+          Breakpoint(
+            start: 0,
+            end: 600,
+            name: MOBILE,
+          ),
+          Breakpoint(
+            start: 601,
+            end: 1024,
+            name: TABLET,
+          ),
+          Breakpoint(
+            start: 1025,
+            end: 1440,
+            name: DESKTOP,
+          ),
+          Breakpoint(
+            start: 1441,
+            end: double.infinity,
+            name: 'XL',
+          ),
+        ],
+      ),
       theme: ThemeData(
-        appBarTheme: const AppBarTheme(backgroundColor: Colors.transparent),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.white,
+        ),
         colorScheme: ColorScheme.fromSeed(
           seedColor: const Color(0xFFBC5D19),
           primary: const Color(0xFFBC5D19),
           onPrimary: const Color(0xFFFFFFFF),
-          surface: const Color(0xFF051C22),
+          surface: const Color(0xFFFFFFFF),
           secondary: const Color(0xFFE9C46A),
           onSecondary: const Color(0xFFEAB308),
           tertiary: const Color(0xFFBAFFBE),
@@ -59,7 +109,7 @@ class _MyAppState extends State<MyApp> {
           error: const Color(0xFFEF4444),
           outline: const Color(0xFFA1A1AA),
           outlineVariant: const Color(0xFFD9D9D9),
-          onSurface: const Color(0xFF3B82F6),
+          onSurface: const Color(0xFF000000),
           onSurfaceVariant: const Color(0xFF1D3557),
           onInverseSurface: const Color(0xFFD8EAFE),
           surfaceTint: const Color(0xFF474D66),
