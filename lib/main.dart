@@ -2,25 +2,32 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kidtastic_flutter/pages/initial_screen/view/view.dart';
 import 'package:responsive_framework/responsive_framework.dart';
+import 'package:window_manager/window_manager.dart';
 
 import 'pages/home/view/view.dart';
 
-void main() {
-  // WidgetsFlutterBinding.ensureInitialized();
-  // await windowManager.ensureInitialized();
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await windowManager.ensureInitialized();
 
-  // WindowOptions windowOptions = const WindowOptions(
-  //   size: Size(800, 600),
-  //   center: true,
-  //   backgroundColor: Colors.transparent,
-  //   skipTaskbar: false,
-  //   titleBarStyle: TitleBarStyle.hidden,
-  //   windowButtonVisibility: false,
-  // );
-  // windowManager.waitUntilReadyToShow(windowOptions, () async {
-  //   await windowManager.show();
-  //   await windowManager.focus();
-  // });
+  WindowOptions windowOptions = const WindowOptions(
+    size: Size(600, 800),
+    center: true,
+    backgroundColor: Colors.grey,
+    skipTaskbar: false,
+    titleBarStyle: TitleBarStyle.normal,
+    windowButtonVisibility: true,
+  );
+
+  windowManager.waitUntilReadyToShow(windowOptions, () async {
+    await windowManager.show();
+    await windowManager.focus();
+
+    await windowManager.setMinimumSize(const Size(600, 800));
+
+    // (Optional) set maximum size too
+    // await windowManager.setMaximumSize(const Size(1200, 900));
+  });
 
   runApp(const MyApp());
 }
@@ -205,9 +212,11 @@ class _MyAppState extends State<MyApp> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(16.0)),
           ),
-          contentPadding: EdgeInsets.symmetric(horizontal: 16.0),
-          tileColor: const Color(0xFF27272A),
-          selectedTileColor: const Color(0xFF27272A),
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: 16.0,
+          ),
+          tileColor: const Color.fromARGB(0, 255, 255, 255),
+          selectedTileColor: const Color.fromARGB(0, 255, 255, 255),
         ),
         bottomNavigationBarTheme: BottomNavigationBarThemeData(
           selectedItemColor: Color(0xFFBC5D19),
