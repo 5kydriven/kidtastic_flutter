@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kidtastic_flutter/pages/initial_screen/bloc/bloc.dart';
 import 'package:kidtastic_flutter/pages/initial_screen/view/view.dart';
 
 class InitialScreenPage extends StatelessWidget {
@@ -8,47 +10,52 @@ class InitialScreenPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        bottomNavigationBar: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 40,
-            vertical: 16,
+    return BlocProvider(
+      create: (context) => InitialScreenBloc(
+        initialState: InitialScreenState(),
+      ),
+      child: SafeArea(
+        child: Scaffold(
+          bottomNavigationBar: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 40,
+              vertical: 16,
+            ),
+            child: Row(
+              children: [
+                FilledButton(
+                  onPressed: () {},
+                  child: Text('Teacher'),
+                ),
+              ],
+            ),
           ),
-          child: Row(
+          body: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              FilledButton(
-                onPressed: () {},
-                child: Text('Teacher'),
+              const SizedBox(
+                height: 0,
+              ),
+              const InitialScreenHeader(),
+
+              Container(
+                width: 800,
+                height: 500,
+
+                padding: EdgeInsets.symmetric(
+                  horizontal: 40,
+                ),
+                child: Center(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(
+                      maxWidth: 900,
+                    ),
+                    child: InitialScreenBody(),
+                  ),
+                ),
               ),
             ],
           ),
-        ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            const SizedBox(
-              height: 0,
-            ),
-            const InitialScreenHeader(),
-
-            Container(
-              width: 800,
-              height: 500,
-
-              padding: EdgeInsets.symmetric(
-                horizontal: 40,
-              ),
-              child: Center(
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(
-                    maxWidth: 900,
-                  ),
-                  child: InitialScreenBody(),
-                ),
-              ),
-            ),
-          ],
         ),
       ),
     );
