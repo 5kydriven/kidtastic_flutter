@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kidtastic_flutter/pages/home/view/home_page.dart';
+import 'package:kidtastic_flutter/pages/initial_screen/view/view.dart';
 
 import '../bloc/bloc.dart';
 import '../widgets/widgets.dart';
@@ -11,14 +12,6 @@ class InitialScreenBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final students = [
-      {'name': 'Skydriven', 'avatar': Icons.person},
-      {'name': 'Alice', 'avatar': Icons.person_outline},
-      {'name': 'Bob', 'avatar': Icons.person_outline},
-      {'name': 'Charlie', 'avatar': Icons.person_outline},
-      {'name': 'Diana', 'avatar': Icons.person_outline},
-      {'name': 'Eve', 'avatar': Icons.person_outline},
-    ];
     return BlocBuilder<InitialScreenBloc, InitialScreenState>(
       builder: (context, state) {
         final bloc = context.read<InitialScreenBloc>();
@@ -27,12 +20,17 @@ class InitialScreenBody extends StatelessWidget {
             SliverGrid(
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
-                  if (index < students.length) {
-                    final s = students[index];
+                  if (index < state.students.length) {
+                    final s = state.students[index];
                     return StudentCard(
-                      name: s['name'] as String,
-                      icon: s['avatar'] as IconData,
-                      onPressed: () => context.go(HomePage.route),
+                      name: s.name ?? '',
+                      icon: Icons.person_outline,
+                      onTap: () => context.push(HomePage.route),
+                      onPressed: () => bloc.add(
+                        InitialScreenDeleteStudentPressed(
+                          id: s.id ?? 0,
+                        ),
+                      ),
                     );
                   } else {
                     return SizedBox(
@@ -50,56 +48,9 @@ class InitialScreenBody extends StatelessWidget {
                           borderRadius: BorderRadius.circular(16),
                           onTap: () => showDialog(
                             context: context,
-                            builder: (context) {
-                              return Dialog(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(16),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(20),
-                                  child: SizedBox(
-                                    width: 400,
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        const Icon(
-                                          Icons.person,
-                                          size: 80,
-                                          color: Colors.grey,
-                                        ),
-                                        const SizedBox(height: 16),
-                                        TextField(
-                                          decoration: const InputDecoration(
-                                            labelText: 'Student Name',
-                                            border: OutlineInputBorder(),
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 20,
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          children: [
-                                            TextButton(
-                                              onPressed: () => context.pop(),
-                                              child: const Text('Cancel'),
-                                            ),
-                                            const SizedBox(width: 8),
-                                            ElevatedButton(
-                                              onPressed: () => bloc.add(
-                                                const InitialScreenAddStudentPressed(),
-                                              ),
-                                              child: const Text('Save'),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              );
-                            },
+                            builder: (context) => InitialScreenAddStudentDialog(
+                              initialScreenBloc: bloc,
+                            ),
                           ),
                           child: const Center(
                             child: Column(
@@ -127,7 +78,7 @@ class InitialScreenBody extends StatelessWidget {
                     );
                   }
                 },
-                childCount: students.length + 1,
+                childCount: state.students.length + 1,
               ),
               gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                 maxCrossAxisExtent: 160,

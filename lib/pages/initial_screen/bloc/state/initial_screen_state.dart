@@ -9,6 +9,12 @@ sealed class InitialScreenState with _$InitialScreenState {
   const factory InitialScreenState({
     @Default([]) List<Student> students,
     @Default(RequestStatus.waiting) RequestStatus requestStatus,
-    @Default(TextFieldInput()) TextFieldInput name,
+    @Default(RequestStatus.waiting) RequestStatus studentRequestStatus,
+    @Default(
+      TextFieldInput(
+        value: '',
+      ),
+    )
+    TextFieldInput? name,
   }) = _InitialScreenState;
 }

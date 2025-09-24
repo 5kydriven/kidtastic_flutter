@@ -6,8 +6,9 @@ part 'student.g.dart';
 @freezed
 sealed class Student with _$Student {
   const factory Student({
-    required String id,
-    required String name,
+    int? id,
+    String? name,
+    bool? isSynced,
   }) = _Student;
 
   factory Student.fromJson(Map<String, dynamic> json) =>

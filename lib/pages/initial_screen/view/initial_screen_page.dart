@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kidtastic_flutter/pages/initial_screen/bloc/bloc.dart';
 import 'package:kidtastic_flutter/pages/initial_screen/view/view.dart';
+import 'package:kidtastic_flutter/repositories/repositories.dart';
 
 class InitialScreenPage extends StatelessWidget {
   static const route = '/initial_screen';
@@ -13,7 +14,8 @@ class InitialScreenPage extends StatelessWidget {
     return BlocProvider(
       create: (context) => InitialScreenBloc(
         initialState: InitialScreenState(),
-      ),
+        studentRepository: RepositoryProvider.of<StudentRepository>(context),
+      )..add(const InitialScreenScreenCreated()),
       child: SafeArea(
         child: Scaffold(
           bottomNavigationBar: Padding(
@@ -33,9 +35,6 @@ class InitialScreenPage extends StatelessWidget {
           body: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              const SizedBox(
-                height: 0,
-              ),
               const InitialScreenHeader(),
 
               Container(

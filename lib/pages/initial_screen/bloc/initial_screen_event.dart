@@ -1,5 +1,11 @@
+import '../../../models/models.dart';
+
 abstract class InitialScreenEvent {
   const InitialScreenEvent();
+}
+
+class InitialScreenScreenCreated extends InitialScreenEvent {
+  const InitialScreenScreenCreated();
 }
 
 class InitialScreenAddStudentPressed extends InitialScreenEvent {
@@ -11,5 +17,21 @@ class InitialScreenNameChanged extends InitialScreenEvent {
 
   const InitialScreenNameChanged({
     required this.value,
+  });
+}
+
+class InitialScreenDeleteStudentPressed extends InitialScreenEvent {
+  final int id;
+
+  const InitialScreenDeleteStudentPressed({
+    required this.id,
+  });
+}
+
+class InitialScreenStreamStudentsWatched extends InitialScreenEvent {
+  final List<Student> students;
+
+  const InitialScreenStreamStudentsWatched({
+    required this.students,
   });
 }
