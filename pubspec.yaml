@@ -21,6 +21,7 @@ dependencies:
   path_provider: ^2.1.5
   responsive_framework: ^1.5.1
   window_manager: ^0.3.5
+  smooth_page_indicator: ^1.2.0
 
 dev_dependencies:
   flutter_test:
@@ -33,3 +34,4 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
+    - assets/

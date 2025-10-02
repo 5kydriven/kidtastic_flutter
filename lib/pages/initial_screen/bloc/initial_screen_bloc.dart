@@ -8,7 +8,6 @@ import 'bloc.dart';
 
 class InitialScreenBloc extends Bloc<InitialScreenEvent, InitialScreenState> {
   final StudentRepository _studentRepository;
-  StreamSubscription? _subscription;
 
   InitialScreenBloc({
     required InitialScreenState initialState,
@@ -19,9 +18,6 @@ class InitialScreenBloc extends Bloc<InitialScreenEvent, InitialScreenState> {
     on<InitialScreenAddStudentPressed>(_addStudentPressed);
     on<InitialScreenNameChanged>(_nameChanged);
     on<InitialScreenDeleteStudentPressed>(_deleteStudentPressed);
-    on<InitialScreenStreamStudentsWatched>(_streamStudentsWatched);
-
-    _startWatchingStudents();
   }
 
   Future<void> _screenCreated(
@@ -77,6 +73,7 @@ class InitialScreenBloc extends Bloc<InitialScreenEvent, InitialScreenState> {
             requestStatus: RequestStatus.success,
           ),
         );
+        add(const InitialScreenScreenCreated());
         break;
       default:
         emit(
@@ -129,6 +126,7 @@ class InitialScreenBloc extends Bloc<InitialScreenEvent, InitialScreenState> {
             requestStatus: RequestStatus.success,
           ),
         );
+        add(const InitialScreenScreenCreated());
         break;
       default:
         emit(
@@ -138,30 +136,5 @@ class InitialScreenBloc extends Bloc<InitialScreenEvent, InitialScreenState> {
         );
         break;
     }
-  }
-
-  void _streamStudentsWatched(
-    InitialScreenStreamStudentsWatched event,
-    Emitter<InitialScreenState> emit,
-  ) {
-    emit(
-      state.copyWith(
-        students: event.students,
-      ),
-    );
-  }
-
-  void _startWatchingStudents() {
-    _subscription = _studentRepository.watchStudents().listen(
-      (students) {
-        add(InitialScreenStreamStudentsWatched(students: students));
-      },
-    );
-  }
-
-  @override
-  Future<void> close() {
-    _subscription?.cancel();
-    return super.close();
   }
 }

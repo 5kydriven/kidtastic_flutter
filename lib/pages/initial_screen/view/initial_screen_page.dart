@@ -32,28 +32,26 @@ class InitialScreenPage extends StatelessWidget {
               ],
             ),
           ),
-          body: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              const InitialScreenHeader(),
+          body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                const InitialScreenHeader(),
 
-              Container(
-                width: 800,
-                height: 500,
-
-                padding: EdgeInsets.symmetric(
-                  horizontal: 40,
-                ),
-                child: Center(
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(
-                      maxWidth: 900,
+                ConstrainedBox(
+                  constraints: const BoxConstraints(
+                    maxWidth: 900,
+                  ),
+                  child: Container(
+                    height: 500,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 40,
                     ),
                     child: InitialScreenBody(),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

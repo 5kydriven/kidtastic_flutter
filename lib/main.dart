@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:kidtastic_flutter/daos/daos.dart';
 import 'package:kidtastic_flutter/database/kidtastic_database.dart';
 import 'package:kidtastic_flutter/pages/initial_screen/view/view.dart';
+import 'package:kidtastic_flutter/pages/number_game/view/number_game_page.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
@@ -20,7 +21,7 @@ Future<void> main() async {
   await windowManager.ensureInitialized();
 
   WindowOptions windowOptions = const WindowOptions(
-    size: Size(600, 800),
+    size: Size(1024, 700),
     center: true,
     backgroundColor: Colors.white,
     skipTaskbar: false,
@@ -32,25 +33,23 @@ Future<void> main() async {
     await windowManager.show();
     await windowManager.focus();
 
-    await windowManager.setMinimumSize(const Size(600, 800));
+    await windowManager.setMinimumSize(const Size(1024, 700));
 
     // (Optional) set maximum size too
     // await windowManager.setMaximumSize(const Size(1200, 900));
   });
 
-  await _installAppDb();
+  try {
+    await _installAppDb();
+    final database = KidtasticDatabase();
+    final studentRepository = StudentRepository(
+      studentDao: StudentDao(database),
+    );
 
-  final database = KidtasticDatabase();
-
-  final studentRepository = StudentRepository(
-    studentDao: StudentDao(database),
-  );
-
-  runApp(
-    MyApp(
-      studentRepository: studentRepository,
-    ),
-  );
+    runApp(MyApp(studentRepository: studentRepository));
+  } catch (e, st) {
+    debugPrint('Database init failed: $e\n$st');
+  }
 }
 
 Future<void> _installAppDb() async {
@@ -110,6 +109,12 @@ class _MyAppState extends State<MyApp> {
           path: InitialScreenPage.route,
           builder: (context, state) {
             return InitialScreenPage();
+          },
+        ),
+        GoRoute(
+          path: NumberGamePage.route,
+          builder: (context, state) {
+            return NumberGamePage();
           },
         ),
       ],
