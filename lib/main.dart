@@ -7,7 +7,9 @@ import 'package:go_router/go_router.dart';
 import 'package:kidtastic_flutter/daos/daos.dart';
 import 'package:kidtastic_flutter/database/kidtastic_database.dart';
 import 'package:kidtastic_flutter/pages/initial_screen/view/view.dart';
+import 'package:kidtastic_flutter/pages/math_game/view/math_game_page.dart';
 import 'package:kidtastic_flutter/pages/number_game/view/number_game_page.dart';
+import 'package:kidtastic_flutter/pages/pronunciation_game/pronunciation_game.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
@@ -23,10 +25,11 @@ Future<void> main() async {
   WindowOptions windowOptions = const WindowOptions(
     size: Size(1024, 700),
     center: true,
-    backgroundColor: Colors.white,
-    skipTaskbar: false,
+    backgroundColor: Colors.black,
     windowButtonVisibility: true,
+    skipTaskbar: false,
     titleBarStyle: TitleBarStyle.normal,
+    title: 'Kidtastic',
   );
 
   windowManager.waitUntilReadyToShow(windowOptions, () async {
@@ -46,7 +49,11 @@ Future<void> main() async {
       studentDao: StudentDao(database),
     );
 
-    runApp(MyApp(studentRepository: studentRepository));
+    runApp(
+      MyApp(
+        studentRepository: studentRepository,
+      ),
+    );
   } catch (e, st) {
     debugPrint('Database init failed: $e\n$st');
   }
@@ -115,6 +122,18 @@ class _MyAppState extends State<MyApp> {
           path: NumberGamePage.route,
           builder: (context, state) {
             return NumberGamePage();
+          },
+        ),
+        GoRoute(
+          path: MathGamePage.route,
+          builder: (context, state) {
+            return MathGamePage();
+          },
+        ),
+        GoRoute(
+          path: PronunciationGamePage.route,
+          builder: (context, state) {
+            return PronunciationGamePage();
           },
         ),
       ],

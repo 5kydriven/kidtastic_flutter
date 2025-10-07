@@ -37,10 +37,9 @@ class InitialScreenPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 const InitialScreenHeader(),
-
                 ConstrainedBox(
                   constraints: const BoxConstraints(
-                    maxWidth: 900,
+                    maxWidth: 600,
                   ),
                   child: Container(
                     height: 500,

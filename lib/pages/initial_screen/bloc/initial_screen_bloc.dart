@@ -70,6 +70,9 @@ class InitialScreenBloc extends Bloc<InitialScreenEvent, InitialScreenState> {
       case ResultStatus.success:
         emit(
           state.copyWith(
+            name: TextFieldInput(
+              value: '',
+            ),
             requestStatus: RequestStatus.success,
           ),
         );
@@ -78,6 +81,9 @@ class InitialScreenBloc extends Bloc<InitialScreenEvent, InitialScreenState> {
       default:
         emit(
           state.copyWith(
+            name: TextFieldInput(
+              value: '',
+            ),
             requestStatus: RequestStatus.failure,
           ),
         );

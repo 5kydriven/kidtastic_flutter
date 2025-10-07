@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
@@ -33,113 +34,135 @@ class InitialScreenAddStudentDialog extends StatelessWidget {
         builder: (context, state) {
           final bloc = context.read<InitialScreenBloc>();
 
-          return Dialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Container(
-              width: 400,
-              height: 500,
-              padding: const EdgeInsets.all(24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                spacing: 20,
-                children: [
-                  const Text(
-                    'Add Student',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
+          return Shortcuts(
+            shortcuts: {
+              LogicalKeySet(LogicalKeyboardKey.escape): const DismissIntent(),
+            },
+            child: Actions(
+              actions: {
+                DismissIntent: CallbackAction<DismissIntent>(
+                  onInvoke: (intent) {
+                    context.pop();
+                    return null;
+                  },
+                ),
+              },
+              child: Focus(
+                child: Dialog(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
                   ),
-                  const Text(
-                    'Create your profile to start learning and playing',
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    spacing: 24,
-                    children: [
-                      IconButton.outlined(
-                        iconSize: 76,
-                        icon: Icon(Icons.person),
-                        onPressed: () {},
-                      ),
-                      FilledButton(
-                        style: FilledButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
+                  child: Container(
+                    width: 400,
+                    height: 500,
+                    padding: const EdgeInsets.all(24),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      spacing: 20,
+                      children: [
+                        const Text(
+                          'Add Student',
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                        onPressed: () {},
-                        child: Text('Change Avatar'),
-                      ),
-                    ],
-                  ),
+                        const Text(
+                          'Create your profile to start learning and playing',
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          spacing: 24,
+                          children: [
+                            IconButton.outlined(
+                              iconSize: 76,
+                              icon: Icon(Icons.person),
+                              onPressed: () {},
+                            ),
+                            FilledButton(
+                              style: FilledButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                              onPressed: () {},
+                              child: Text('Change Avatar'),
+                            ),
+                          ],
+                        ),
 
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Your Name',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Your Name',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 8,
+                            ),
+                            TextFormField(
+                              onChanged: (value) => bloc.add(
+                                InitialScreenNameChanged(
+                                  value: value,
+                                ),
+                              ),
+                              autofocus: true,
+                              onFieldSubmitted: (_) {
+                                bloc.add(
+                                  const InitialScreenAddStudentPressed(),
+                                );
+                                context.pop();
+                              },
+                              keyboardType: TextInputType.name,
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(),
+                                errorText: _nameErrorText(
+                                  context: context,
+                                  state: state,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                      SizedBox(
-                        height: 8,
-                      ),
-                      TextFormField(
-                        onChanged: (value) => bloc.add(
-                          InitialScreenNameChanged(
-                            value: value,
+                        Container(
+                          width: double.infinity,
+                          height: 44,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 44,
+                          ),
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                            onPressed: () {
+                              bloc.add(const InitialScreenAddStudentPressed());
+                              context.pop();
+                            },
+                            child: const Text("Let's Go!"),
                           ),
                         ),
-                        keyboardType: TextInputType.name,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          errorText: _nameErrorText(
-                            context: context,
-                            state: state,
+                        TextButton(
+                          style: TextButton.styleFrom(
+                            backgroundColor: Colors.transparent,
+                          ),
+                          onPressed: () => context.pop(),
+                          child: const Text(
+                            'Cancel',
+                            style: TextStyle(
+                              color: Colors.black,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  Container(
-                    width: double.infinity,
-                    height: 44,
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 44,
-                    ),
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      onPressed: () {
-                        bloc.add(
-                          const InitialScreenAddStudentPressed(),
-                        );
-                        context.pop();
-                      },
-                      child: const Text('Let\'s Go!'),
+                      ],
                     ),
                   ),
-                  TextButton(
-                    style: TextButton.styleFrom(
-                      backgroundColor: Colors.transparent,
-                    ),
-                    onPressed: () => context.pop(),
-                    child: const Text(
-                      'Cancel',
-                      style: TextStyle(
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
           );
