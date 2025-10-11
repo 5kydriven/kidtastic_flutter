@@ -1,84 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:kidtastic_flutter/pages/math_game/math_game.dart';
+import 'package:kidtastic_flutter/pages/math_game/view/math_game_app_bar.dart';
+
+import '../../../constants/constants.dart';
 
 class MathGamePage extends StatelessWidget {
   static const route = '/math_game';
+
   const MathGamePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Container(
-          width: 600,
-          decoration: BoxDecoration(
-            border: BoxBorder.all(
-              color: Colors.black,
-            ),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Text('Let\'s do math game'),
-              Text('game'),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Container(
-                    width: 100,
-                    height: 100,
-                    decoration: BoxDecoration(
-                      border: BoxBorder.all(
-                        color: Colors.black,
-                      ),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Center(
-                      child: Text('1'),
-                    ),
-                  ),
-                  Container(
-                    width: 100,
-                    height: 100,
-                    decoration: BoxDecoration(
-                      border: BoxBorder.all(
-                        color: Colors.black,
-                      ),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Center(
-                      child: Text('2'),
-                    ),
-                  ),
-                  Container(
-                    width: 100,
-                    height: 100,
-                    decoration: BoxDecoration(
-                      border: BoxBorder.all(
-                        color: Colors.black,
-                      ),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Center(
-                      child: Text('3'),
-                    ),
-                  ),
-                  Container(
-                    width: 100,
-                    height: 100,
-                    decoration: BoxDecoration(
-                      border: BoxBorder.all(
-                        color: Colors.black,
-                      ),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Center(
-                      child: Text('4'),
-                    ),
-                  ),
-                ],
+    return SafeArea(
+      top: false,
+      child: Scaffold(
+        extendBodyBehindAppBar: true,
+        appBar: MathGameAppBar(),
+        body: Stack(
+          children: [
+            Positioned.fill(
+              child: Image.asset(
+                Assets.mathBg,
+                fit: BoxFit.cover,
               ),
-            ],
-          ),
+            ),
+
+            Center(
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width * 0.7,
+                height: MediaQuery.of(context).size.height * 0.8,
+                child: MathGameBody(),
+              ),
+            ),
+          ],
         ),
       ),
     );

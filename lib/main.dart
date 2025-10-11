@@ -24,8 +24,8 @@ Future<void> main() async {
 
   WindowOptions windowOptions = const WindowOptions(
     size: Size(1024, 700),
+    minimumSize: Size(1024, 700),
     center: true,
-    backgroundColor: Colors.black,
     windowButtonVisibility: true,
     skipTaskbar: false,
     titleBarStyle: TitleBarStyle.normal,
@@ -35,8 +35,6 @@ Future<void> main() async {
   windowManager.waitUntilReadyToShow(windowOptions, () async {
     await windowManager.show();
     await windowManager.focus();
-
-    await windowManager.setMinimumSize(const Size(1024, 700));
 
     // (Optional) set maximum size too
     // await windowManager.setMaximumSize(const Size(1200, 900));
@@ -177,6 +175,7 @@ class _MyAppState extends State<MyApp> {
           ],
         ),
         theme: ThemeData(
+          fontFamily: 'Vag',
           appBarTheme: const AppBarTheme(
             backgroundColor: Colors.white,
           ),

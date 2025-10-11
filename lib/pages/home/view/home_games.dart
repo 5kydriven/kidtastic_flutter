@@ -94,7 +94,7 @@ class HomeGames extends StatelessWidget {
                           itemCount: pageItems.length,
                           itemBuilder: (context, index) {
                             final game = pageItems[index];
-                            return GestureDetector(
+                            return InkWell(
                               onTap: () => context.push(game.route),
                               child: Card(
                                 elevation: 4,

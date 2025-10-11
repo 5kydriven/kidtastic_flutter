@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../constants/constants.dart';
+import 'view.dart';
 
 class PronunciationGamePage extends StatelessWidget {
   static const String route = '/pronunciation-game';
@@ -9,6 +10,8 @@ class PronunciationGamePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: const PronunciationGameAppBar(),
       body: Stack(
         children: [
           Positioned.fill(
@@ -19,18 +22,10 @@ class PronunciationGamePage extends StatelessWidget {
           ),
 
           Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Text(
-                  'Pronunciation Game',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-              ],
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width * 0.7,
+              height: MediaQuery.of(context).size.height * 0.7,
+              child: PronunciationGameBody(),
             ),
           ),
         ],

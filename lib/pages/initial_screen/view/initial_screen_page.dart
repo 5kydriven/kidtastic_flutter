@@ -17,6 +17,7 @@ class InitialScreenPage extends StatelessWidget {
         studentRepository: RepositoryProvider.of<StudentRepository>(context),
       )..add(const InitialScreenScreenCreated()),
       child: SafeArea(
+        top: true,
         child: Scaffold(
           bottomNavigationBar: Padding(
             padding: const EdgeInsets.symmetric(
