@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kidtastic_flutter/daos/daos.dart';
@@ -41,8 +40,16 @@ Future<void> main() async {
   });
 
   try {
-    await _installAppDb();
-    final database = KidtasticDatabase();
+    final dbPath = await _getDbPath();
+
+    // Delete old DB if you truly want "new install = new db"
+    // (or comment this out if you want to preserve it between runs)
+    // if (await File(dbPath).exists()) {
+    //   await File(dbPath).delete();
+    // }
+
+    final database = KidtasticDatabase.withPath(dbPath);
+
     final studentRepository = StudentRepository(
       studentDao: StudentDao(database),
     );
@@ -54,33 +61,84 @@ Future<void> main() async {
     );
   } catch (e, st) {
     debugPrint('Database init failed: $e\n$st');
+
+    runApp(
+      MaterialApp(
+        home: Scaffold(
+          body: Center(
+            child: Text('Failed to initialize: $e'),
+          ),
+        ),
+      ),
+    );
+    return;
   }
 }
 
-Future<void> _installAppDb() async {
-  final fallbackFolder = await getApplicationDocumentsDirectory();
+Future<String> _getDbPath() async {
+  final exeDir = File(Platform.resolvedExecutable).parent.path;
 
-  final dbPath = p.join(
-    '${fallbackFolder.path}\\kidtastic_flutter\\db\\',
-    'kidtasticdb.sqlite',
-  );
-
-  final exists = await File(dbPath).exists();
-
-  if (!exists) {
-    ByteData data = await rootBundle.load('assets/database/kidtasticdb.sqlite');
-    List<int> bytes = data.buffer.asUint8List();
-
-    await Directory(p.dirname(dbPath)).create(
-      recursive: true,
+  if (exeDir.contains('Program Files')) {
+    final programDataDir = Directory(
+      p.join(
+        Platform.environment['ProgramData'] ?? r'C:\ProgramData',
+        'Kidtastic',
+      ),
     );
-
-    await File(dbPath).writeAsBytes(
-      bytes,
-      flush: true,
-    );
+    if (!await programDataDir.exists()) {
+      await programDataDir.create(recursive: true);
+    }
+    return p.join(programDataDir.path, 'kidtasticdb.sqlite');
   }
+
+  final appSupportDir = await getApplicationSupportDirectory();
+  final dbDir = Directory(p.join(appSupportDir.path, 'db'));
+  if (!await dbDir.exists()) {
+    await dbDir.create(recursive: true);
+  }
+  return p.join(dbDir.path, 'kidtasticdb.sqlite');
 }
+
+// Future<void> _installAppDb() async {
+//   Directory dbFolder;
+//   try {
+//     final appSupportDir = await getApplicationSupportDirectory();
+//     dbFolder = Directory(p.join(appSupportDir.path, 'db'));
+//   } catch (e) {
+//     final appDocumentsDir = await getApplicationDocumentsDirectory();
+//     dbFolder = Directory(
+//       p.join(appDocumentsDir.path, 'kidtastic_flutter', 'db'),
+//     );
+//   }
+
+//   if (!await dbFolder.exists()) {
+//     await dbFolder.create(
+//       recursive: true,
+//     );
+//   }
+
+//   final dbPath = p.join(dbFolder.path, 'kidtasticdb.sqlite');
+//   final exists = await File(dbPath).exists();
+
+//   if (!exists) {
+//     try {
+//       ByteData data = await rootBundle.load(
+//         'assets/database/kidtasticdb.sqlite',
+//       );
+//       List<int> bytes = data.buffer.asUint8List(
+//         data.offsetInBytes,
+//         data.lengthInBytes,
+//       );
+//       await File(dbPath).writeAsBytes(bytes, flush: true);
+//       debugPrint('Database created at: $dbPath');
+//     } catch (e, st) {
+//       debugPrint('Database creation failed: $e\n$st');
+//       rethrow;
+//     }
+//   } else {
+//     debugPrint('Database already exists at: $dbPath');
+//   }
+// }
 
 class MyApp extends StatefulWidget {
   final StudentRepository studentRepository;

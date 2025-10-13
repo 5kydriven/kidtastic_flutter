@@ -37,6 +37,7 @@ flutter:
     - assets/
     - assets/fonts/
     - assets/fonts/Vag/
+    - assets/database/
 
   fonts:
     - family: Vag
