@@ -81,7 +81,7 @@ class InitialDataSeeder {
           gameId: gameId,
           question: 'How many $fruit(s) are there?',
           correctAnswer: correctCount.toString(),
-          options: options.toString(), // store as stringified list
+          options: options.toString(),
         ),
       );
     }
