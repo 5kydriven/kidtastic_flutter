@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kidtastic_flutter/daos/daos.dart';
+import 'package:kidtastic_flutter/data/seed/seed.dart';
 import 'package:kidtastic_flutter/database/kidtastic_database.dart';
 import 'package:kidtastic_flutter/pages/initial_screen/view/view.dart';
 import 'package:kidtastic_flutter/pages/math_game/view/math_game_page.dart';
@@ -73,6 +74,13 @@ Future<void> main() async {
       teacherDao: TeacherDao(db),
     );
 
+    // final seeder = InitialDataSeeder(
+    //   gameRepository: gameRepository,
+    //   gameQuestionRepository: gameQuestionRepository,
+    // );
+
+    // await seeder.seed();
+
     runApp(
       MyApp(
         studentRepository: studentRepository,
@@ -117,6 +125,7 @@ Future<String> _getDbPath() async {
   }
 
   final appSupportDir = await getApplicationSupportDirectory();
+  print(appSupportDir);
   final dbDir = Directory(p.join(appSupportDir.path, 'db'));
   if (!await dbDir.exists()) {
     await dbDir.create(recursive: true);
