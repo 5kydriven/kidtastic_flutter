@@ -34,9 +34,6 @@ Future<void> main() async {
   windowManager.waitUntilReadyToShow(windowOptions, () async {
     await windowManager.show();
     await windowManager.focus();
-
-    // (Optional) set maximum size too
-    // await windowManager.setMaximumSize(const Size(1200, 900));
   });
 
   try {
@@ -48,15 +45,43 @@ Future<void> main() async {
     //   await File(dbPath).delete();
     // }
 
-    final database = KidtasticDatabase.withPath(dbPath);
+    final db = KidtasticDatabase.withPath(dbPath);
 
     final studentRepository = StudentRepository(
-      studentDao: StudentDao(database),
+      studentDao: StudentDao(db),
+    );
+
+    final gameQuestionRepository = GameQuestionRepository(
+      gameQuestionDao: GameQuestionDao(db),
+    );
+
+    final gameRepository = GameRepository(gameDao: GameDao(db));
+
+    final gameSessionRepository = GameSessionRepository(
+      gameSessionDao: GameSessionDao(db),
+    );
+
+    final sessionQuestionRepository = SessionQuestionRepository(
+      sessionQuestionDao: SessionQuestionDao(db),
+    );
+
+    final studentInsightRepository = StudentInsightRepository(
+      studentInstightDao: StudentInsightDao(db),
+    );
+
+    final teacherRepository = TeacherRepository(
+      teacherDao: TeacherDao(db),
     );
 
     runApp(
       MyApp(
         studentRepository: studentRepository,
+        gameQuestionRepository: gameQuestionRepository,
+        gameRepository: gameRepository,
+        gameSessionRepository: gameSessionRepository,
+        sessionQuestionRepository: sessionQuestionRepository,
+        studentInsightRepository: studentInsightRepository,
+        teacherRepository: teacherRepository,
       ),
     );
   } catch (e, st) {
@@ -99,53 +124,24 @@ Future<String> _getDbPath() async {
   return p.join(dbDir.path, 'kidtasticdb.sqlite');
 }
 
-// Future<void> _installAppDb() async {
-//   Directory dbFolder;
-//   try {
-//     final appSupportDir = await getApplicationSupportDirectory();
-//     dbFolder = Directory(p.join(appSupportDir.path, 'db'));
-//   } catch (e) {
-//     final appDocumentsDir = await getApplicationDocumentsDirectory();
-//     dbFolder = Directory(
-//       p.join(appDocumentsDir.path, 'kidtastic_flutter', 'db'),
-//     );
-//   }
-
-//   if (!await dbFolder.exists()) {
-//     await dbFolder.create(
-//       recursive: true,
-//     );
-//   }
-
-//   final dbPath = p.join(dbFolder.path, 'kidtasticdb.sqlite');
-//   final exists = await File(dbPath).exists();
-
-//   if (!exists) {
-//     try {
-//       ByteData data = await rootBundle.load(
-//         'assets/database/kidtasticdb.sqlite',
-//       );
-//       List<int> bytes = data.buffer.asUint8List(
-//         data.offsetInBytes,
-//         data.lengthInBytes,
-//       );
-//       await File(dbPath).writeAsBytes(bytes, flush: true);
-//       debugPrint('Database created at: $dbPath');
-//     } catch (e, st) {
-//       debugPrint('Database creation failed: $e\n$st');
-//       rethrow;
-//     }
-//   } else {
-//     debugPrint('Database already exists at: $dbPath');
-//   }
-// }
-
 class MyApp extends StatefulWidget {
   final StudentRepository studentRepository;
+  final GameRepository gameRepository;
+  final GameQuestionRepository gameQuestionRepository;
+  final GameSessionRepository gameSessionRepository;
+  final SessionQuestionRepository sessionQuestionRepository;
+  final StudentInsightRepository studentInsightRepository;
+  final TeacherRepository teacherRepository;
 
   const MyApp({
     super.key,
     required this.studentRepository,
+    required this.gameQuestionRepository,
+    required this.gameRepository,
+    required this.gameSessionRepository,
+    required this.sessionQuestionRepository,
+    required this.studentInsightRepository,
+    required this.teacherRepository,
   });
 
   @override
@@ -202,6 +198,24 @@ class _MyAppState extends State<MyApp> {
       providers: [
         RepositoryProvider.value(
           value: widget.studentRepository,
+        ),
+        RepositoryProvider.value(
+          value: widget.gameRepository,
+        ),
+        RepositoryProvider.value(
+          value: widget.gameQuestionRepository,
+        ),
+        RepositoryProvider.value(
+          value: widget.gameSessionRepository,
+        ),
+        RepositoryProvider.value(
+          value: widget.sessionQuestionRepository,
+        ),
+        RepositoryProvider.value(
+          value: widget.studentInsightRepository,
+        ),
+        RepositoryProvider.value(
+          value: widget.teacherRepository,
         ),
       ],
       child: MaterialApp.router(

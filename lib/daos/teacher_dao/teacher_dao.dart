@@ -7,5 +7,5 @@ part 'teacher_dao.g.dart';
 @DriftAccessor(tables: [TeacherTable])
 class TeacherDao extends DatabaseAccessor<KidtasticDatabase>
     with _$TeacherDaoMixin {
-  TeacherDao(super.attachedDatabase);
+  TeacherDao(super.db);
 }
