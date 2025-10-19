@@ -8,7 +8,17 @@ import '../tables/tables.dart';
 
 part 'kidtastic_database.g.dart';
 
-@DriftDatabase(tables: [StudentTable])
+@DriftDatabase(
+  tables: [
+    GameQuestionTable,
+    GameSessionTable,
+    GameTable,
+    SessionQuestionTable,
+    StudentInsightTable,
+    StudentTable,
+    TeacherTable,
+  ],
+)
 class KidtasticDatabase extends _$KidtasticDatabase {
   KidtasticDatabase(super.e);
 

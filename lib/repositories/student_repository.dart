@@ -15,7 +15,7 @@ class StudentRepository {
     required Student student,
   }) async {
     try {
-      await _studentDao.add(
+      await _studentDao.insertStudent(
         StudentTableCompanion.insert(
           name: student.name ?? '',
           isSynced: Value(false),
@@ -35,7 +35,7 @@ class StudentRepository {
 
   Future<Result<List<Student>>> getStudents() async {
     try {
-      final students = await _studentDao.getAll();
+      final students = await _studentDao.getAllStudents();
       return Result(
         statusCode: 200,
         data: students.map((e) => Student.fromJson(e.toJson())).toList(),
@@ -52,7 +52,7 @@ class StudentRepository {
     required int id,
   }) async {
     try {
-      await _studentDao.destroy(id);
+      await _studentDao.destroyStudent(id);
       return Result(
         statusCode: 200,
       );
