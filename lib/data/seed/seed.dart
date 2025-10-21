@@ -1,5 +1,9 @@
-import 'dart:math';
+import 'dart:developer';
+import 'dart:math' hide log;
+
 import 'package:kidtastic_flutter/constants/constants.dart';
+import 'package:kidtastic_flutter/pages/math_game/view/math_game_page.dart';
+import 'package:kidtastic_flutter/pages/pronunciation_game/view/pronunciation_game_page.dart';
 import 'package:kidtastic_flutter/repositories/game_repository.dart';
 import 'package:kidtastic_flutter/repositories/game_question_repository.dart';
 
@@ -20,31 +24,37 @@ class InitialDataSeeder {
   Future<void> seed() async {
     final gameResult = await _gameRepository.getGames();
 
-    if (gameResult.data > 0) return;
+    log(gameResult.data.toString());
+    if ((gameResult.data ?? []).isNotEmpty) {
+      for (final game in gameResult.data ?? []) {
+        await _gameRepository.destroyGame(id: game.id ?? 0);
+      }
+    }
 
-    print('🌱 Seeding initial games & questions...');
+    print('🌱 Seeding initial games & questions... ');
 
     // --- Base Games ---
     final games = [
       Game(
-        name: 'Counting Fruits',
+        name: 'Counting',
         category: GameType.counting,
-        description: 'Count how many fruits you see!',
-      ),
-      Game(
-        name: 'Match the Shapes',
-        category: GameType.matching,
-        description: 'Match shapes to learn geometry.',
-      ),
-      Game(
-        name: 'Color Guess',
-        category: GameType.guessing,
-        description: 'Guess what color this is!',
+        description: 'Count how many picture you see!',
+        imageAsset: Assets.letters,
+        route: MathGamePage.route,
       ),
       Game(
         name: 'Pronunciation',
         category: GameType.pronunciation,
+        imageAsset: Assets.musicNotes,
         description: 'Say the word correctly!',
+        route: PronunciationGamePage.route,
+      ),
+      Game(
+        name: 'Match the Shapes',
+        category: GameType.matching,
+        imageAsset: Assets.shapes,
+        description: 'Match shapes to learn geometry.',
+        route: '/shapes-game',
       ),
     ];
 
@@ -53,14 +63,17 @@ class InitialDataSeeder {
       final result = await _gameRepository.addGame(
         game: game,
       );
-      gameIds.add(result.data);
+      if (result.resultStatus == ResultStatus.error) {
+        print('error $game');
+      }
+      gameIds.add(result.data ?? 0);
     }
 
     // --- Seed Questions ---
     await _seedCountingFruits(gameIds[0]);
     await _seedShapes(gameIds[1]);
     await _seedColors(gameIds[2]);
-    await _seedPronunciation(gameIds[3]);
+    // await _seedPronunciation(gameIds[3]);
 
     print('✅ Seeding complete!');
   }
@@ -69,27 +82,51 @@ class InitialDataSeeder {
   // 🍎 COUNTING FRUITS GAME
   // ---------------------------
   Future<void> _seedCountingFruits(int gameId) async {
-    const fruits = ['apple', 'banana', 'carrot', 'grape', 'orange'];
+    final fruits = <Fruit>[
+      Fruit(
+        name: 'apple',
+        image: Assets.apple,
+      ),
+      Fruit(
+        name: 'carrot',
+        image: Assets.carrot,
+      ),
+      Fruit(
+        name: 'pear',
+        image: Assets.pear,
+      ),
+      Fruit(
+        name: 'strawberry',
+        image: Assets.pear,
+      ),
+    ];
+
     final questions = <Question>[];
 
-    for (final fruit in fruits) {
-      final correctCount = _rng.nextInt(4) + 1; // 1–5 random
-      final options = List.generate(4, (i) => (i + 1).toString());
+    for (int i = 0; i < 20; i++) {
+      final fruit = fruits[_rng.nextInt(fruits.length)];
+      final correctCount = _rng.nextInt(9) + 1;
+
+      final allOptions = <int>{correctCount};
+      while (allOptions.length < 3) {
+        allOptions.add(_rng.nextInt(9) + 1);
+      }
+
+      final options = allOptions.map((n) => n.toString()).toList()..shuffle();
 
       questions.add(
         Question(
           gameId: gameId,
-          question: 'How many $fruit(s) are there?',
+          question: 'How many ${fruit.name}(s) are there?',
           correctAnswer: correctCount.toString(),
+          image: fruit.image,
           options: options.toString(),
         ),
       );
     }
 
     for (final question in questions) {
-      await _gameQuestionRepository.addQuestion(
-        question: question,
-      );
+      await _gameQuestionRepository.addQuestion(question: question);
     }
   }
 

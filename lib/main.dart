@@ -6,6 +6,9 @@ import 'package:go_router/go_router.dart';
 import 'package:kidtastic_flutter/daos/daos.dart';
 import 'package:kidtastic_flutter/data/seed/seed.dart';
 import 'package:kidtastic_flutter/database/kidtastic_database.dart';
+import 'package:kidtastic_flutter/pages/counting_game/bloc/state/counting_game_state.dart';
+import 'package:kidtastic_flutter/pages/counting_game/view/counting_game_page.dart';
+import 'package:kidtastic_flutter/pages/home/bloc/state/home_state.dart';
 import 'package:kidtastic_flutter/pages/initial_screen/view/view.dart';
 import 'package:kidtastic_flutter/pages/math_game/view/math_game_page.dart';
 import 'package:kidtastic_flutter/pages/number_game/view/number_game_page.dart';
@@ -56,7 +59,9 @@ Future<void> main() async {
       gameQuestionDao: GameQuestionDao(db),
     );
 
-    final gameRepository = GameRepository(gameDao: GameDao(db));
+    final gameRepository = GameRepository(
+      gameDao: GameDao(db),
+    );
 
     final gameSessionRepository = GameSessionRepository(
       gameSessionDao: GameSessionDao(db),
@@ -74,12 +79,12 @@ Future<void> main() async {
       teacherDao: TeacherDao(db),
     );
 
-    // final seeder = InitialDataSeeder(
-    //   gameRepository: gameRepository,
-    //   gameQuestionRepository: gameQuestionRepository,
-    // );
+    final seeder = InitialDataSeeder(
+      gameRepository: gameRepository,
+      gameQuestionRepository: gameQuestionRepository,
+    );
 
-    // await seeder.seed();
+    await seeder.seed();
 
     runApp(
       MyApp(
@@ -170,7 +175,9 @@ class _MyAppState extends State<MyApp> {
         GoRoute(
           path: HomePage.route,
           builder: (context, state) {
-            return HomePage();
+            return HomePage(
+              initialState: state.extra as HomeState,
+            );
           },
         ),
         GoRoute(
@@ -195,6 +202,14 @@ class _MyAppState extends State<MyApp> {
           path: PronunciationGamePage.route,
           builder: (context, state) {
             return PronunciationGamePage();
+          },
+        ),
+        GoRoute(
+          path: CountingGamePage.route,
+          builder: (context, state) {
+            return CountingGamePage(
+              initialState: state.extra as CountingGameState,
+            );
           },
         ),
       ],
