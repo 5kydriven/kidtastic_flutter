@@ -29,4 +29,26 @@ class GameQuestionRepository {
       );
     }
   }
+
+  Future<Result<List<Question>>> getRandomQuestion({
+    required int gameId,
+    int limit = 5,
+  }) async {
+    try {
+      final response = await _gameQuestionDao.getQuestionsForGame(gameId);
+      response.shuffle();
+
+      return Result(
+        data: response
+            .map((e) => Question.fromJson(e.toJson()))
+            .take(limit)
+            .toList(),
+        statusCode: 200,
+      );
+    } catch (e) {
+      return Result(
+        statusCode: 400,
+      );
+    }
+  }
 }

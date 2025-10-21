@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:kidtastic_flutter/pages/math_game/view/math_game_page.dart';
-import 'package:kidtastic_flutter/pages/pronunciation_game/view/pronunciation_game_page.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import '../../../constants/constants.dart';
 import '../bloc/bloc.dart';
 
 class HomeGames extends StatelessWidget {
@@ -19,33 +16,24 @@ class HomeGames extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<HomeBloc, HomeState>(
       builder: (context, state) {
-        final List<Game> games = [
-          Game(
-            title: 'Math Game',
-            image: Assets.letters,
-            route: MathGamePage.route,
-          ),
-          Game(
-            title: 'Pronunciation Game',
-            image: Assets.musicNotes,
-            route: PronunciationGamePage.route,
-          ),
-          Game(
-            title: 'Colors Game',
-            image: Assets.letters,
-            route: '/colors-game',
-          ),
-          Game(
-            title: 'Shapes Game',
-            image: Assets.shapes,
-            route: '/shapes-game',
-          ),
-        ];
-
+        final games = state.games;
         final int itemsPerPage = 6;
-
-        final totalPages = (games.length / itemsPerPage).ceil();
+        final totalPages = (games.isEmpty)
+            ? 1 // ✅ Always at least 1 page to avoid errors
+            : (games.length / itemsPerPage).ceil();
         final bloc = context.read<HomeBloc>();
+
+        // ✅ Show message when there are no games
+        if (games.isEmpty) {
+          return const Center(
+            child: Text(
+              'No games available.\nPlease check seeded data or restart the app.',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 16, color: Colors.grey),
+            ),
+          );
+        }
+
         return Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -70,18 +58,15 @@ class HomeGames extends StatelessWidget {
                     controller: pageController,
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: totalPages,
-                    onPageChanged: (index) {},
                     itemBuilder: (context, pageIndex) {
                       final start = pageIndex * itemsPerPage;
-                      final end = (start + itemsPerPage) > games.length
+                      final end = (start + itemsPerPage > games.length)
                           ? games.length
-                          : (start + itemsPerPage);
+                          : start + itemsPerPage;
                       final pageItems = games.sublist(start, end);
 
                       return Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8.0,
-                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
                         child: GridView.builder(
                           gridDelegate:
                               const SliverGridDelegateWithFixedCrossAxisCount(
@@ -95,13 +80,23 @@ class HomeGames extends StatelessWidget {
                           itemBuilder: (context, index) {
                             final game = pageItems[index];
                             return InkWell(
-                              onTap: () => context.push(game.route),
+                              onTap: () {
+                                if (game.route?.isNotEmpty ?? false) {
+                                  context.push(game.route!);
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                        'This game has no route set.',
+                                      ),
+                                    ),
+                                  );
+                                }
+                              },
                               child: Card(
                                 elevation: 4,
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(
-                                    12,
-                                  ),
+                                  borderRadius: BorderRadius.circular(12),
                                   side: const BorderSide(
                                     color: Color(0xffBC98C1),
                                     width: 2,
@@ -113,9 +108,13 @@ class HomeGames extends StatelessWidget {
                                     Align(
                                       alignment: Alignment.center,
                                       child: Image.asset(
-                                        game.image,
+                                        game.imageAsset ?? '',
                                         width: 80,
                                         height: 80,
+                                        errorBuilder: (context, error, stack) =>
+                                            const Icon(
+                                              Icons.image_not_supported,
+                                            ),
                                       ),
                                     ),
                                     Align(
@@ -125,7 +124,8 @@ class HomeGames extends StatelessWidget {
                                           bottom: 12,
                                         ),
                                         child: Text(
-                                          game.title,
+                                          game.name ?? '',
+                                          textAlign: TextAlign.center,
                                           style: const TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.w500,
@@ -170,16 +170,4 @@ class HomeGames extends StatelessWidget {
       },
     );
   }
-}
-
-class Game {
-  final String title;
-  final String image;
-  final String route;
-
-  const Game({
-    required this.title,
-    required this.image,
-    required this.route,
-  });
 }

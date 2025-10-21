@@ -1,6 +1,5 @@
 import 'package:drift/drift.dart';
 import 'package:kidtastic_flutter/database/kidtastic_database.dart';
-import 'package:kidtastic_flutter/tables/student_insight_table.dart';
 import 'package:kidtastic_flutter/tables/tables.dart';
 
 part 'student_insight_dao.g.dart';
@@ -44,8 +43,9 @@ class StudentInsightDao extends DatabaseAccessor<KidtasticDatabase>
     );
   }
 
-  Future<List<StudentInsightTableData>> getInsightsByStudent(int studentId) =>
-      (select(
-        studentInsightTable,
-      )..where((i) => i.studentId.equals(studentId))).get();
+  Future<List<StudentInsightTableData>> getInsightsByStudent({
+    required int studentId,
+  }) => (select(
+    studentInsightTable,
+  )..where((i) => i.studentId.equals(studentId))).get();
 }

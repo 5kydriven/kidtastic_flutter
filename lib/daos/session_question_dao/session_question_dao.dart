@@ -13,11 +13,40 @@ class SessionQuestionDao extends DatabaseAccessor<KidtasticDatabase>
     return await into(sessionQuestionTable).insert(entry);
   }
 
-  Future<List<SessionQuestionTableData>> getQuestionsBySession(
-    int sessionId,
-  ) async {
+  Future<List<SessionQuestionTableData>> getQuestionsBySession({
+    required int sessionId,
+  }) async {
     return await (select(
       sessionQuestionTable,
     )..where((question) => question.sessionId.equals(sessionId))).get();
+  }
+
+  Future<void> updateSessionQuestion({
+    required int sessionQuestionId,
+    required String selectedAnswer,
+    required bool isCorrect,
+  }) async {
+    await (update(
+      sessionQuestionTable,
+    )..where((tbl) => tbl.id.equals(sessionQuestionId))).write(
+      SessionQuestionTableCompanion(
+        studentAnswer: Value(selectedAnswer),
+        isCorrect: Value(isCorrect),
+      ),
+    );
+  }
+
+  Future<SessionQuestionTableData> getQuestionById({required int id}) async {
+    return (select(
+      sessionQuestionTable,
+    )..where((tbl) => tbl.id.equals(id))).getSingle();
+  }
+
+  Future<void> deleteQuestionsBySession({
+    required int sessionId,
+  }) async {
+    await (delete(
+      sessionQuestionTable,
+    )..where((tbl) => tbl.sessionId.equals(sessionId))).go();
   }
 }

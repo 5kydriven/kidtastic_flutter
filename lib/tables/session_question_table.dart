@@ -7,7 +7,7 @@ class SessionQuestionTable extends Table {
   IntColumn get sessionId => integer().references(GameQuestionTable, #id)();
   IntColumn get questionId => integer().references(GameSessionTable, #id)();
   TextColumn get studentAnswer => text().nullable()();
-  BoolColumn get isCorrext => boolean().withDefault(const Constant(false))();
+  BoolColumn get isCorrect => boolean().withDefault(const Constant(false))();
   BoolColumn get isSynced => boolean().withDefault(const Constant(false))();
   DateTimeColumn get syncedAt =>
       dateTime().clientDefault(() => DateTime.now())();

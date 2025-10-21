@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:kidtastic_flutter/pages/home/view/home_page.dart';
+import 'package:kidtastic_flutter/pages/home/home.dart';
 import 'package:kidtastic_flutter/pages/initial_screen/view/view.dart';
 
 import '../bloc/bloc.dart';
@@ -21,14 +21,19 @@ class InitialScreenBody extends StatelessWidget {
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
                   if (index < state.students.length) {
-                    final s = state.students[index];
+                    final student = state.students[index];
                     return StudentCard(
-                      name: s.name ?? '',
+                      name: student.name ?? '',
                       icon: Icons.person_outline,
-                      onTap: () => context.push(HomePage.route),
+                      onTap: () => context.push(
+                        HomePage.route,
+                        extra: HomeState(
+                          student: student,
+                        ),
+                      ),
                       onPressed: () => bloc.add(
                         InitialScreenDeleteStudentPressed(
-                          id: s.id ?? 0,
+                          id: student.id ?? 0,
                         ),
                       ),
                     );

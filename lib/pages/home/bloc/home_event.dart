@@ -9,3 +9,7 @@ class HomePrevButtonPressed extends HomeEvent {
 class HomeNextButtonPressed extends HomeEvent {
   const HomeNextButtonPressed();
 }
+
+class HomeScreenCreated extends HomeEvent {
+  const HomeScreenCreated();
+}

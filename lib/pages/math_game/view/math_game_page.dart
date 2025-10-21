@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:kidtastic_flutter/pages/math_game/math_game.dart';
-import 'package:kidtastic_flutter/pages/math_game/view/math_game_app_bar.dart';
 
 import '../../../constants/constants.dart';
 

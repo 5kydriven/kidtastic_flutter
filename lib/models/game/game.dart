@@ -10,6 +10,8 @@ sealed class Game with _$Game {
     String? name,
     String? description,
     String? category,
+    String? imageAsset,
+    String? route,
     bool? isSynced,
   }) = _Game;
 
