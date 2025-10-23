@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
-// import 'package:path/path.dart' as p;
 
 import '../tables/tables.dart';
 
@@ -17,6 +16,7 @@ part 'kidtastic_database.g.dart';
     StudentInsightTable,
     StudentTable,
     TeacherTable,
+    PronunciationAttemptTable,
   ],
 )
 class KidtasticDatabase extends _$KidtasticDatabase {

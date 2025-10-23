@@ -79,6 +79,10 @@ Future<void> main() async {
       teacherDao: TeacherDao(db),
     );
 
+    final pronunciationAttemptRepository = PronunciationAttemptRepository(
+      pronunciationAttemptDao: PronunciationAttemptDao(db),
+    );
+
     final seeder = InitialDataSeeder(
       gameRepository: gameRepository,
       gameQuestionRepository: gameQuestionRepository,
@@ -95,6 +99,7 @@ Future<void> main() async {
         sessionQuestionRepository: sessionQuestionRepository,
         studentInsightRepository: studentInsightRepository,
         teacherRepository: teacherRepository,
+        pronunciationAttemptRepository: pronunciationAttemptRepository,
       ),
     );
   } catch (e, st) {
@@ -146,6 +151,7 @@ class MyApp extends StatefulWidget {
   final SessionQuestionRepository sessionQuestionRepository;
   final StudentInsightRepository studentInsightRepository;
   final TeacherRepository teacherRepository;
+  final PronunciationAttemptRepository pronunciationAttemptRepository;
 
   const MyApp({
     super.key,
@@ -156,6 +162,7 @@ class MyApp extends StatefulWidget {
     required this.sessionQuestionRepository,
     required this.studentInsightRepository,
     required this.teacherRepository,
+    required this.pronunciationAttemptRepository,
   });
 
   @override
