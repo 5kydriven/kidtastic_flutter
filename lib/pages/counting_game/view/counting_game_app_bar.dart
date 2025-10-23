@@ -38,7 +38,6 @@ class CountingGameAppBar extends StatelessWidget
                       TextButton(
                         onPressed: () {
                           bloc.add(const CountingGameGameEnd());
-                          context.pop();
                         },
                         child: const Text('Exit'),
                       ),

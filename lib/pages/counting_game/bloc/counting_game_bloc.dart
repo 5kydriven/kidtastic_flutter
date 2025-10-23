@@ -129,7 +129,6 @@ class CountingGameBloc extends Bloc<CountingGameEvent, CountingGameState> {
 
     if (nextIndex >= state.question.length) {
       add(const CountingGameGameEnd());
-      print('end: $nextIndex');
       return;
     }
 

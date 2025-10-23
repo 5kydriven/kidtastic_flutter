@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:kidtastic_flutter/models/models.dart';
 import 'package:kidtastic_flutter/pages/counting_game/view/view.dart';
 
 import '../../../constants/constants.dart';
@@ -18,8 +19,35 @@ class CountingGamePage extends StatelessWidget {
 
   void _gameListener(BuildContext context, CountingGameState state) {
     final bloc = context.read<CountingGameBloc>();
-    bloc.add(const CountingGameGameEnd());
-    context.pop();
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Game Over'),
+          content: Text(
+            'Your score is ${state.score}',
+            textAlign: TextAlign.center,
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                context.pop();
+                context.pop();
+              },
+              child: const Text('Choose another game'),
+            ),
+            TextButton(
+              onPressed: () {
+                bloc.add(const CountingGameScreenCreated());
+                context.pop();
+              },
+              child: const Text('Play again'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -42,7 +70,8 @@ class CountingGamePage extends StatelessWidget {
         listener: _gameListener,
         listenWhen: (previous, current) =>
             previous.gameSessionRequestStatus !=
-            current.gameSessionRequestStatus,
+                current.gameSessionRequestStatus &&
+            current.gameSessionRequestStatus == RequestStatus.success,
         child: SafeArea(
           top: false,
           child: Scaffold(
