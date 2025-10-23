@@ -1,8 +1,9 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:math' hide log;
 
 import 'package:kidtastic_flutter/constants/constants.dart';
-import 'package:kidtastic_flutter/pages/math_game/view/math_game_page.dart';
+import 'package:kidtastic_flutter/pages/counting_game/view/counting_game_page.dart';
 import 'package:kidtastic_flutter/pages/pronunciation_game/view/pronunciation_game_page.dart';
 import 'package:kidtastic_flutter/repositories/game_repository.dart';
 import 'package:kidtastic_flutter/repositories/game_question_repository.dart';
@@ -24,12 +25,8 @@ class InitialDataSeeder {
   Future<void> seed() async {
     final gameResult = await _gameRepository.getGames();
 
-    log(gameResult.data.toString());
-    if ((gameResult.data ?? []).isNotEmpty) {
-      for (final game in gameResult.data ?? []) {
-        await _gameRepository.destroyGame(id: game.id ?? 0);
-      }
-    }
+    // log(gameResult.data.toString());
+    if ((gameResult.data ?? []).isNotEmpty) return;
 
     print('🌱 Seeding initial games & questions... ');
 
@@ -40,7 +37,7 @@ class InitialDataSeeder {
         category: GameType.counting,
         description: 'Count how many picture you see!',
         imageAsset: Assets.letters,
-        route: MathGamePage.route,
+        route: CountingGamePage.route,
       ),
       Game(
         name: 'Pronunciation',
@@ -71,8 +68,8 @@ class InitialDataSeeder {
 
     // --- Seed Questions ---
     await _seedCountingFruits(gameIds[0]);
-    await _seedShapes(gameIds[1]);
-    await _seedColors(gameIds[2]);
+    // await _seedShapes(gameIds[1]);
+    // await _seedColors(gameIds[2]);
     // await _seedPronunciation(gameIds[3]);
 
     print('✅ Seeding complete!');
@@ -83,6 +80,10 @@ class InitialDataSeeder {
   // ---------------------------
   Future<void> _seedCountingFruits(int gameId) async {
     final fruits = <Fruit>[
+      Fruit(
+        name: 'chili pepper',
+        image: Assets.chiliPepper,
+      ),
       Fruit(
         name: 'apple',
         image: Assets.apple,
@@ -97,7 +98,7 @@ class InitialDataSeeder {
       ),
       Fruit(
         name: 'strawberry',
-        image: Assets.pear,
+        image: Assets.strawberry,
       ),
     ];
 
@@ -117,17 +118,21 @@ class InitialDataSeeder {
       questions.add(
         Question(
           gameId: gameId,
-          question: 'How many ${fruit.name}(s) are there?',
+          question: 'How many ${fruit.name}s are there?',
           correctAnswer: correctCount.toString(),
           image: fruit.image,
-          options: options.toString(),
+          choices: jsonEncode(options),
         ),
       );
     }
 
     for (final question in questions) {
-      await _gameQuestionRepository.addQuestion(question: question);
+      await _gameQuestionRepository.addQuestion(
+        question: question,
+      );
     }
+
+    log('counting seeded');
   }
 
   // ---------------------------
@@ -141,7 +146,7 @@ class InitialDataSeeder {
           gameId: gameId,
           question: 'Which shape matches a $s?',
           correctAnswer: s,
-          options: shapes.toString(),
+          choices: shapes.toString(),
         ),
       );
     }
@@ -165,7 +170,7 @@ class InitialDataSeeder {
           gameId: gameId,
           question: c['question']!,
           correctAnswer: c['answer']!,
-          options: shuffled.toString(),
+          choices: shuffled.toString(),
         ),
       );
     }
@@ -183,7 +188,6 @@ class InitialDataSeeder {
           gameId: gameId,
           question: 'Say the word: $w',
           correctAnswer: w,
-          options: '{}', // not used
         ),
       );
     }

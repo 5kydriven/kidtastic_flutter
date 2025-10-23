@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart';
 import 'package:kidtastic_flutter/daos/game_question_dao/game_question_dao.dart';
 import 'package:kidtastic_flutter/database/kidtastic_database.dart';
 import 'package:kidtastic_flutter/models/models.dart';
@@ -9,14 +10,20 @@ class GameQuestionRepository {
     required GameQuestionDao gameQuestionDao,
   }) : _gameQuestionDao = gameQuestionDao;
 
-  Future<Result> addQuestion({required Question question}) async {
+  Future<Result> addQuestion({
+    required Question question,
+  }) async {
     try {
       final data = await _gameQuestionDao.insertQuestion(
         GameQuestionTableCompanion.insert(
           gameId: question.gameId ?? 0,
           question: question.question ?? '',
           correctAnswer: question.correctAnswer ?? '',
-          difficulty: question.difficulty ?? '',
+          image: Value(question.image),
+          difficulty: Value(question.difficulty),
+          audio: Value(question.audio),
+          isSynced: Value(question.isSynced),
+          choices: Value(question.choices),
         ),
       );
       return Result(
@@ -46,6 +53,7 @@ class GameQuestionRepository {
         statusCode: 200,
       );
     } catch (e) {
+      print(e);
       return Result(
         statusCode: 400,
       );

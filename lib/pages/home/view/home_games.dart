@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:kidtastic_flutter/constants/constants.dart';
+import 'package:kidtastic_flutter/pages/counting_game/bloc/bloc.dart';
+import 'package:kidtastic_flutter/pages/counting_game/view/counting_game_page.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../bloc/bloc.dart';
 
@@ -43,7 +46,7 @@ class HomeGames extends StatelessWidget {
               child: state.currentPage > 0
                   ? IconButton(
                       icon: const Icon(Icons.arrow_back_ios),
-                      onPressed: () => bloc.add(HomePrevButtonPressed()),
+                      onPressed: () => bloc.add(const HomePrevButtonPressed()),
                     )
                   : null,
             ),
@@ -82,7 +85,24 @@ class HomeGames extends StatelessWidget {
                             return InkWell(
                               onTap: () {
                                 if (game.route?.isNotEmpty ?? false) {
-                                  context.push(game.route!);
+                                  switch (game.category) {
+                                    case GameType.counting:
+                                      context.push(
+                                        CountingGamePage.route,
+                                        extra: CountingGameState(
+                                          game: game,
+                                          student: state.student,
+                                        ),
+                                      );
+                                      break;
+                                    default:
+                                      context.push(
+                                        game.route ?? '',
+                                        extra: game,
+                                      );
+
+                                      break;
+                                  }
                                 } else {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(

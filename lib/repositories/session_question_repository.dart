@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart';
 import 'package:kidtastic_flutter/daos/session_question_dao/session_question_dao.dart';
 import 'package:kidtastic_flutter/database/kidtastic_database.dart';
 import 'package:kidtastic_flutter/models/models.dart';
@@ -10,10 +11,17 @@ class SessionQuestionRepository {
   }) : _sessionQuestionDao = sessionQuestionDao;
 
   Future<Result<int>> addSessionQuestion({
-    required SessionQuestionTableCompanion entry,
+    required SessionQuestion entry,
   }) async {
     try {
-      final response = await _sessionQuestionDao.insertSessionQuestion(entry);
+      final response = await _sessionQuestionDao.insertSessionQuestion(
+        SessionQuestionTableCompanion.insert(
+          sessionId: entry.sessionId ?? 0,
+          questionId: entry.questionId ?? 0,
+          studentAnswer: Value(entry.studentAnswer ?? ''),
+          isCorrect: Value(entry.isCorrect ?? false),
+        ),
+      );
       return Result(
         data: response,
         statusCode: 200,

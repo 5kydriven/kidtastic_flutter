@@ -13,7 +13,7 @@ sealed class Question with _$Question {
     String? correctAnswer,
     String? image,
     String? audio,
-    String? options,
+    String? choices,
     bool? isSynced,
   }) = _Question;
 
