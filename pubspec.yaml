@@ -22,6 +22,8 @@ dependencies:
   responsive_framework: ^1.5.1
   window_manager: ^0.5.1
   smooth_page_indicator: ^1.2.0
+  vosk_flutter: ^0.3.48
+  record: ^6.1.2
 
 dev_dependencies:
   flutter_test:
@@ -39,6 +41,9 @@ flutter:
     - assets/fonts/Vag/
     - assets/database/
     - assets/fruits/
+    - assets/animals/
+    - assets/shapes/
+    - assets/models/vosk-model-small-en-us-0.15/
 
   fonts:
     - family: Vag
