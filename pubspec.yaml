@@ -44,6 +44,7 @@ flutter:
     - assets/animals/
     - assets/shapes/
     - assets/models/vosk-model-small-en-us-0.15/
+    - assets/avatars/
 
   fonts:
     - family: Vag
