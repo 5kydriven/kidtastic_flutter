@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kidtastic_flutter/daos/daos.dart';
-import 'package:kidtastic_flutter/data/seed/seed.dart';
+import 'package:kidtastic_flutter/database/seeder/seed.dart';
 import 'package:kidtastic_flutter/database/kidtastic_database.dart';
 import 'package:kidtastic_flutter/pages/counting_game/bloc/state/counting_game_state.dart';
 import 'package:kidtastic_flutter/pages/counting_game/view/counting_game_page.dart';
@@ -13,6 +13,7 @@ import 'package:kidtastic_flutter/pages/initial_screen/view/view.dart';
 import 'package:kidtastic_flutter/pages/math_game/view/math_game_page.dart';
 import 'package:kidtastic_flutter/pages/number_game/view/number_game_page.dart';
 import 'package:kidtastic_flutter/pages/pronunciation_game/pronunciation_game.dart';
+import 'package:kidtastic_flutter/pages/speech_recognition/view/view.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
@@ -36,6 +37,7 @@ Future<void> main() async {
   );
 
   windowManager.waitUntilReadyToShow(windowOptions, () async {
+    await Future.delayed(const Duration(milliseconds: 300));
     await windowManager.show();
     await windowManager.focus();
   });
@@ -88,8 +90,6 @@ Future<void> main() async {
       gameQuestionRepository: gameQuestionRepository,
     );
 
-    await seeder.seed();
-
     runApp(
       MyApp(
         studentRepository: studentRepository,
@@ -102,6 +102,7 @@ Future<void> main() async {
         pronunciationAttemptRepository: pronunciationAttemptRepository,
       ),
     );
+    await seeder.seed();
   } catch (e, st) {
     debugPrint('Database init failed: $e\n$st');
 
@@ -178,6 +179,7 @@ class _MyAppState extends State<MyApp> {
 
     router = GoRouter(
       initialLocation: InitialScreenPage.route,
+      // initialLocation: SpeechRecognitionPage.route,
       routes: <RouteBase>[
         GoRoute(
           path: HomePage.route,
@@ -208,7 +210,9 @@ class _MyAppState extends State<MyApp> {
         GoRoute(
           path: PronunciationGamePage.route,
           builder: (context, state) {
-            return PronunciationGamePage();
+            return PronunciationGamePage(
+              initialState: state.extra as PronunciationGameState,
+            );
           },
         ),
         GoRoute(
@@ -217,6 +221,12 @@ class _MyAppState extends State<MyApp> {
             return CountingGamePage(
               initialState: state.extra as CountingGameState,
             );
+          },
+        ),
+        GoRoute(
+          path: SpeechRecognitionPage.route,
+          builder: (context, state) {
+            return SpeechRecognitionPage();
           },
         ),
       ],
@@ -247,6 +257,9 @@ class _MyAppState extends State<MyApp> {
         ),
         RepositoryProvider.value(
           value: widget.teacherRepository,
+        ),
+        RepositoryProvider.value(
+          value: widget.pronunciationAttemptRepository,
         ),
       ],
       child: MaterialApp.router(

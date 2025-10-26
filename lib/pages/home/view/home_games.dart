@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:kidtastic_flutter/constants/constants.dart';
 import 'package:kidtastic_flutter/pages/counting_game/bloc/bloc.dart';
 import 'package:kidtastic_flutter/pages/counting_game/view/counting_game_page.dart';
+import 'package:kidtastic_flutter/pages/pronunciation_game/pronunciation_game.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../bloc/bloc.dart';
 
@@ -95,6 +96,14 @@ class HomeGames extends StatelessWidget {
                                         ),
                                       );
                                       break;
+                                    case GameType.pronunciation:
+                                      context.push(
+                                        PronunciationGamePage.route,
+                                        extra: PronunciationGameState(
+                                          game: game,
+                                          student: state.student,
+                                        ),
+                                      );
                                     default:
                                       context.push(
                                         game.route ?? '',

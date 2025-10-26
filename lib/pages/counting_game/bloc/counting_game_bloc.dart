@@ -4,12 +4,13 @@ import 'package:kidtastic_flutter/pages/counting_game/bloc/bloc.dart';
 import 'package:kidtastic_flutter/repositories/repositories.dart';
 
 class CountingGameBloc extends Bloc<CountingGameEvent, CountingGameState> {
+  final CountingGameState initialState;
   final GameQuestionRepository _gameQuestionRepository;
   final GameSessionRepository _gameSessionRepository;
   final SessionQuestionRepository _sessionQuestionRepository;
 
   CountingGameBloc({
-    required CountingGameState initialState,
+    required this.initialState,
     required GameQuestionRepository gameQuestionRepository,
     required GameSessionRepository gameSessionRepository,
     required SessionQuestionRepository sessionQuestionRepository,

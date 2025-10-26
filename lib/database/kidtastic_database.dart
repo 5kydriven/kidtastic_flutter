@@ -29,20 +29,3 @@ class KidtasticDatabase extends _$KidtasticDatabase {
   @override
   int get schemaVersion => 1;
 }
-
-// LazyDatabase _openConnection() {
-//   return LazyDatabase(() async {
-//     final customDir = Directory(p.join(Directory.current.path, 'db'));
-
-//     if (!await customDir.exists()) {
-//       await customDir.create(recursive: true);
-//     }
-
-//     final dbPath = p.join(customDir.path, 'kidtasticdb.sqlite');
-
-//     return NativeDatabase.createInBackground(
-//       File(dbPath),
-//       logStatements: true,
-//     );
-//   });
-// }
