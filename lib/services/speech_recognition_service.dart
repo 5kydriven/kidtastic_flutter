@@ -27,14 +27,11 @@ class SpeechRecognitionService {
 
   StreamSubscription<RecordState>? _recordSub;
 
-  final StreamController<String> _textController =
-      StreamController<String>.broadcast();
-  final StreamController<bool> _recordingStateController =
-      StreamController<bool>.broadcast();
+  final _textController = StreamController<String>.broadcast();
+  final _recordingStateController = StreamController<bool>.broadcast();
 
   // ✅ Added: Silence detection stream
-  final StreamController<bool> _silenceController =
-      StreamController<bool>.broadcast();
+  final _silenceController = StreamController<bool>.broadcast();
   Stream<bool> get silenceStream => _silenceController.stream;
 
   Timer? _silenceTimer;
@@ -64,7 +61,7 @@ class SpeechRecognitionService {
 
   Future<sherpa_onnx.OnlineRecognizer> _createOnlineRecognizer() async {
     final type = 0;
-    final modelConfig = await getModelConfig(type: type);
+    final modelConfig = await getOnlineModelConfig(type: type);
     final config = sherpa_onnx.OnlineRecognizerConfig(
       model: modelConfig,
       ruleFsts: '',

@@ -132,7 +132,9 @@ class PronunciationGameBody extends StatelessWidget {
                           style: TextStyle(color: Colors.white, fontSize: 18),
                         ),
                       ),
-                      const SizedBox(width: 16),
+                      const SizedBox(
+                        width: 16,
+                      ),
                       ElevatedButton.icon(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: state.isRecording

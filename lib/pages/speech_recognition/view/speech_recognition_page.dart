@@ -5,10 +5,15 @@ import '../../../services/services.dart';
 import '../../../widgets/widgets.dart';
 import '../bloc/bloc.dart';
 
-class SpeechRecognitionPage extends StatelessWidget {
+class SpeechRecognitionPage extends StatefulWidget {
   static const String route = '/SpeechRecognition';
   const SpeechRecognitionPage({super.key});
 
+  @override
+  State<SpeechRecognitionPage> createState() => _SpeechRecognitionPageState();
+}
+
+class _SpeechRecognitionPageState extends State<SpeechRecognitionPage> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(

@@ -41,11 +41,11 @@ class CountingGameBloc extends Bloc<CountingGameEvent, CountingGameState> {
 
     switch (gameSessionResult.resultStatus) {
       case ResultStatus.success:
-        final gameQuestionResult = await _gameQuestionRepository
-            .getRandomQuestion(
-              gameId: state.game?.id ?? 0,
-              limit: 5,
-            );
+        final gameQuestionResult = await _gameQuestionRepository.getQuestion(
+          gameId: state.game?.id ?? 0,
+          limit: 5,
+          isRandom: true,
+        );
 
         switch (gameQuestionResult.resultStatus) {
           case ResultStatus.success:

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 import 'dart:math' hide log;
 import 'package:audioplayers/audioplayers.dart';
 import 'package:bloc/bloc.dart';
@@ -15,8 +14,8 @@ class PronunciationGameBloc
   final GameQuestionRepository _gameQuestionRepository;
   final GameSessionRepository _gameSessionRepository;
   final SessionQuestionRepository _sessionQuestionRepository;
-  final SpeechRecognitionService _speechService;
   final PronunciationAttemptRepository _pronunciationAttemptRepository;
+  final SpeechRecognitionService _speechService;
 
   StreamSubscription<String>? _textSub;
   StreamSubscription<bool>? _recSub;
@@ -39,60 +38,61 @@ class PronunciationGameBloc
        _pronunciationAttemptRepository = pronunciationAttemptRepository,
        super(initialState) {
     on<PronunciationGameScreenCreated>(_screenCreated);
-    on<PronunciationGameSessionFetched>(_sessionFetched);
     on<PronunciationGameQuestionNext>(_questionNext);
     on<PronunciationGameGameEnd>(_gameEnd);
     on<PronunciationGameRecordingToggle>(_recordingToggle);
     on<PronunciationGameTextRecognized>(_onTextRecognized);
+    _textSub = _speechService.textStream.listen((recognizedText) {
+      add(PronunciationGameTextRecognized(recognizedText));
+    });
+
+    _silenceSub = _speechService.silenceStream.listen((isSilent) {
+      if (isSilent && _speechService.isRecording) {
+        add(const PronunciationGameRecordingToggle());
+      }
+    });
   }
 
   Future<void> _screenCreated(
     PronunciationGameScreenCreated event,
     Emitter<PronunciationGameState> emit,
   ) async {
-    emit(state.copyWith(screenRequestStatus: RequestStatus.inProgress));
+    emit(
+      state.copyWith(
+        screenRequestStatus: RequestStatus.inProgress,
+      ),
+    );
 
-    await _speechService.initialize();
-
-    // Listen for recognized text
-    _textSub = _speechService.textStream.listen((recognizedText) {
-      add(PronunciationGameTextRecognized(recognizedText));
-    });
-
-    // ✅ Listen for silence >1.5–2s
-    _silenceSub = _speechService.silenceStream.listen((isSilent) {
-      if (isSilent && _speechService.isRecording) {
-        log('Detected silence >1.5s — stopping recording.');
-        add(const PronunciationGameRecordingToggle());
-      }
-    });
-
-    add(const PronunciationGameSessionFetched());
-  }
-
-  Future<void> _sessionFetched(
-    PronunciationGameSessionFetched event,
-    Emitter<PronunciationGameState> emit,
-  ) async {
     final gameSessionResult = await _gameSessionRepository.startSession(
       studentId: state.student?.id ?? 0,
       gameId: state.game?.id ?? 0,
     );
 
     if (gameSessionResult.resultStatus == ResultStatus.success) {
-      final gameQuestionResult = await _gameQuestionRepository
-          .getRandomQuestion(
-            gameId: state.game?.id ?? 0,
-            limit: 5,
-          );
+      final gameQuestionResult = await _gameQuestionRepository.getQuestion(
+        gameId: state.game?.id ?? 0,
+        limit: 5,
+      );
 
-      if (gameQuestionResult.resultStatus == ResultStatus.success) {
+      if (gameQuestionResult.resultStatus == ResultStatus.success &&
+          (gameQuestionResult.data?.isNotEmpty ?? false)) {
+        final firstQuestion = gameQuestionResult.data!.first;
+
+        final sessionQuestionResult = await _sessionQuestionRepository
+            .addSessionQuestion(
+              entry: SessionQuestion(
+                sessionId: gameSessionResult.data ?? 0,
+                questionId: firstQuestion.id ?? 0,
+              ),
+            );
+
         emit(
           state.copyWith(
             sessionId: gameSessionResult.data ?? 0,
             question: gameQuestionResult.data ?? [],
             score: 0,
             currentIndex: 0,
+            currentSessionQuestionId: sessionQuestionResult.data ?? 0,
             screenRequestStatus: RequestStatus.success,
           ),
         );
@@ -105,7 +105,11 @@ class PronunciationGameBloc
         );
       }
     } else {
-      emit(state.copyWith(screenRequestStatus: RequestStatus.failure));
+      emit(
+        state.copyWith(
+          screenRequestStatus: RequestStatus.failure,
+        ),
+      );
     }
   }
 
@@ -119,14 +123,30 @@ class PronunciationGameBloc
       return;
     }
 
-    emit(state.copyWith(currentIndex: nextIndex));
+    final result = await _sessionQuestionRepository.addSessionQuestion(
+      entry: SessionQuestion(
+        sessionId: state.sessionId ?? 0,
+        questionId: state.question[state.currentIndex].id ?? 0,
+      ),
+    );
+
+    emit(
+      state.copyWith(
+        currentIndex: nextIndex,
+        currentSessionQuestionId: result.data ?? 0,
+      ),
+    );
   }
 
   Future<void> _gameEnd(
     PronunciationGameGameEnd event,
     Emitter<PronunciationGameState> emit,
   ) async {
-    emit(state.copyWith(gameSessionRequestStatus: RequestStatus.inProgress));
+    emit(
+      state.copyWith(
+        gameSessionRequestStatus: RequestStatus.inProgress,
+      ),
+    );
 
     final result = await _gameSessionRepository.endSession(
       sessionId: state.sessionId ?? 0,
@@ -154,7 +174,6 @@ class PronunciationGameBloc
       await _soundPlayer.setVolume(1.0);
       await _speechService.startRecording();
 
-      // ✅ 8s max timeout
       _maxTimer?.cancel();
       _maxTimer = Timer(const Duration(seconds: 8), () {
         if (_speechService.isRecording) {
@@ -174,6 +193,8 @@ class PronunciationGameBloc
     PronunciationGameTextRecognized event,
     Emitter<PronunciationGameState> emit,
   ) async {
+    if (!state.isRecording) return;
+
     final current = state.question[state.currentIndex];
     final expectedText = current.question?.toLowerCase().trim() ?? '';
     final recognizedText = event.recognizedText.toLowerCase().trim();
@@ -190,20 +211,34 @@ class PronunciationGameBloc
       ),
     );
 
-    if (isCorrect && _speechService.isRecording) {
+    if (isCorrect && _speechService.isRecording && state.isRecording) {
+      _stopRecording(emit);
       await _soundPlayer.play(AssetSource(Assets.correctRecord));
       await _soundPlayer.setVolume(1.0);
-      await _stopRecording(emit);
     }
   }
 
   Future<void> _stopRecording(Emitter<PronunciationGameState> emit) async {
-    _maxTimer?.cancel();
+    if (state.isCorrect) {
+      add(const PronunciationGameQuestionNext());
+    }
     await _speechService.stopRecording();
-    _speechService.clearText();
+    _maxTimer?.cancel();
+    final result = await _pronunciationAttemptRepository.addAttempt(
+      attempt: PronunciationAttempt(
+        isCorrect: state.isCorrect,
+        sessionQuestionId: state.currentSessionQuestionId ?? 0,
+        recognizedText: state.recognizedText,
+        word: state.question[state.currentIndex].question ?? '',
+        confidence: state.confidenceScore,
+      ),
+    );
+    print('attempt: ${result.resultStatus}');
     emit(
       state.copyWith(
+        attempts: state.attempts + 1,
         isRecording: false,
+        isCorrect: false,
       ),
     );
   }

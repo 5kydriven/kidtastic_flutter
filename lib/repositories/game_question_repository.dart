@@ -37,13 +37,16 @@ class GameQuestionRepository {
     }
   }
 
-  Future<Result<List<Question>>> getRandomQuestion({
+  Future<Result<List<Question>>> getQuestion({
     required int gameId,
     int limit = 5,
+    bool isRandom = false,
   }) async {
     try {
       final response = await _gameQuestionDao.getQuestionsForGame(gameId);
-      response.shuffle();
+      if (isRandom) {
+        response.shuffle();
+      }
 
       return Result(
         data: response
