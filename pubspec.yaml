@@ -51,6 +51,8 @@ flutter:
     - assets/avatars/
     - assets/pronunciation/
     - assets/audios/
+    - assets/shapes/
+    - assets/backgrounds/
 
   fonts:
     - family: Vag

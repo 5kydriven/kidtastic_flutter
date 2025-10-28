@@ -26,6 +26,17 @@ class Assets {
   static const String zebraAvatar = 'assets/avatars/zebra_avatar.png';
   static const String crocodileAvatar = 'assets/avatars/crocodile_avatar.png';
 
+  // **Shapes Assets**
+  static const String circle = 'assets/shapes/circle.png';
+  static const String heart = 'assets/shapes/heart.png';
+  static const String hexagon = 'assets/shapes/hexgon.png';
+  static const String oval = 'assets/shapes/oval.png';
+  static const String pentagon = 'assets/shapes/pentagon.png';
+  static const String rectangle = 'assets/shapes/rectangle.png';
+  static const String square = 'assets/shapes/square.png';
+  static const String trapezoid = 'assets/shapes/trapezoid.png';
+  static const String triangle = 'assets/shapes/triangle.png';
+
   // **Pronunciation**
   static const String foxWearingNecktie =
       'assets/pronunciation/fox_wearing_necktie.png';
@@ -39,4 +50,9 @@ class Assets {
   // **Audios**
   static const String startRecord = 'audios/start_record.mp3';
   static const String correctRecord = 'audios/correct.mp3';
+
+  // **Backgrounds**
+  static const String matchTheShapeHome =
+      'assets/backgrounds/match_the_shape_home.png';
+  static const String matchTheShape = 'assets/backgrounds/match_the_shape.png';
 }

@@ -1,10 +1,10 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:math' hide log;
 
 import 'package:kidtastic_flutter/constants/constants.dart';
 import 'package:kidtastic_flutter/pages/counting_game/view/counting_game_page.dart';
 import 'package:kidtastic_flutter/pages/pronunciation_game/view/pronunciation_game_page.dart';
+import 'package:kidtastic_flutter/pages/shape_game/view/shape_game_page.dart';
 import 'package:kidtastic_flutter/repositories/game_repository.dart';
 import 'package:kidtastic_flutter/repositories/game_question_repository.dart';
 
@@ -51,7 +51,7 @@ class InitialDataSeeder {
         category: GameType.matching,
         imageAsset: Assets.shapes,
         description: 'Match shapes to learn geometry.',
-        route: '/shapes-game',
+        route: ShapeGamePage.route,
       ),
     ];
 
@@ -69,10 +69,8 @@ class InitialDataSeeder {
     // --- Seed Questions ---
     await _seedCountingFruits(gameIds[0]);
     await _seedPronunciation(gameIds[1]);
-    // await _seedShapes(gameIds[1]);
+    await _seedShapes(gameIds[2]);
     // await _seedColors(gameIds[2]);
-
-    print('✅ Seeding complete!');
   }
 
   // ---------------------------
@@ -131,8 +129,6 @@ class InitialDataSeeder {
         question: question,
       );
     }
-
-    log('counting seeded');
   }
 
   // ---------------------------
@@ -178,14 +174,66 @@ class InitialDataSeeder {
   // 🔺 MATCH THE SHAPES GAME
   // ---------------------------
   Future<void> _seedShapes(int gameId) async {
-    const shapes = ['circle', 'square', 'triangle', 'rectangle'];
-    for (final s in shapes) {
+    final random = Random();
+
+    const shapes = <Question>[
+      Question(
+        correctAnswer: 'circle',
+        image: Assets.circle,
+      ),
+      Question(
+        correctAnswer: 'heart',
+        image: Assets.heart,
+      ),
+      Question(
+        correctAnswer: 'hexagon',
+        image: Assets.hexagon,
+      ),
+      Question(
+        correctAnswer: 'oval',
+        image: Assets.oval,
+      ),
+      Question(
+        correctAnswer: 'pentagon',
+        image: Assets.pentagon,
+      ),
+      Question(
+        correctAnswer: 'rectangle',
+        image: Assets.rectangle,
+      ),
+      Question(
+        correctAnswer: 'square',
+        image: Assets.square,
+      ),
+      Question(
+        correctAnswer: 'trapezoid',
+        image: Assets.trapezoid,
+      ),
+      Question(
+        correctAnswer: 'triangle',
+        image: Assets.triangle,
+      ),
+    ];
+
+    for (final shape in shapes) {
+      final otherAnswers = shapes
+          .where((s) => s.correctAnswer != shape.correctAnswer)
+          .map((s) => s.correctAnswer)
+          .toList();
+
+      otherAnswers.shuffle(random);
+      final randomChoices = otherAnswers.take(5).toList();
+
+      randomChoices.add(shape.correctAnswer);
+      randomChoices.shuffle(random);
+
       await _gameQuestionRepository.addQuestion(
         question: Question(
           gameId: gameId,
-          question: 'Which shape matches a $s?',
-          correctAnswer: s,
-          choices: shapes.toString(),
+          question: 'What shape is this?',
+          correctAnswer: shape.correctAnswer,
+          image: shape.image,
+          choices: jsonEncode(randomChoices),
         ),
       );
     }

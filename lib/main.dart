@@ -13,6 +13,8 @@ import 'package:kidtastic_flutter/pages/initial_screen/view/view.dart';
 import 'package:kidtastic_flutter/pages/math_game/view/math_game_page.dart';
 import 'package:kidtastic_flutter/pages/number_game/view/number_game_page.dart';
 import 'package:kidtastic_flutter/pages/pronunciation_game/pronunciation_game.dart';
+import 'package:kidtastic_flutter/pages/shape_game/bloc/shape_game_state/shape_game_state.dart';
+import 'package:kidtastic_flutter/pages/shape_game/view/shape_game_page.dart';
 import 'package:kidtastic_flutter/pages/speech_recognition/view/view.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
@@ -227,6 +229,14 @@ class _MyAppState extends State<MyApp> {
           path: SpeechRecognitionPage.route,
           builder: (context, state) {
             return SpeechRecognitionPage();
+          },
+        ),
+        GoRoute(
+          path: ShapeGamePage.route,
+          builder: (context, state) {
+            return ShapeGamePage(
+              initialState: state.extra as ShapeGameState,
+            );
           },
         ),
       ],
