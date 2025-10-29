@@ -29,7 +29,7 @@ class Assets {
   // **Shapes Assets**
   static const String circle = 'assets/shapes/circle.png';
   static const String heart = 'assets/shapes/heart.png';
-  static const String hexagon = 'assets/shapes/hexgon.png';
+  static const String hexagon = 'assets/shapes/hexagon.png';
   static const String oval = 'assets/shapes/oval.png';
   static const String pentagon = 'assets/shapes/pentagon.png';
   static const String rectangle = 'assets/shapes/rectangle.png';

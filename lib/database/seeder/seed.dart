@@ -48,7 +48,7 @@ class InitialDataSeeder {
       ),
       Game(
         name: 'Match the Shapes',
-        category: GameType.matching,
+        category: GameType.shape,
         imageAsset: Assets.shapes,
         description: 'Match shapes to learn geometry.',
         route: ShapeGamePage.route,

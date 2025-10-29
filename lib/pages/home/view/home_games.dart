@@ -105,7 +105,7 @@ class HomeGames extends StatelessWidget {
                                           student: state.student,
                                         ),
                                       );
-                                    case GameType.matching:
+                                    case GameType.shape:
                                       context.push(
                                         ShapeGamePage.route,
                                         extra: ShapeGameState(

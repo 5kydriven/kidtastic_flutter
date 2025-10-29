@@ -6,4 +6,5 @@ class GameType {
   static const String shapePuzzle = 'shape_puzzle';
   static const String numberSequence = 'number_sequence';
   static const String guessing = 'guessing';
+  static const String shape = 'shape';
 }
