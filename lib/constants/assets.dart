@@ -55,4 +55,5 @@ class Assets {
   static const String matchTheShapeHome =
       'assets/backgrounds/match_the_shape_home.png';
   static const String matchTheShape = 'assets/backgrounds/match_the_shape.png';
+  static const String homeBg = 'assets/backgrounds/home_bg.png';
 }

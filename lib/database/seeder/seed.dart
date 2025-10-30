@@ -53,6 +53,34 @@ class InitialDataSeeder {
         description: 'Match shapes to learn geometry.',
         route: ShapeGamePage.route,
       ),
+      Game(
+        name: 'Match the Shapes',
+        category: GameType.shape,
+        imageAsset: Assets.shapes,
+        description: 'Match shapes to learn geometry.',
+        route: ShapeGamePage.route,
+      ),
+      Game(
+        name: 'Match the Shapes',
+        category: GameType.shape,
+        imageAsset: Assets.shapes,
+        description: 'Match shapes to learn geometry.',
+        route: ShapeGamePage.route,
+      ),
+      Game(
+        name: 'Match the Shapes',
+        category: GameType.shape,
+        imageAsset: Assets.shapes,
+        description: 'Match shapes to learn geometry.',
+        route: ShapeGamePage.route,
+      ),
+      Game(
+        name: 'Match the Shapes',
+        category: GameType.shape,
+        imageAsset: Assets.shapes,
+        description: 'Match shapes to learn geometry.',
+        route: ShapeGamePage.route,
+      ),
     ];
 
     final gameIds = <int>[];

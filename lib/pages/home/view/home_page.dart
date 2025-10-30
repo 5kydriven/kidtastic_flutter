@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kidtastic_flutter/widgets/widgets.dart';
 
+import '../../../constants/constants.dart';
 import '../../../repositories/repositories.dart';
 import '../bloc/bloc.dart';
 import 'view.dart';
@@ -48,41 +50,15 @@ class _HomePageState extends State<HomePage> {
             previous.currentPage != current.currentPage,
         child: BlocBuilder<HomeBloc, HomeState>(
           builder: (context, state) {
-            // final bloc = context.read<HomeBloc>();
-
-            return Scaffold(
-              appBar: const HomeAppBar(),
-              body: Center(
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(
-                    maxWidth: 700,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Hello ${state.student?.name ?? ''}',
-                          style: TextStyle(
-                            fontSize: 36,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                        const Text(
-                          "Let's play and learn",
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(
-                          height: 28,
-                        ),
-                        HomeGames(
-                          pageController: _pageController,
-                        ),
-                      ],
-                    ),
-                  ),
+            return GameScaffold(
+              appBar: HomeAppBar(),
+              imageAssets: Assets.homeBg,
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(32),
+                ),
+                child: HomeBody(
+                  pageController: _pageController,
                 ),
               ),
             );
