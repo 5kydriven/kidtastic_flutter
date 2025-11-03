@@ -19,36 +19,39 @@ class ShapeGamePage extends StatelessWidget {
 
   void _gameListener(BuildContext context, ShapeGameState state) {
     final bloc = context.read<ShapeGameBloc>();
-    if (state.currentIndex != (state.question.length - 1)) return;
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Game Over'),
-          content: Text(
-            'Your score is ${state.score}',
-            textAlign: TextAlign.center,
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                context.pop();
-                context.pop();
-              },
-              child: const Text('Choose another game'),
+    if (state.hasEnded) {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Game Over'),
+            content: Text(
+              'Your score is ${state.score}',
+              textAlign: TextAlign.center,
             ),
-            TextButton(
-              onPressed: () {
-                bloc.add(const ShapeGameScreenCreated());
-                context.pop();
-              },
-              child: const Text('Play again'),
-            ),
-          ],
-        );
-      },
-    );
+            actions: [
+              TextButton(
+                onPressed: () {
+                  context.pop();
+                  context.pop();
+                },
+                child: const Text('Choose another game'),
+              ),
+              TextButton(
+                onPressed: () {
+                  bloc.add(const ShapeGameScreenCreated());
+                  context.pop();
+                },
+                child: const Text('Play again'),
+              ),
+            ],
+          );
+        },
+      );
+    } else {
+      return;
+    }
   }
 
   @override

@@ -126,13 +126,20 @@ class CountingGameBloc extends Bloc<CountingGameEvent, CountingGameState> {
     CountingGameNextQuestion event,
     Emitter<CountingGameState> emit,
   ) {
-    if (state.currentIndex == (state.question.length - 1)) {
+    final nextIndex = state.currentIndex + 1;
+
+    if (nextIndex == state.question.length) {
+      emit(
+        state.copyWith(
+          hasEnded: true,
+        ),
+      );
       add(const CountingGameGameEnd());
       return;
     }
     emit(
       state.copyWith(
-        currentIndex: state.currentIndex + 1,
+        currentIndex: nextIndex,
       ),
     );
   }

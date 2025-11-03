@@ -13,6 +13,7 @@ sealed class ShapeGameState with _$ShapeGameState {
     @Default(0) int currentIndex,
     int? sessionId,
     @Default(0) int score,
+    @Default(false) bool hasEnded,
     @Default(RequestStatus.waiting) RequestStatus screenRequestStatus,
     @Default(RequestStatus.waiting) RequestStatus sessionQuestionRequestStatus,
     @Default(RequestStatus.waiting) RequestStatus gameSessionRequestStatus,

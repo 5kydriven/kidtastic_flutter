@@ -125,14 +125,19 @@ class ShapeGameBloc extends Bloc<ShapeGameEvent, ShapeGameState> {
     ShapeGameNextQuestion event,
     Emitter<ShapeGameState> emit,
   ) {
-    if (state.currentIndex == (state.question.length - 1)) {
+    final nextIndex = state.currentIndex + 1;
+    if (nextIndex == state.question.length) {
+      emit(
+        state.copyWith(
+          hasEnded: true,
+        ),
+      );
       add(const ShapeGameGameEnd());
       return;
     }
-
     emit(
       state.copyWith(
-        currentIndex: state.currentIndex + 1,
+        currentIndex: nextIndex,
       ),
     );
   }

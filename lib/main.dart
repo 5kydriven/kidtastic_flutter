@@ -17,7 +17,6 @@ import 'package:kidtastic_flutter/pages/shape_game/bloc/shape_game_state/shape_g
 import 'package:kidtastic_flutter/pages/shape_game/view/shape_game_page.dart';
 import 'package:kidtastic_flutter/pages/speech_recognition/view/view.dart';
 import 'package:path/path.dart' as p;
-import 'package:path_provider/path_provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:window_manager/window_manager.dart';
 
@@ -122,27 +121,16 @@ Future<void> main() async {
 }
 
 Future<String> _getDbPath() async {
-  final exeDir = File(Platform.resolvedExecutable).parent.path;
+  final localAppData =
+      Platform.environment['LOCALAPPDATA'] ??
+      Platform.environment['APPDATA'] ??
+      Directory.current.path;
 
-  if (exeDir.contains('Program Files')) {
-    final programDataDir = Directory(
-      p.join(
-        Platform.environment['ProgramData'] ?? r'C:\ProgramData',
-        'Kidtastic',
-      ),
-    );
-    if (!await programDataDir.exists()) {
-      await programDataDir.create(recursive: true);
-    }
-    return p.join(programDataDir.path, 'kidtasticdb.sqlite');
-  }
-
-  final appSupportDir = await getApplicationSupportDirectory();
-  print(appSupportDir);
-  final dbDir = Directory(p.join(appSupportDir.path, 'db'));
+  final dbDir = Directory(p.join(localAppData, 'Kidtastic'));
   if (!await dbDir.exists()) {
     await dbDir.create(recursive: true);
   }
+
   return p.join(dbDir.path, 'kidtasticdb.sqlite');
 }
 
