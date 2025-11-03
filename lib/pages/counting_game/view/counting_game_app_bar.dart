@@ -1,25 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:kidtastic_flutter/pages/counting_game/bloc/bloc.dart';
 
 import '../../../constants/constants.dart';
+import '../bloc/bloc.dart';
 
-class CountingGameAppBar extends StatelessWidget
-    implements PreferredSizeWidget {
+class CountingGameAppBar extends StatelessWidget {
   const CountingGameAppBar({super.key});
-
-  @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CountingGameBloc, CountingGameState>(
       builder: (context, state) {
         final bloc = context.read<CountingGameBloc>();
-        return AppBar(
-          backgroundColor: Colors.transparent,
-          leading: InkWell(
+        return Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 12,
+            vertical: 4,
+          ),
+          child: InkWell(
             onTap: () {
               showDialog(
                 context: context,
@@ -38,6 +37,8 @@ class CountingGameAppBar extends StatelessWidget
                       TextButton(
                         onPressed: () {
                           bloc.add(const CountingGameGameEnd());
+                          context.pop();
+                          context.pop();
                         },
                         child: const Text('Exit'),
                       ),
@@ -46,11 +47,10 @@ class CountingGameAppBar extends StatelessWidget
                 },
               );
             },
-            customBorder: const CircleBorder(),
             child: Image.asset(
               Assets.arrowLeft,
-              width: 64,
-              height: 64,
+              width: 100,
+              height: 100,
             ),
           ),
         );

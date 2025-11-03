@@ -19,6 +19,7 @@ class ShapeGamePage extends StatelessWidget {
 
   void _gameListener(BuildContext context, ShapeGameState state) {
     final bloc = context.read<ShapeGameBloc>();
+    if (state.currentIndex != (state.question.length - 1)) return;
     showDialog(
       context: context,
       barrierDismissible: false,

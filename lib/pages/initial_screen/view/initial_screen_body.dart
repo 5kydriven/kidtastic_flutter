@@ -110,8 +110,8 @@ class InitialScreenBody extends StatelessWidget {
                                   if (index < pageItems.length) {
                                     final student = pageItems[index];
                                     return StudentCard(
-                                      name: student.name ?? '',
-                                      icon: Icons.person_outline,
+                                      name: student.firstName ?? '',
+                                      image: student.image ?? '',
                                       onTap: () => context.push(
                                         HomePage.route,
                                         extra: HomeState(student: student),

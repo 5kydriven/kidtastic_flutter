@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kidtastic_flutter/models/models.dart';
 import 'package:kidtastic_flutter/pages/counting_game/view/view.dart';
+import 'package:kidtastic_flutter/widgets/widgets.dart';
 
 import '../../../constants/constants.dart';
 import '../../../repositories/repositories.dart';
@@ -19,6 +20,7 @@ class CountingGamePage extends StatelessWidget {
 
   void _gameListener(BuildContext context, CountingGameState state) {
     final bloc = context.read<CountingGameBloc>();
+    if (state.currentIndex != (state.question.length - 1)) return;
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -72,36 +74,20 @@ class CountingGamePage extends StatelessWidget {
             previous.gameSessionRequestStatus !=
                 current.gameSessionRequestStatus &&
             current.gameSessionRequestStatus == RequestStatus.success,
-        child: SafeArea(
-          top: false,
-          child: Scaffold(
-            extendBodyBehindAppBar: true,
-            appBar: CountingGameAppBar(),
-            body: Stack(
-              children: [
-                Positioned.fill(
-                  child: Image.asset(
-                    Assets.mathBg,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-
-                Center(
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.7,
-                    height: MediaQuery.of(context).size.height * 0.8,
-                    child: Card(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 20,
-                          horizontal: 16,
-                        ),
-                        child: CountingGameBody(),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+        child: GameScaffold(
+          imageAssets: Assets.mathBg,
+          appBar: CountingGameAppBar(),
+          child: Card(
+            elevation: 8,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(24),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: 20,
+                horizontal: 16,
+              ),
+              child: CountingGameBody(),
             ),
           ),
         ),

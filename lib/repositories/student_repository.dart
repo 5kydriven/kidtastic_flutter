@@ -18,6 +18,9 @@ class StudentRepository {
       await _studentDao.insertStudent(
         StudentTableCompanion.insert(
           name: student.name ?? '',
+          firstName: student.firstName ?? '',
+          lastName: student.lastName ?? '',
+          image: Value(student.image),
           isSynced: Value(false),
           createdAt: Value(DateTime.now()),
           syncedAt: Value(DateTime.now()),
@@ -27,6 +30,7 @@ class StudentRepository {
         statusCode: 200,
       );
     } catch (e) {
+      print(e);
       return Result(
         statusCode: 400,
       );

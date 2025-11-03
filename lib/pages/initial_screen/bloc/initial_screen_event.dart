@@ -10,10 +10,18 @@ class InitialScreenAddStudentPressed extends InitialScreenEvent {
   const InitialScreenAddStudentPressed();
 }
 
-class InitialScreenNameChanged extends InitialScreenEvent {
+class InitialScreenFirstNameChanged extends InitialScreenEvent {
   final String value;
 
-  const InitialScreenNameChanged({
+  const InitialScreenFirstNameChanged({
+    required this.value,
+  });
+}
+
+class InitialScreenLastNameChanged extends InitialScreenEvent {
+  final String value;
+
+  const InitialScreenLastNameChanged({
     required this.value,
   });
 }
@@ -32,4 +40,16 @@ class InitialScreenNextButtonPressed extends InitialScreenEvent {
 
 class InitialScreenPrevButtonPressed extends InitialScreenEvent {
   const InitialScreenPrevButtonPressed();
+}
+
+class InitialScreenAvatarButtonPressed extends InitialScreenEvent {
+  const InitialScreenAvatarButtonPressed();
+}
+
+class InitialScreenAvatarSelected extends InitialScreenEvent {
+  final String avatar;
+
+  const InitialScreenAvatarSelected({
+    required this.avatar,
+  });
 }

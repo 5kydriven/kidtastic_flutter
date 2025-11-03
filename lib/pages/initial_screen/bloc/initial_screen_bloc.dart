@@ -16,10 +16,12 @@ class InitialScreenBloc extends Bloc<InitialScreenEvent, InitialScreenState> {
        super(initialState) {
     on<InitialScreenScreenCreated>(_screenCreated);
     on<InitialScreenAddStudentPressed>(_addStudentPressed);
-    on<InitialScreenNameChanged>(_nameChanged);
+    on<InitialScreenFirstNameChanged>(_firstNameChanged);
+    on<InitialScreenLastNameChanged>(_lastNameChanged);
     on<InitialScreenDeleteStudentPressed>(_deleteStudentPressed);
     on<InitialScreenNextButtonPressed>(_nextButtonPressed);
     on<InitialScreenPrevButtonPressed>(_prevButtonPressed);
+    on<InitialScreenAvatarSelected>(_avatarSelected);
   }
 
   Future<void> _screenCreated(
@@ -64,7 +66,10 @@ class InitialScreenBloc extends Bloc<InitialScreenEvent, InitialScreenState> {
 
     final response = await _studentRepository.addStudent(
       student: Student(
-        name: state.name?.value,
+        name: '${state.firstName.value} ${state.lastName.value}',
+        firstName: state.firstName.value,
+        lastName: state.lastName.value,
+        image: state.selectedAvatar,
       ),
     );
 
@@ -72,7 +77,10 @@ class InitialScreenBloc extends Bloc<InitialScreenEvent, InitialScreenState> {
       case ResultStatus.success:
         emit(
           state.copyWith(
-            name: TextFieldInput(
+            firstName: TextFieldInput(
+              value: '',
+            ),
+            lastName: TextFieldInput(
               value: '',
             ),
             requestStatus: RequestStatus.success,
@@ -83,7 +91,10 @@ class InitialScreenBloc extends Bloc<InitialScreenEvent, InitialScreenState> {
       default:
         emit(
           state.copyWith(
-            name: TextFieldInput(
+            firstName: TextFieldInput(
+              value: '',
+            ),
+            lastName: TextFieldInput(
               value: '',
             ),
             requestStatus: RequestStatus.failure,
@@ -93,8 +104,8 @@ class InitialScreenBloc extends Bloc<InitialScreenEvent, InitialScreenState> {
     }
   }
 
-  void _nameChanged(
-    InitialScreenNameChanged event,
+  void _firstNameChanged(
+    InitialScreenFirstNameChanged event,
     Emitter<InitialScreenState> emit,
   ) {
     var errorType = ErrorType.empty;
@@ -106,7 +117,27 @@ class InitialScreenBloc extends Bloc<InitialScreenEvent, InitialScreenState> {
     }
 
     emit(
-      state.copyWith.name!(
+      state.copyWith.firstName(
+        value: event.value,
+        errorType: errorType,
+      ),
+    );
+  }
+
+  void _lastNameChanged(
+    InitialScreenLastNameChanged event,
+    Emitter<InitialScreenState> emit,
+  ) {
+    var errorType = ErrorType.empty;
+
+    if (event.value.isEmpty) {
+      errorType = ErrorType.empty;
+    } else {
+      errorType = ErrorType.none;
+    }
+
+    emit(
+      state.copyWith.lastName(
         value: event.value,
         errorType: errorType,
       ),
@@ -164,6 +195,17 @@ class InitialScreenBloc extends Bloc<InitialScreenEvent, InitialScreenState> {
     emit(
       state.copyWith(
         currentPage: state.currentPage - 1,
+      ),
+    );
+  }
+
+  void _avatarSelected(
+    InitialScreenAvatarSelected event,
+    Emitter<InitialScreenState> emit,
+  ) {
+    emit(
+      state.copyWith(
+        selectedAvatar: event.avatar,
       ),
     );
   }

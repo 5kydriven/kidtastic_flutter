@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:bloc/bloc.dart';
 
 import '../../../models/models.dart';
@@ -47,8 +45,6 @@ class ShapeGameBloc extends Bloc<ShapeGameEvent, ShapeGameState> {
           limit: 5,
           isRandom: true,
         );
-
-        log('game:  ${gameQuestionResult.data}');
 
         switch (gameQuestionResult.resultStatus) {
           case ResultStatus.success:
@@ -129,16 +125,14 @@ class ShapeGameBloc extends Bloc<ShapeGameEvent, ShapeGameState> {
     ShapeGameNextQuestion event,
     Emitter<ShapeGameState> emit,
   ) {
-    final nextIndex = state.currentIndex + 1;
-
-    if (nextIndex >= state.question.length) {
+    if (state.currentIndex == (state.question.length - 1)) {
       add(const ShapeGameGameEnd());
       return;
     }
 
     emit(
       state.copyWith(
-        currentIndex: nextIndex,
+        currentIndex: state.currentIndex + 1,
       ),
     );
   }

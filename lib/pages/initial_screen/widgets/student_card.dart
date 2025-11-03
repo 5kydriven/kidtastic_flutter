@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 
 class StudentCard extends StatelessWidget {
   final String name;
-  final IconData icon;
   final VoidCallback? onTap;
   final VoidCallback? onPressed;
+  final String image;
 
   const StudentCard({
     super.key,
     required this.name,
-    required this.icon,
     this.onTap,
     this.onPressed,
+    required this.image,
   });
 
   @override
@@ -35,7 +35,6 @@ class StudentCard extends StatelessWidget {
                   icon: const Icon(Icons.more_vert),
                   onSelected: (value) {
                     if (value == 'edit') {
-                      // handle edit
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Text('Edit clicked'),
@@ -46,10 +45,10 @@ class StudentCard extends StatelessWidget {
                     }
                   },
                   itemBuilder: (BuildContext context) => [
-                    const PopupMenuItem(
-                      value: 'edit',
-                      child: Text('Edit'),
-                    ),
+                    // const PopupMenuItem(
+                    //   value: 'edit',
+                    //   child: Text('Edit'),
+                    // ),
                     const PopupMenuItem(
                       value: 'delete',
                       child: Text('Delete'),
@@ -58,11 +57,19 @@ class StudentCard extends StatelessWidget {
                 ),
               ),
 
-              CircleAvatar(
-                radius: 32,
-                child: Icon(
-                  icon,
-                  size: 36,
+              Container(
+                width: 68,
+                height: 68,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: Color(0xffFFAE00),
+                    width: 2,
+                  ),
+                  image: DecorationImage(
+                    image: AssetImage(image),
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
               const SizedBox(

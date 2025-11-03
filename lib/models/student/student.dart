@@ -8,6 +8,9 @@ sealed class Student with _$Student {
   const factory Student({
     int? id,
     String? name,
+    String? firstName,
+    String? lastName,
+    String? image,
     bool? isSynced,
   }) = _Student;
 

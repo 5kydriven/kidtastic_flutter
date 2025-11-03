@@ -22,6 +22,9 @@ class InitialScreenAddStudentDialog extends StatefulWidget {
 
 class _InitialScreenAddStudentDialogState
     extends State<InitialScreenAddStudentDialog> {
+  final LayerLink _layerLink = LayerLink();
+  OverlayEntry? _overlayEntry;
+
   final List<String> avatars = [
     Assets.bearAvatar,
     Assets.birdAvatar,
@@ -44,15 +47,9 @@ class _InitialScreenAddStudentDialogState
     Assets.zebraAvatar,
   ];
 
-  String selectedAvatar = Assets.sheepAvatar;
-
-  bool showAvatars = false;
-
-  // Add this inside your State class:
-  final LayerLink _layerLink = LayerLink();
-  OverlayEntry? _overlayEntry;
-
   void _toggleAvatarMenu(BuildContext context) {
+    final bloc = context.read<InitialScreenBloc>();
+    final state = bloc.state;
     if (_overlayEntry != null) {
       _overlayEntry!.remove();
       _overlayEntry = null;
@@ -102,13 +99,15 @@ class _InitialScreenAddStudentDialogState
                           ),
                       itemBuilder: (context, index) {
                         final avatar = avatars[index];
-                        final isSelected = avatar == selectedAvatar;
+                        final isSelected = avatar == state.selectedAvatar;
 
                         return GestureDetector(
                           onTap: () {
-                            setState(() {
-                              selectedAvatar = avatar;
-                            });
+                            bloc.add(
+                              InitialScreenAvatarSelected(
+                                avatar: avatar,
+                              ),
+                            );
                             _overlayEntry?.remove();
                             _overlayEntry = null;
                           },
@@ -142,11 +141,23 @@ class _InitialScreenAddStudentDialogState
     overlay.insert(_overlayEntry!);
   }
 
-  String? _nameErrorText({
+  String? _firstNameErrorText({
     required BuildContext context,
     required InitialScreenState state,
   }) {
-    switch (state.name?.errorType) {
+    switch (state.firstName.errorType) {
+      case ErrorType.empty:
+        return 'Field cannot be empty';
+      default:
+        return null;
+    }
+  }
+
+  String? _lastNameErrorText({
+    required BuildContext context,
+    required InitialScreenState state,
+  }) {
+    switch (state.lastName.errorType) {
       case ErrorType.empty:
         return 'Field cannot be empty';
       default:
@@ -186,7 +197,6 @@ class _InitialScreenAddStudentDialogState
                     padding: const EdgeInsets.all(24),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
-                      spacing: 20,
                       children: [
                         const Text(
                           'Add Student',
@@ -214,7 +224,7 @@ class _InitialScreenAddStudentDialogState
                                     width: 3,
                                   ),
                                   image: DecorationImage(
-                                    image: AssetImage(selectedAvatar),
+                                    image: AssetImage(state.selectedAvatar),
                                     fit: BoxFit.cover,
                                   ),
                                 ),
@@ -236,7 +246,7 @@ class _InitialScreenAddStudentDialogState
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Your Name',
+                              'First Name',
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
@@ -247,7 +257,7 @@ class _InitialScreenAddStudentDialogState
                             ),
                             TextFormField(
                               onChanged: (value) => bloc.add(
-                                InitialScreenNameChanged(
+                                InitialScreenFirstNameChanged(
                                   value: value,
                                 ),
                               ),
@@ -261,7 +271,7 @@ class _InitialScreenAddStudentDialogState
                               keyboardType: TextInputType.name,
                               decoration: InputDecoration(
                                 border: OutlineInputBorder(),
-                                errorText: _nameErrorText(
+                                errorText: _firstNameErrorText(
                                   context: context,
                                   state: state,
                                 ),
@@ -269,6 +279,44 @@ class _InitialScreenAddStudentDialogState
                             ),
                           ],
                         ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Last Name',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 8,
+                            ),
+                            TextFormField(
+                              onChanged: (value) => bloc.add(
+                                InitialScreenLastNameChanged(
+                                  value: value,
+                                ),
+                              ),
+                              autofocus: true,
+                              onFieldSubmitted: (_) {
+                                bloc.add(
+                                  const InitialScreenAddStudentPressed(),
+                                );
+                                context.pop();
+                              },
+                              keyboardType: TextInputType.name,
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(),
+                                errorText: _lastNameErrorText(
+                                  context: context,
+                                  state: state,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+
                         Container(
                           width: double.infinity,
                           height: 44,

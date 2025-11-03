@@ -6,12 +6,20 @@ class Assets {
   static const String arrowLeft = 'assets/arrow_left.png';
   static const String mathBg = 'assets/math_bg.png';
 
-  // **Fruits**
-  static const String carrot = 'assets/fruits/carrot.png';
+  // **Fruits and Vegetables**
   static const String apple = 'assets/fruits/apple.png';
-  static const String pear = 'assets/fruits/pear.png';
-  static const String strawberry = 'assets/fruits/strawberry.png';
+  static const String banana = 'assets/fruits/banana.png';
+  static const String carrot = 'assets/fruits/carrot.png';
   static const String chiliPepper = 'assets/fruits/chili_pepper.png';
+  static const String grape = 'assets/fruits/grape.png';
+  static const String lemon = 'assets/fruits/lemon.png';
+  static const String orange = 'assets/fruits/orange.png';
+  static const String pear = 'assets/fruits/pear.png';
+  static const String pineapple = 'assets/fruits/pineapple.png';
+  static const String squash = 'assets/fruits/squash.png';
+  static const String strawberry = 'assets/fruits/strawberry.png';
+  static const String tomato = 'assets/fruits/tomato.png';
+  static const String watermelon = 'assets/fruits/watermelon.png';
 
   // **Avatars**
   static const String bearAvatar = 'assets/avatars/bear_avatar.jpg';

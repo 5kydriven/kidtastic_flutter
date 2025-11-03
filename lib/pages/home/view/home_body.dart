@@ -31,9 +31,9 @@ class HomeBody extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'Hello ${state.student?.name?.toUpperCase() ?? ''}!',
+              'Hello ${state.student?.firstName?.toUpperCase() ?? ''}!',
               style: TextStyle(
-                fontSize: MediaQuery.of(context).size.width * 0.06,
+                fontSize: MediaQuery.of(context).size.width * 0.05,
                 fontWeight: FontWeight.bold,
                 color: Color(0xffA66609),
               ),

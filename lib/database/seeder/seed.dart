@@ -7,6 +7,7 @@ import 'package:kidtastic_flutter/pages/pronunciation_game/view/pronunciation_ga
 import 'package:kidtastic_flutter/pages/shape_game/view/shape_game_page.dart';
 import 'package:kidtastic_flutter/repositories/game_repository.dart';
 import 'package:kidtastic_flutter/repositories/game_question_repository.dart';
+import 'package:kidtastic_flutter/utils/pluralize_helper.dart';
 
 import '../../models/models.dart';
 
@@ -53,34 +54,6 @@ class InitialDataSeeder {
         description: 'Match shapes to learn geometry.',
         route: ShapeGamePage.route,
       ),
-      Game(
-        name: 'Match the Shapes',
-        category: GameType.shape,
-        imageAsset: Assets.shapes,
-        description: 'Match shapes to learn geometry.',
-        route: ShapeGamePage.route,
-      ),
-      Game(
-        name: 'Match the Shapes',
-        category: GameType.shape,
-        imageAsset: Assets.shapes,
-        description: 'Match shapes to learn geometry.',
-        route: ShapeGamePage.route,
-      ),
-      Game(
-        name: 'Match the Shapes',
-        category: GameType.shape,
-        imageAsset: Assets.shapes,
-        description: 'Match shapes to learn geometry.',
-        route: ShapeGamePage.route,
-      ),
-      Game(
-        name: 'Match the Shapes',
-        category: GameType.shape,
-        imageAsset: Assets.shapes,
-        description: 'Match shapes to learn geometry.',
-        route: ShapeGamePage.route,
-      ),
     ];
 
     final gameIds = <int>[];
@@ -106,26 +79,19 @@ class InitialDataSeeder {
   // ---------------------------
   Future<void> _seedCountingFruits(int gameId) async {
     final fruits = <Fruit>[
-      Fruit(
-        name: 'chili pepper',
-        image: Assets.chiliPepper,
-      ),
-      Fruit(
-        name: 'apple',
-        image: Assets.apple,
-      ),
-      Fruit(
-        name: 'carrot',
-        image: Assets.carrot,
-      ),
-      Fruit(
-        name: 'pear',
-        image: Assets.pear,
-      ),
-      Fruit(
-        name: 'strawberry',
-        image: Assets.strawberry,
-      ),
+      Fruit(name: 'apple', image: Assets.apple),
+      Fruit(name: 'banana', image: Assets.banana),
+      Fruit(name: 'carrot', image: Assets.carrot),
+      Fruit(name: 'chili pepper', image: Assets.chiliPepper),
+      Fruit(name: 'grape', image: Assets.grape),
+      Fruit(name: 'lemon', image: Assets.lemon),
+      Fruit(name: 'orange', image: Assets.orange),
+      Fruit(name: 'pear', image: Assets.pear),
+      Fruit(name: 'pineapple', image: Assets.pineapple),
+      Fruit(name: 'squash', image: Assets.squash),
+      Fruit(name: 'strawberry', image: Assets.strawberry),
+      Fruit(name: 'tomato', image: Assets.tomato),
+      Fruit(name: 'watermelon', image: Assets.watermelon),
     ];
 
     final questions = <Question>[];
@@ -140,11 +106,15 @@ class InitialDataSeeder {
       }
 
       final options = allOptions.map((n) => n.toString()).toList()..shuffle();
+      final fruitName = pluralizeFruit(
+        name: fruit.name ?? '',
+        count: correctCount,
+      );
 
       questions.add(
         Question(
           gameId: gameId,
-          question: 'How many ${fruit.name}s are there?',
+          question: 'How many $fruitName are there?',
           correctAnswer: correctCount.toString(),
           image: fruit.image,
           choices: jsonEncode(options),
