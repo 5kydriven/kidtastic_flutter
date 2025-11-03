@@ -8,6 +8,7 @@ part 'initial_screen_state.freezed.dart';
 sealed class InitialScreenState with _$InitialScreenState {
   const factory InitialScreenState({
     @Default([]) List<Student> students,
+    @Default(0) int currentPage,
     @Default(RequestStatus.waiting) RequestStatus requestStatus,
     @Default(RequestStatus.waiting) RequestStatus studentRequestStatus,
     @Default(

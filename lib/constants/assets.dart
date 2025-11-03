@@ -14,17 +14,25 @@ class Assets {
   static const String chiliPepper = 'assets/fruits/chili_pepper.png';
 
   // **Avatars**
-  static const String bearAvatar = 'assets/avatars/bear_avatar.png';
-  static const String birdAvatar = 'assets/avatars/bird_avatar.png';
-  static const String catAvatar = 'assets/avatars/cat_avatar.png';
-  static const String dogAvatar = 'assets/avatars/dog_avatar.png';
-  static const String frogAvatar = 'assets/avatars/frog_avatar.png';
-  static const String lionAvatar = 'assets/avatars/lion_avatar.png';
-  static const String pandaAvatar = 'assets/avatars/panda_avatar.png';
-  static const String rabbitAvatar = 'assets/avatars/rabbit_avatar.png';
-  static const String sharkAvatar = 'assets/avatars/shark_avatar.png';
-  static const String zebraAvatar = 'assets/avatars/zebra_avatar.png';
-  static const String crocodileAvatar = 'assets/avatars/crocodile_avatar.png';
+  static const String bearAvatar = 'assets/avatars/bear_avatar.jpg';
+  static const String birdAvatar = 'assets/avatars/bird_avatar.jpg';
+  static const String bullAvatar = 'assets/avatars/bull_avatar.jpg';
+  static const String catAvatar = 'assets/avatars/cat_avatar.jpg';
+  static const String crocodileAvatar = 'assets/avatars/crocodile_avatar.jpg';
+  static const String dogAvatar = 'assets/avatars/dog_avatar.jpg';
+  static const String frogAvatar = 'assets/avatars/frog_avatar.jpg';
+  static const String hedgehogAvatar = 'assets/avatars/hedgehog_avatar.jpg';
+  static const String jellyfishAvatar = 'assets/avatars/jellyfish_avatar.png';
+  static const String koalaAvatar = 'assets/avatars/koala_avatar.jpg';
+  static const String lionAvatar = 'assets/avatars/lion_avatar.jpg';
+  static const String miceAvatar = 'assets/avatars/mice_avatar.jpg';
+  static const String monkeyAvatar = 'assets/avatars/monkey_avatar.png';
+  static const String pandaAvatar = 'assets/avatars/panda_avatar.jpg';
+  static const String rabbitAvatar = 'assets/avatars/rabbit_avatar.jpg';
+  static const String sharkAvatar = 'assets/avatars/shark_avatar.jpg';
+  static const String sheepAvatar = 'assets/avatars/sheep_avatar.jpg';
+  static const String whaleAvatar = 'assets/avatars/whale_avatar.png';
+  static const String zebraAvatar = 'assets/avatars/zebra_avatar.jpg';
 
   // **Shapes Assets**
   static const String circle = 'assets/shapes/circle.png';

@@ -3,16 +3,144 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../constants/constants.dart';
 import '../../../models/models.dart';
 import '../bloc/bloc.dart';
 
-class InitialScreenAddStudentDialog extends StatelessWidget {
+class InitialScreenAddStudentDialog extends StatefulWidget {
   final InitialScreenBloc initialScreenBloc;
 
   const InitialScreenAddStudentDialog({
     super.key,
     required this.initialScreenBloc,
   });
+
+  @override
+  State<InitialScreenAddStudentDialog> createState() =>
+      _InitialScreenAddStudentDialogState();
+}
+
+class _InitialScreenAddStudentDialogState
+    extends State<InitialScreenAddStudentDialog> {
+  final List<String> avatars = [
+    Assets.bearAvatar,
+    Assets.birdAvatar,
+    Assets.bullAvatar,
+    Assets.catAvatar,
+    Assets.crocodileAvatar,
+    Assets.dogAvatar,
+    Assets.frogAvatar,
+    Assets.hedgehogAvatar,
+    Assets.jellyfishAvatar,
+    Assets.koalaAvatar,
+    Assets.lionAvatar,
+    Assets.miceAvatar,
+    Assets.monkeyAvatar,
+    Assets.pandaAvatar,
+    Assets.rabbitAvatar,
+    Assets.sharkAvatar,
+    Assets.sheepAvatar,
+    Assets.whaleAvatar,
+    Assets.zebraAvatar,
+  ];
+
+  String selectedAvatar = Assets.sheepAvatar;
+
+  bool showAvatars = false;
+
+  // Add this inside your State class:
+  final LayerLink _layerLink = LayerLink();
+  OverlayEntry? _overlayEntry;
+
+  void _toggleAvatarMenu(BuildContext context) {
+    if (_overlayEntry != null) {
+      _overlayEntry!.remove();
+      _overlayEntry = null;
+      return;
+    }
+
+    final overlay = Overlay.of(context);
+
+    _overlayEntry = OverlayEntry(
+      builder: (context) => Stack(
+        children: [
+          // Transparent layer to detect outside taps
+          Positioned.fill(
+            child: GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              onTap: () {
+                _overlayEntry?.remove();
+                _overlayEntry = null;
+              },
+              child: const SizedBox(), // just a transparent clickable area
+            ),
+          ),
+
+          // The actual floating avatar grid
+          Positioned(
+            width: 300,
+            child: CompositedTransformFollower(
+              link: _layerLink,
+              showWhenUnlinked: false,
+              offset: const Offset(0, 100), // distance below button
+              child: Material(
+                elevation: 8,
+                borderRadius: BorderRadius.circular(16),
+                color: Colors.white,
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: SizedBox(
+                    height: 220, // limit popup height so it can scroll
+                    child: GridView.builder(
+                      physics: const BouncingScrollPhysics(),
+                      itemCount: avatars.length,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 4,
+                            mainAxisSpacing: 12,
+                            crossAxisSpacing: 12,
+                          ),
+                      itemBuilder: (context, index) {
+                        final avatar = avatars[index];
+                        final isSelected = avatar == selectedAvatar;
+
+                        return GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              selectedAvatar = avatar;
+                            });
+                            _overlayEntry?.remove();
+                            _overlayEntry = null;
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: isSelected
+                                    ? Colors.blueAccent
+                                    : Colors.transparent,
+                                width: 3,
+                              ),
+                              image: DecorationImage(
+                                image: AssetImage(avatar),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+
+    overlay.insert(_overlayEntry!);
+  }
 
   String? _nameErrorText({
     required BuildContext context,
@@ -29,7 +157,7 @@ class InitialScreenAddStudentDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<InitialScreenBloc>.value(
-      value: initialScreenBloc,
+      value: widget.initialScreenBloc,
       child: BlocBuilder<InitialScreenBloc, InitialScreenState>(
         builder: (context, state) {
           final bloc = context.read<InitialScreenBloc>();
@@ -70,25 +198,38 @@ class InitialScreenAddStudentDialog extends StatelessWidget {
                         const Text(
                           'Create your profile to start learning and playing',
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          spacing: 24,
-                          children: [
-                            IconButton.outlined(
-                              iconSize: 76,
-                              icon: Icon(Icons.person),
-                              onPressed: () {},
-                            ),
-                            FilledButton(
-                              style: FilledButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
+                        CompositedTransformTarget(
+                          link: _layerLink,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            spacing: 24,
+                            children: [
+                              Container(
+                                width: 84,
+                                height: 84,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color: Colors.white,
+                                    width: 3,
+                                  ),
+                                  image: DecorationImage(
+                                    image: AssetImage(selectedAvatar),
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
                               ),
-                              onPressed: () {},
-                              child: Text('Change Avatar'),
-                            ),
-                          ],
+                              FilledButton(
+                                style: FilledButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                ),
+                                onPressed: () => _toggleAvatarMenu(context),
+                                child: const Text('Choose Avatar'),
+                              ),
+                            ],
+                          ),
                         ),
 
                         Column(

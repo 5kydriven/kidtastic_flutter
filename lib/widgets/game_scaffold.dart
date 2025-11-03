@@ -3,13 +3,17 @@ import 'package:flutter/material.dart';
 class GameScaffold extends StatelessWidget {
   final String imageAssets;
   final Widget? appBar;
+  final Widget? bottomBar;
   final Widget child;
+  final double constraintsBox;
 
   const GameScaffold({
     super.key,
     required this.imageAssets,
     required this.child,
+    this.bottomBar,
     this.appBar,
+    this.constraintsBox = 1000,
   });
 
   @override
@@ -39,8 +43,8 @@ class GameScaffold extends StatelessWidget {
 
             Center(
               child: ConstrainedBox(
-                constraints: const BoxConstraints(
-                  maxWidth: 1000,
+                constraints: BoxConstraints(
+                  maxWidth: constraintsBox,
                 ),
                 child: SizedBox(
                   width: size.width * widthFactor,
@@ -48,6 +52,11 @@ class GameScaffold extends StatelessWidget {
                   child: child,
                 ),
               ),
+            ),
+
+            Align(
+              alignment: AlignmentGeometry.bottomLeft,
+              child: bottomBar,
             ),
           ],
         ),

@@ -18,6 +18,8 @@ class InitialScreenBloc extends Bloc<InitialScreenEvent, InitialScreenState> {
     on<InitialScreenAddStudentPressed>(_addStudentPressed);
     on<InitialScreenNameChanged>(_nameChanged);
     on<InitialScreenDeleteStudentPressed>(_deleteStudentPressed);
+    on<InitialScreenNextButtonPressed>(_nextButtonPressed);
+    on<InitialScreenPrevButtonPressed>(_prevButtonPressed);
   }
 
   Future<void> _screenCreated(
@@ -142,5 +144,27 @@ class InitialScreenBloc extends Bloc<InitialScreenEvent, InitialScreenState> {
         );
         break;
     }
+  }
+
+  void _nextButtonPressed(
+    InitialScreenNextButtonPressed event,
+    Emitter<InitialScreenState> emit,
+  ) {
+    emit(
+      state.copyWith(
+        currentPage: state.currentPage + 1,
+      ),
+    );
+  }
+
+  void _prevButtonPressed(
+    InitialScreenPrevButtonPressed event,
+    Emitter<InitialScreenState> emit,
+  ) {
+    emit(
+      state.copyWith(
+        currentPage: state.currentPage - 1,
+      ),
+    );
   }
 }

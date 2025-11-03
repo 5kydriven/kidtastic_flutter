@@ -25,3 +25,11 @@ class InitialScreenDeleteStudentPressed extends InitialScreenEvent {
     required this.id,
   });
 }
+
+class InitialScreenNextButtonPressed extends InitialScreenEvent {
+  const InitialScreenNextButtonPressed();
+}
+
+class InitialScreenPrevButtonPressed extends InitialScreenEvent {
+  const InitialScreenPrevButtonPressed();
+}

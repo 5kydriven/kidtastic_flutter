@@ -10,6 +10,32 @@ import '../bloc/bloc.dart';
 class ShapeGameBody extends StatelessWidget {
   const ShapeGameBody({super.key});
 
+  void _checkAnswer(BuildContext context, String selected) {
+    final bloc = context.read<ShapeGameBloc>();
+    final state = bloc.state;
+    final isCorrect =
+        selected == state.question[state.currentIndex].correctAnswer;
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          isCorrect ? '✅ Correct!' : '❌ Wrong answer!',
+          style: const TextStyle(fontSize: 20),
+        ),
+        backgroundColor: isCorrect ? Colors.green : Colors.red,
+        duration: const Duration(
+          seconds: 1,
+        ),
+      ),
+    );
+
+    bloc.add(
+      ShapeGameButtonPressed(
+        answer: selected,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -17,7 +43,6 @@ class ShapeGameBody extends StatelessWidget {
     return BlocBuilder<ShapeGameBloc, ShapeGameState>(
       builder: (context, state) {
         if (state.screenRequestStatus == RequestStatus.success) {
-          final bloc = context.read<ShapeGameBloc>();
           final current = state.question[state.currentIndex];
           final choices = List<String>.from(
             jsonDecode(current.choices ?? '[]'),
@@ -85,14 +110,7 @@ class ShapeGameBody extends StatelessWidget {
                                 : '';
                             return ShapeButton(
                               label: label,
-                              onPressed: () {
-                                print('here');
-                                bloc.add(
-                                  ShapeGameButtonPressed(
-                                    answer: label,
-                                  ),
-                                );
-                              },
+                              onPressed: () => _checkAnswer(context, label),
                             );
                           },
                         ),

@@ -18,7 +18,7 @@ class InitialScreenHeader extends StatelessWidget {
           height: 8,
         ),
         Text(
-          'Choose your profile or add a new student.',
+          'Choose your profile or add your own.',
           style: TextStyle(
             fontSize: 16,
             color: Colors.black54,
