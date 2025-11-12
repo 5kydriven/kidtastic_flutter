@@ -1,0 +1,8 @@
+prompt for generating animals avatar in Leonardo.ai:
+- legacy mode
+- 1:1 ratio
+- number of images 2
+- Leonardo lightning XL
+- dynamic
+- prompt: A cute cartoon [animal_name] head avatar, smiling, colorful, round face, big expressive eyes, plain background, 2D vector art, thick outlines, pastel colors, kid-friendly style, for a children's educational game
+- negative prompt: realistic, scary, dark, detailed fur, photo, ugly, creepy, text, watermark, full body, multiple, head background, extra background character or avatar
