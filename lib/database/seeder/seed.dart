@@ -137,22 +137,117 @@ class InitialDataSeeder {
       Question(
         question: 'Fox wearing a necktie',
         image: Assets.foxWearingNecktie,
+        difficulty: Difficulty.hard,
       ),
       Question(
         question: 'Bird feeding worm',
         image: Assets.birdFeedingWorm,
+        difficulty: Difficulty.hard,
       ),
       Question(
         question: 'Rabbit with ball',
         image: Assets.rabbitWithBall,
+        difficulty: Difficulty.hard,
       ),
       Question(
         question: 'There are two giraffes.',
         image: Assets.giraffe,
+        difficulty: Difficulty.hard,
       ),
       Question(
         question: 'There is an aligator.',
         image: Assets.aligator,
+        difficulty: Difficulty.hard,
+      ),
+      Question(
+        question: 'aligator',
+        image: Assets.aligator,
+        difficulty: Difficulty.easy,
+      ),
+      Question(
+        question: 'ball',
+        image: Assets.ball,
+        difficulty: Difficulty.easy,
+      ),
+      Question(
+        question: 'cat',
+        image: Assets.cat,
+        difficulty: Difficulty.easy,
+      ),
+      Question(
+        question: 'duck',
+        image: Assets.duck,
+        difficulty: Difficulty.easy,
+      ),
+      Question(
+        question: 'elephant',
+        image: Assets.elephant,
+        difficulty: Difficulty.easy,
+      ),
+      Question(
+        question: 'fox',
+        image: Assets.foxWearingNecktie,
+        difficulty: Difficulty.easy,
+      ),
+      Question(
+        question: 'giraffe',
+        image: Assets.giraffe,
+        difficulty: Difficulty.easy,
+      ),
+      Question(
+        question: 'hat',
+        image: Assets.hat,
+        difficulty: Difficulty.easy,
+      ),
+      Question(
+        question: 'ice cream',
+        image: Assets.iceCream,
+        difficulty: Difficulty.easy,
+      ),
+      Question(
+        question: 'jar',
+        image: Assets.jar,
+        difficulty: Difficulty.easy,
+      ),
+      Question(
+        question: 'kite',
+        image: Assets.kite,
+        difficulty: Difficulty.easy,
+      ),
+      Question(
+        question: 'lion',
+        image: Assets.lion,
+        difficulty: Difficulty.easy,
+      ),
+      Question(
+        question: 'mice',
+        image: Assets.mice,
+        difficulty: Difficulty.easy,
+      ),
+      Question(
+        question: 'net',
+        image: Assets.net,
+        difficulty: Difficulty.easy,
+      ),
+      Question(
+        question: 'pig',
+        image: Assets.pig,
+        difficulty: Difficulty.easy,
+      ),
+      Question(
+        question: 'queen',
+        image: Assets.queen,
+        difficulty: Difficulty.easy,
+      ),
+      Question(
+        question: 'rabbit',
+        image: Assets.rabbitWithBall,
+        difficulty: Difficulty.easy,
+      ),
+      Question(
+        question: 'rainbow',
+        image: Assets.rainbow,
+        difficulty: Difficulty.easy,
       ),
     ];
 

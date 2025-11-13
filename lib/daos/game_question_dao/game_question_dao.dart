@@ -21,9 +21,15 @@ class GameQuestionDao extends DatabaseAccessor<KidtasticDatabase>
     )..where((question) => question.id.equals(id))).go();
   }
 
-  Future<List<GameQuestionTableData>> getQuestionsForGame(int gameId) async {
-    return await (select(
-      gameQuestionTable,
-    )..where((question) => question.gameId.equals(gameId))).get();
+  Future<List<GameQuestionTableData>> getQuestionsForGame(
+    int gameId,
+    String difficulty,
+  ) async {
+    return await (select(gameQuestionTable)..where(
+          (question) =>
+              question.gameId.equals(gameId) &
+              question.difficulty.equals(difficulty),
+        ))
+        .get();
   }
 }

@@ -20,7 +20,7 @@ class GameQuestionRepository {
           question: question.question ?? '',
           correctAnswer: question.correctAnswer ?? '',
           image: Value(question.image),
-          difficulty: Value(question.difficulty),
+          difficulty: Value(question.difficulty?.name),
           audio: Value(question.audio),
           isSynced: Value(question.isSynced),
           choices: Value(question.choices),
@@ -41,9 +41,13 @@ class GameQuestionRepository {
     required int gameId,
     int limit = 5,
     bool isRandom = false,
+    Difficulty difficulty = Difficulty.easy,
   }) async {
     try {
-      final response = await _gameQuestionDao.getQuestionsForGame(gameId);
+      final response = await _gameQuestionDao.getQuestionsForGame(
+        gameId,
+        difficulty.name,
+      );
       if (isRandom) {
         response.shuffle();
       }
