@@ -2,6 +2,8 @@ import 'package:drift/drift.dart';
 import 'package:kidtastic_flutter/database/kidtastic_database.dart';
 import 'package:kidtastic_flutter/tables/game_question_table.dart';
 
+import '../../models/models.dart';
+
 part 'game_question_dao.g.dart';
 
 @DriftAccessor(tables: [GameQuestionTable])
@@ -23,13 +25,11 @@ class GameQuestionDao extends DatabaseAccessor<KidtasticDatabase>
 
   Future<List<GameQuestionTableData>> getQuestionsForGame(
     int gameId,
-    String difficulty,
+    Difficulty difficulty,
   ) async {
-    return await (select(gameQuestionTable)..where(
-          (question) =>
-              question.gameId.equals(gameId) &
-              question.difficulty.equals(difficulty),
-        ))
+    return await (select(gameQuestionTable)
+          ..where((q) => q.gameId.equals(gameId))
+          ..where((q) => q.difficulty.equals(difficulty.name)))
         .get();
   }
 }

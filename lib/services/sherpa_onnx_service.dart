@@ -1,65 +1,90 @@
+import 'dart:async';
 import 'dart:typed_data';
-
 import 'package:kidtastic_flutter/utils/model_config.dart';
 import 'package:sherpa_onnx/sherpa_onnx.dart' as sherpa_onnx;
-
 import '../utils/utils.dart';
 
-class SherpaOnnxService {
-  late final sherpa_onnx.OnlineRecognizer _recognizer;
-  late sherpa_onnx.OnlineStream _stream;
-  var _isInitialized = false;
+class SpeechRecognitionService {
+  // Nullable fields
+  sherpa_onnx.OnlineRecognizer? _recognizer;
+  sherpa_onnx.OnlineStream? _stream;
+  bool _isInitialized = false;
 
-  Future<void> init() async {
+  final _textController = StreamController<String>.broadcast();
+  final _silenceController = StreamController<bool>.broadcast();
+
+  Stream<String> get textStream => _textController.stream;
+  Stream<bool> get silenceStream => _silenceController.stream;
+
+  bool get isRecording => _stream != null;
+
+  /// Initialize safely
+  Future<void> initialize() async {
     if (_isInitialized) return;
 
     sherpa_onnx.initBindings();
-    final modelConfig = await getOnlineModelConfig(
-      type: 0,
-    );
+    final modelConfig = await getOnlineModelConfig(type: 0);
 
     final config = sherpa_onnx.OnlineRecognizerConfig(
       model: modelConfig,
       ruleFsts: '',
     );
 
-    _recognizer = sherpa_onnx.OnlineRecognizer(config);
-    _stream = _recognizer.createStream();
+    _recognizer ??= sherpa_onnx.OnlineRecognizer(config);
+    _stream ??= _recognizer!.createStream();
     _isInitialized = true;
   }
 
-  void acceptAudio(Uint8List data) {
-    if (!_isInitialized) return;
+  /// Start recording safely
+  Future<void> startRecording() async {
+    if (!_isInitialized) await initialize();
+    _stream ??= _recognizer!.createStream();
+  }
 
-    final samplesFloat32 = convertBytesToFloat32(data);
-    _stream.acceptWaveform(
-      samples: samplesFloat32,
-      sampleRate: 16000,
-    );
-
-    while (_recognizer.isReady(_stream)) {
-      _recognizer.decode(_stream);
+  /// Stop recording safely
+  Future<void> stopRecording() async {
+    if (_stream != null) {
+      _stream!.free();
+      _stream = null;
     }
   }
 
-  String getText() {
-    if (!_isInitialized) return '';
-    return _recognizer.getResult(_stream).text;
+  /// Accept audio
+  void acceptAudio(Uint8List data) {
+    if (_stream == null) return;
+
+    final samplesFloat32 = convertBytesToFloat32(data);
+    _stream!.acceptWaveform(samples: samplesFloat32, sampleRate: 16000);
+
+    while (_recognizer!.isReady(_stream!)) {
+      _recognizer!.decode(_stream!);
+    }
   }
 
-  bool isEndpoint() {
-    if (!_isInitialized) return false;
-    return _recognizer.isEndpoint(_stream);
+  /// Get recognized text
+  String getText() =>
+      _stream != null ? _recognizer!.getResult(_stream!).text : '';
+
+  bool isEndpoint() => _stream != null && _recognizer!.isEndpoint(_stream!);
+
+  /// Clear text safely
+  void clearText() {
+    if (!_textController.isClosed) {
+      _textController.add('');
+    }
   }
 
-  void reset() {
-    if (!_isInitialized) return;
-    _recognizer.reset(_stream);
-  }
-
+  /// Dispose safely
   void dispose() {
-    _stream.free();
-    _recognizer.free();
+    _stream?.free();
+    _stream = null;
+
+    _recognizer?.free();
+    _recognizer = null;
+
     _isInitialized = false;
+
+    if (!_textController.isClosed) _textController.close();
+    if (!_silenceController.isClosed) _silenceController.close();
   }
 }

@@ -21,3 +21,15 @@ class CountingGameNextQuestion extends CountingGameEvent {
 class CountingGameGameEnd extends CountingGameEvent {
   const CountingGameGameEnd();
 }
+
+class CountingGamePositionsGenerated extends CountingGameEvent {
+  final int questionIndex;
+  final double maxWidth;
+  final double maxHeight;
+
+  const CountingGamePositionsGenerated({
+    required this.questionIndex,
+    required this.maxWidth,
+    required this.maxHeight,
+  });
+}

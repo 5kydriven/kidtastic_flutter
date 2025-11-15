@@ -86,8 +86,10 @@ class Assets {
   static const String startRecord = 'audios/start_record.mp3';
   static const String tadaFanfare = 'audios/tada-fanfare.mp3';
   static const String weNeedToTryAgainChild =
-      'audios/we-need-to-try-again-child.mp3';
+      'audios/audios/we-need-to-try-again-child.mp3';
   static const String wow = 'audios/wow.mp3';
+  static const String wrongZap = 'audios/wrong-zap.mp3';
+  static const String wrongChime = 'audios/wrong-chime.mp3';
 
   // **Backgrounds**
   static const String matchTheShapeHome =

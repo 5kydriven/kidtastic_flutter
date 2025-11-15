@@ -117,6 +117,7 @@ class InitialDataSeeder {
           question: 'How many $fruitName are there?',
           correctAnswer: correctCount.toString(),
           image: fruit.image,
+          difficulty: Difficulty.easy,
           choices: jsonEncode(options),
         ),
       );
@@ -257,6 +258,7 @@ class InitialDataSeeder {
           gameId: gameId,
           question: word.question,
           correctAnswer: word.question,
+          difficulty: word.difficulty,
           image: word.image,
         ),
       );
@@ -273,38 +275,47 @@ class InitialDataSeeder {
       Question(
         correctAnswer: 'circle',
         image: Assets.circle,
+        difficulty: Difficulty.easy,
       ),
       Question(
         correctAnswer: 'heart',
         image: Assets.heart,
+        difficulty: Difficulty.easy,
       ),
       Question(
         correctAnswer: 'hexagon',
         image: Assets.hexagon,
+        difficulty: Difficulty.easy,
       ),
       Question(
         correctAnswer: 'oval',
         image: Assets.oval,
+        difficulty: Difficulty.easy,
       ),
       Question(
         correctAnswer: 'pentagon',
         image: Assets.pentagon,
+        difficulty: Difficulty.easy,
       ),
       Question(
         correctAnswer: 'rectangle',
         image: Assets.rectangle,
+        difficulty: Difficulty.easy,
       ),
       Question(
         correctAnswer: 'square',
         image: Assets.square,
+        difficulty: Difficulty.easy,
       ),
       Question(
         correctAnswer: 'trapezoid',
         image: Assets.trapezoid,
+        difficulty: Difficulty.easy,
       ),
       Question(
         correctAnswer: 'triangle',
         image: Assets.triangle,
+        difficulty: Difficulty.easy,
       ),
     ];
 
@@ -326,6 +337,7 @@ class InitialDataSeeder {
           question: 'What shape is this?',
           correctAnswer: shape.correctAnswer,
           image: shape.image,
+          difficulty: shape.difficulty,
           choices: jsonEncode(randomChoices),
         ),
       );

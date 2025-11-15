@@ -46,7 +46,7 @@ class GameQuestionRepository {
     try {
       final response = await _gameQuestionDao.getQuestionsForGame(
         gameId,
-        difficulty.name,
+        difficulty,
       );
       if (isRandom) {
         response.shuffle();
@@ -60,7 +60,7 @@ class GameQuestionRepository {
         statusCode: 200,
       );
     } catch (e) {
-      print(e);
+      print('here: $e');
       return Result(
         statusCode: 400,
       );

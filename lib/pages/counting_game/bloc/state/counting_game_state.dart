@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../../models/models.dart';
@@ -14,6 +16,7 @@ sealed class CountingGameState with _$CountingGameState {
     int? sessionId,
     @Default(0) int score,
     @Default(false) hasEnded,
+    @Default([]) List<Offset> imagePositions,
     @Default(RequestStatus.waiting) RequestStatus screenRequestStatus,
     @Default(RequestStatus.waiting) RequestStatus sessionQuestionRequestStatus,
     @Default(RequestStatus.waiting) RequestStatus gameSessionRequestStatus,

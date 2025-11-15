@@ -1,13 +1,21 @@
+import 'dart:math';
+
+import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kidtastic_flutter/models/models.dart';
 import 'package:kidtastic_flutter/pages/counting_game/bloc/bloc.dart';
 import 'package:kidtastic_flutter/repositories/repositories.dart';
+
+import '../../../constants/constants.dart';
 
 class CountingGameBloc extends Bloc<CountingGameEvent, CountingGameState> {
   final CountingGameState initialState;
   final GameQuestionRepository _gameQuestionRepository;
   final GameSessionRepository _gameSessionRepository;
   final SessionQuestionRepository _sessionQuestionRepository;
+
+  final AudioPlayer player = AudioPlayer();
 
   CountingGameBloc({
     required this.initialState,
@@ -22,6 +30,7 @@ class CountingGameBloc extends Bloc<CountingGameEvent, CountingGameState> {
     on<CountingGameButtonPressed>(_buttonPressed);
     on<CountingGameNextQuestion>(_nextQuestion);
     on<CountingGameGameEnd>(_gameEnd);
+    on<CountingGamePositionsGenerated>(_positionsGenerated);
   }
 
   Future<void> _screenCreated(
@@ -55,6 +64,7 @@ class CountingGameBloc extends Bloc<CountingGameEvent, CountingGameState> {
                 question: gameQuestionResult.data ?? [],
                 score: 0,
                 currentIndex: 0,
+
                 screenRequestStatus: RequestStatus.success,
               ),
             );
@@ -92,6 +102,13 @@ class CountingGameBloc extends Bloc<CountingGameEvent, CountingGameState> {
     final isCorrect =
         state.question[state.currentIndex].correctAnswer == event.answer;
 
+    await player.setVolume(1.0);
+    if (isCorrect) {
+      await player.play(AssetSource(Assets.correctRecord));
+    } else {
+      await player.play(AssetSource(Assets.wrongChime));
+    }
+
     final sessionQuestionResult = await _sessionQuestionRepository
         .addSessionQuestion(
           entry: SessionQuestion(
@@ -119,7 +136,6 @@ class CountingGameBloc extends Bloc<CountingGameEvent, CountingGameState> {
         );
         break;
     }
-    add(const CountingGameNextQuestion());
   }
 
   void _nextQuestion(
@@ -137,9 +153,11 @@ class CountingGameBloc extends Bloc<CountingGameEvent, CountingGameState> {
       add(const CountingGameGameEnd());
       return;
     }
+
     emit(
       state.copyWith(
         currentIndex: nextIndex,
+        imagePositions: [],
       ),
     );
   }
@@ -175,5 +193,33 @@ class CountingGameBloc extends Bloc<CountingGameEvent, CountingGameState> {
         );
         break;
     }
+  }
+
+  void _positionsGenerated(
+    CountingGamePositionsGenerated event,
+    Emitter<CountingGameState> emit,
+  ) {
+    final question = state.question[event.questionIndex];
+    final count = int.tryParse(question.correctAnswer ?? '0') ?? 0;
+    final positions = List.generate(
+      count,
+      (_) => Offset(
+        Random().nextDouble() * (event.maxWidth - 80),
+        Random().nextDouble() * (event.maxHeight - 80),
+      ),
+    );
+
+    emit(
+      state.copyWith(
+        currentIndex: event.questionIndex,
+        imagePositions: positions,
+      ),
+    );
+  }
+
+  @override
+  Future<void> close() async {
+    await player.dispose();
+    return super.close();
   }
 }
