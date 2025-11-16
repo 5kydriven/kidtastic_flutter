@@ -54,7 +54,7 @@ class Assets {
   static const String triangle = 'assets/shapes/triangle.png';
 
   // **Pronunciation**
-  static const String aligator = 'assets/pronunciation/aligator.png';
+  static const String alligator = 'assets/pronunciation/aligator.png';
   static const String ball = 'assets/pronunciation/ball.png';
   static const String birdFeedingWorm =
       'assets/pronunciation/bird_feeding_worm.png';

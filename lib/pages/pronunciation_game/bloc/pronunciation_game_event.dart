@@ -30,3 +30,11 @@ class PronunciationGameRecordingToggle extends PronunciationGameEvent {
 class PronunciationGameModelReady extends PronunciationGameEvent {
   const PronunciationGameModelReady();
 }
+
+class PronunciationGameTextSpeech extends PronunciationGameEvent {
+  final String text;
+
+  const PronunciationGameTextSpeech({
+    required this.text,
+  });
+}

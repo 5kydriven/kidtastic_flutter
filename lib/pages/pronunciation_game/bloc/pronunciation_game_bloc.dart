@@ -1,4 +1,3 @@
-// pronunciation_game_bloc.dart
 import 'dart:async';
 import 'dart:isolate';
 import 'dart:typed_data';
@@ -6,6 +5,7 @@ import 'dart:typed_data';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+// import 'package:flutter_tts/flutter_tts.dart';
 import 'package:kidtastic_flutter/workers/sherpa_worker.dart';
 import 'package:record/record.dart';
 import 'package:sherpa_onnx/sherpa_onnx.dart' as sherpa;
@@ -25,14 +25,13 @@ class PronunciationGameBloc
   final PronunciationAttemptRepository _pronunciationAttemptRepository;
 
   late final AudioRecorder _audioRecorder;
-  final AudioPlayer _soundPlayer = AudioPlayer();
+  final AudioPlayer player = AudioPlayer();
+  // final FlutterTts flutterTts = FlutterTts();
 
-  // Sherpa objects live in worker; keep reference so we can reset/create streams locally if needed
   sherpa.OnlineRecognizer? _recognizer;
   sherpa.OnlineStream? _stream;
   final int _sampleRate = 16000;
 
-  // isolate comms
   Isolate? _sherpaIsolate;
   SendPort? _sherpaSend;
   late ReceivePort _sherpaReceivePort;
@@ -44,7 +43,6 @@ class PronunciationGameBloc
 
   bool _isInitialized = false;
 
-  // Accumulate recognized text during a single recording session
   String _accumulatedText = '';
 
   PronunciationGameBloc({
@@ -63,8 +61,9 @@ class PronunciationGameBloc
     on<PronunciationGameQuestionNext>(_questionNext);
     on<PronunciationGameGameEnd>(_gameEnd);
     on<PronunciationGameRecordingToggle>(_recordingToggle);
-    on<PronunciationGameTextRecognized>(_onTextRecognized);
-    on<PronunciationGameModelReady>(_onModelReady);
+    on<PronunciationGameTextRecognized>(_textRecognized);
+    on<PronunciationGameModelReady>(_modelReady);
+    on<PronunciationGameTextSpeech>(_textSpeech);
   }
 
   Future<void> _screenCreated(
@@ -95,44 +94,6 @@ class PronunciationGameBloc
     );
 
     add(const PronunciationGameSessionFetched());
-  }
-
-  Future<void> _startSherpaIsolate() async {
-    _sherpaInitPort = ReceivePort();
-
-    _sherpaIsolate = await Isolate.spawn(
-      sherpaWorker,
-      _sherpaInitPort.sendPort,
-      debugName: 'SherpaWorker',
-    );
-
-    _sherpaSend = await _sherpaInitPort.first as SendPort;
-    _sherpaInitPort.close();
-
-    _sherpaReceivePort = ReceivePort();
-    _sherpaReceivePort.listen((msg) {
-      if (msg is Map && msg['type'] == 'ready') {
-        add(const PronunciationGameModelReady());
-      } else if (msg is Map && msg['type'] == 'result') {
-        final text = msg['text'] as String? ?? '';
-        add(PronunciationGameTextRecognized(text));
-      } else if (msg is Map && msg['type'] == 'silence') {
-        _handleSilenceTimeout();
-      }
-    });
-
-    final modelConfig = await getOnlineModelConfig(type: 0);
-    final config = sherpa.OnlineRecognizerConfig(
-      model: modelConfig,
-      ruleFsts: '',
-    );
-
-    _sherpaSend!.send({
-      'type': 'init',
-      'config': config,
-      'replyPort': _sherpaReceivePort.sendPort,
-      'quietFramesForSilence': 100,
-    });
   }
 
   Future<void> _sessionFetched(
@@ -202,6 +163,11 @@ class PronunciationGameBloc
   ) async {
     final nextIndex = state.currentIndex + 1;
     if (nextIndex >= state.question.length) {
+      emit(
+        state.copyWith(
+          isGameEnded: true,
+        ),
+      );
       add(const PronunciationGameGameEnd());
       return;
     }
@@ -272,8 +238,8 @@ class PronunciationGameBloc
 
       _sherpaSend?.send({'type': 'reset'});
 
-      await _soundPlayer.setVolume(1.0);
-      await _soundPlayer.play(
+      await player.setVolume(1.0);
+      await player.play(
         AssetSource(Assets.startRecord),
       );
 
@@ -323,7 +289,7 @@ class PronunciationGameBloc
     }
   }
 
-  Future<void> _onTextRecognized(
+  Future<void> _textRecognized(
     PronunciationGameTextRecognized event,
     Emitter<PronunciationGameState> emit,
   ) async {
@@ -397,6 +363,12 @@ class PronunciationGameBloc
     bool triggeredByUser = false,
     bool wasCorrect = false,
   }) async {
+    emit(
+      state.copyWith(
+        pronunciationRequestStatus: RequestStatus.inProgress,
+      ),
+    );
+
     final finalIsCorrect = wasCorrect || state.isCorrect;
     final finalRecognized = state.recognizedText;
     final finalConfidence = state.confidenceScore;
@@ -417,21 +389,25 @@ class PronunciationGameBloc
 
     _sherpaSend?.send({'type': 'reset'});
 
-    try {
-      await _pronunciationAttemptRepository.addAttempt(
-        attempt: PronunciationAttempt(
-          isCorrect: finalIsCorrect,
-          sessionQuestionId: state.currentSessionQuestionId ?? 0,
-          recognizedText: finalRecognized,
-          word: state.question.isNotEmpty
-              ? state.question[state.currentIndex].question ?? ''
-              : '',
-          confidence: finalConfidence,
-        ),
-      );
-    } catch (e) {
-      debugPrint('Error saving attempt: $e');
-    }
+    final result = await _pronunciationAttemptRepository.addAttempt(
+      attempt: PronunciationAttempt(
+        isCorrect: finalIsCorrect,
+        sessionQuestionId: state.currentSessionQuestionId ?? 0,
+        recognizedText: finalRecognized,
+        word: state.question.isNotEmpty
+            ? state.question[state.currentIndex].question ?? ''
+            : '',
+        confidence: finalConfidence,
+      ),
+    );
+
+    emit(
+      state.copyWith(
+        pronunciationRequestStatus: result.resultStatus == ResultStatus.success
+            ? RequestStatus.success
+            : RequestStatus.failure,
+      ),
+    );
 
     emit(
       state.copyWith(
@@ -443,17 +419,18 @@ class PronunciationGameBloc
 
     if (finalIsCorrect) {
       try {
-        await _soundPlayer.setVolume(1.0);
-        await _soundPlayer.play(AssetSource(Assets.correctRecord));
+        await player.setVolume(1.0);
+        await player.play(AssetSource(Assets.correctRecord));
       } catch (e) {
         debugPrint('play correct sound error: $e');
       }
 
       await Future.delayed(
         const Duration(
-          milliseconds: 300,
+          seconds: 1,
         ),
       );
+      player.stop();
 
       emit(
         state.copyWith(
@@ -467,6 +444,30 @@ class PronunciationGameBloc
     } else {
       // not correct: if user triggered stop, UI already reflects stopped. If automatic stop (silence/max) we do nothing more.
     }
+  }
+
+  Future<void> _modelReady(
+    PronunciationGameModelReady event,
+    Emitter<PronunciationGameState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        isModelReady: true,
+      ),
+    );
+  }
+
+  Future<void> _textSpeech(
+    PronunciationGameTextSpeech event,
+    Emitter<PronunciationGameState> emit,
+  ) async {
+    // await flutterTts.setLanguage('en-US');
+    // await flutterTts.speak('Hello from your Windows application!');
+    // await tts.setLanguage('en-US'); // or other language
+    // await tts.setSpeechRate(0.5); // adjust speed
+    // await tts.setVolume(1.0);
+    // await tts.setPitch(1.0);
+    // await tts.speak(event.text);
   }
 
   void _startMaxTimer() {
@@ -497,36 +498,53 @@ class PronunciationGameBloc
     }
   }
 
-  Future<void> _onModelReady(
-    PronunciationGameModelReady event,
-    Emitter<PronunciationGameState> emit,
-  ) async {
-    emit(
-      state.copyWith(
-        isModelReady: true,
-      ),
+  Future<void> _startSherpaIsolate() async {
+    _sherpaInitPort = ReceivePort();
+
+    _sherpaIsolate = await Isolate.spawn(
+      sherpaWorker,
+      _sherpaInitPort.sendPort,
+      debugName: 'SherpaWorker',
     );
+
+    _sherpaSend = await _sherpaInitPort.first as SendPort;
+    _sherpaInitPort.close();
+
+    _sherpaReceivePort = ReceivePort();
+    _sherpaReceivePort.listen((msg) {
+      if (msg is Map && msg['type'] == 'ready') {
+        add(const PronunciationGameModelReady());
+      } else if (msg is Map && msg['type'] == 'result') {
+        final text = msg['text'] as String? ?? '';
+        add(PronunciationGameTextRecognized(text));
+      } else if (msg is Map && msg['type'] == 'silence') {
+        _handleSilenceTimeout();
+      }
+    });
+
+    final modelConfig = await getOnlineModelConfig(type: 0);
+    final config = sherpa.OnlineRecognizerConfig(
+      model: modelConfig,
+      ruleFsts: '',
+    );
+
+    _sherpaSend!.send({
+      'type': 'init',
+      'config': config,
+      'replyPort': _sherpaReceivePort.sendPort,
+      'quietFramesForSilence': 100,
+    });
   }
 
   @override
   Future<void> close() async {
-    try {
-      _sherpaSend?.send({'type': 'dispose'});
-    } catch (_) {}
-    try {
-      _sherpaReceivePort.close();
-    } catch (_) {}
-    try {
-      _sherpaIsolate?.kill(priority: Isolate.immediate);
-    } catch (_) {}
+    _sherpaSend?.send({'type': 'dispose'});
+    _sherpaReceivePort.close();
+    _sherpaIsolate?.kill(priority: Isolate.immediate);
     await _recordSub?.cancel();
-    try {
-      await _audioRecorder.dispose();
-    } catch (_) {}
-    try {
-      _stream?.free();
-      _recognizer?.free();
-    } catch (_) {}
+    await _audioRecorder.dispose();
+    _stream?.free();
+    _recognizer?.free();
     _silenceTimer?.cancel();
     _maxTimer?.cancel();
     return super.close();

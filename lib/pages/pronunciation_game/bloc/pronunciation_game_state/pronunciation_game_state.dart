@@ -22,6 +22,7 @@ sealed class PronunciationGameState with _$PronunciationGameState {
     @Default(Duration(seconds: 8)) Duration maxRecordingTime,
     @Default(0) int attempts,
     @Default(false) bool isModelReady,
+    @Default(false) bool isGameEnded,
     @Default(RequestStatus.waiting) RequestStatus sessionQuestionRequestStatus,
     @Default(RequestStatus.waiting) RequestStatus sessionRequestStatus,
     @Default(RequestStatus.waiting) RequestStatus gameSessionRequestStatus,
