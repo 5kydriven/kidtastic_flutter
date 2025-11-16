@@ -15,8 +15,6 @@ import 'package:kidtastic_flutter/pages/number_game/view/number_game_page.dart';
 import 'package:kidtastic_flutter/pages/pronunciation_game/pronunciation_game.dart';
 import 'package:kidtastic_flutter/pages/shape_game/bloc/shape_game_state/shape_game_state.dart';
 import 'package:kidtastic_flutter/pages/shape_game/view/shape_game_page.dart';
-import 'package:kidtastic_flutter/pages/speech_recognition/view/view.dart';
-import 'package:kidtastic_flutter/pages/streaming_asr/view/streaming_asr_page.dart';
 import 'package:path/path.dart' as p;
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:window_manager/window_manager.dart';
@@ -169,8 +167,8 @@ class _MyAppState extends State<MyApp> {
     super.initState();
 
     router = GoRouter(
-      // initialLocation: InitialScreenPage.route,
-      initialLocation: StreamingAsrPage.route,
+      initialLocation: InitialScreenPage.route,
+      // initialLocation: StreamingAsrPage.route,
       routes: <RouteBase>[
         GoRoute(
           path: HomePage.route,
@@ -214,24 +212,13 @@ class _MyAppState extends State<MyApp> {
             );
           },
         ),
-        GoRoute(
-          path: SpeechRecognitionPage.route,
-          builder: (context, state) {
-            return SpeechRecognitionPage();
-          },
-        ),
+
         GoRoute(
           path: ShapeGamePage.route,
           builder: (context, state) {
             return ShapeGamePage(
               initialState: state.extra as ShapeGameState,
             );
-          },
-        ),
-        GoRoute(
-          path: StreamingAsrPage.route,
-          builder: (context, state) {
-            return const StreamingAsrPage();
           },
         ),
       ],

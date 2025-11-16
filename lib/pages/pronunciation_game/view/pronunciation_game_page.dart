@@ -1,17 +1,14 @@
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:record/record.dart';
 
 import '../../../constants/constants.dart';
 import '../../../models/models.dart';
 import '../../../repositories/repositories.dart';
-import '../../../services/services.dart';
 import '../bloc/bloc.dart';
 import 'view.dart';
 
-class PronunciationGamePage extends StatefulWidget {
+class PronunciationGamePage extends StatelessWidget {
   static const String route = '/pronunciation-game';
   final PronunciationGameState initialState;
 
@@ -19,28 +16,6 @@ class PronunciationGamePage extends StatefulWidget {
     super.key,
     required this.initialState,
   });
-
-  @override
-  State<PronunciationGamePage> createState() => _PronunciationGamePageState();
-}
-
-class _PronunciationGamePageState extends State<PronunciationGamePage> {
-  final audioPlayer = AudioPlayer();
-  final audioRecorder = AudioRecorder();
-  final speechService = SpeechRecognitionService.instance;
-
-  @override
-  void initState() {
-    super.initState();
-    speechService.initialize();
-  }
-
-  @override
-  void dispose() {
-    audioPlayer.dispose();
-    audioRecorder.dispose();
-    super.dispose();
-  }
 
   void _gameListener(BuildContext context, PronunciationGameState state) {
     final bloc = context.read<PronunciationGameBloc>();
@@ -75,7 +50,7 @@ class _PronunciationGamePageState extends State<PronunciationGamePage> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => PronunciationGameBloc(
-        initialState: widget.initialState,
+        initialState: initialState,
         gameQuestionRepository: RepositoryProvider.of<GameQuestionRepository>(
           context,
         ),
@@ -84,7 +59,6 @@ class _PronunciationGamePageState extends State<PronunciationGamePage> {
         ),
         sessionQuestionRepository:
             RepositoryProvider.of<SessionQuestionRepository>(context),
-        speechService: speechService,
         pronunciationAttemptRepository:
             RepositoryProvider.of<PronunciationAttemptRepository>(context),
       )..add(const PronunciationGameScreenCreated()),

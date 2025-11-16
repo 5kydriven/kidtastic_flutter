@@ -26,3 +26,7 @@ class PronunciationGameSessionFetched extends PronunciationGameEvent {
 class PronunciationGameRecordingToggle extends PronunciationGameEvent {
   const PronunciationGameRecordingToggle();
 }
+
+class PronunciationGameModelReady extends PronunciationGameEvent {
+  const PronunciationGameModelReady();
+}
