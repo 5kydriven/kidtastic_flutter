@@ -2,13 +2,19 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_confetti/flutter_confetti.dart';
 import 'package:kidtastic_flutter/pages/shape_game/widgets/shape_button.dart';
 
 import '../../../models/models.dart';
 import '../bloc/bloc.dart';
 
 class ShapeGameBody extends StatelessWidget {
-  const ShapeGameBody({super.key});
+  final ConfettiController confettiController;
+
+  const ShapeGameBody({
+    super.key,
+    required this.confettiController,
+  });
 
   void _checkAnswer(BuildContext context, String selected) {
     final bloc = context.read<ShapeGameBloc>();
@@ -28,6 +34,22 @@ class ShapeGameBody extends StatelessWidget {
         ),
       ),
     );
+
+    if (isCorrect) {
+      Confetti.launch(
+        context,
+        options: ConfettiOptions(
+          particleCount: 250,
+          spread: 275,
+          gravity: 3,
+          colors: [
+            Color(0xFFC8C8FF),
+            Color(0xFFC8EFFF),
+            Color(0xFFBBEEE9),
+          ],
+        ),
+      );
+    }
 
     bloc.add(
       ShapeGameButtonPressed(

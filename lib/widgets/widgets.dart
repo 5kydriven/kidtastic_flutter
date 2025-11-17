@@ -1,4 +1,3 @@
-export 'confetti_overlay_widget.dart';
 export 'control_buttons_widget.dart';
 export 'text_display_widget.dart';
 export 'title_bar.dart';

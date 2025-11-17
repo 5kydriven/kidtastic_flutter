@@ -39,4 +39,4 @@ Filename: "{app}\kidtastic_flutter.exe"; Description: "Launch Kidtastic"; \
 ; --- Uninstaller cleanup (optional) ---
 [UninstallDelete]
 ; Remove user data folder during uninstall (optional; comment out to preserve data)
-; Type: filesandordirs; Name: "{localappdata}\Kidtastic"
+Type: filesandordirs; Name: "{localappdata}\Kidtastic"

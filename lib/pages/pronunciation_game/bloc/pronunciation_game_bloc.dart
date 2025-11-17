@@ -1,11 +1,19 @@
 import 'dart:async';
-import 'dart:math' hide log;
+import 'dart:isolate';
+import 'dart:typed_data';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
+// import 'package:flutter_tts/flutter_tts.dart';
+import 'package:kidtastic_flutter/workers/sherpa_worker.dart';
+import 'package:record/record.dart';
+import 'package:sherpa_onnx/sherpa_onnx.dart' as sherpa;
+
 import '../../../constants/constants.dart';
 import '../../../models/models.dart';
 import '../../../repositories/repositories.dart';
-import '../../../services/services.dart';
+import '../../../utils/utils.dart';
 import 'bloc.dart';
 
 class PronunciationGameBloc
@@ -15,42 +23,47 @@ class PronunciationGameBloc
   final GameSessionRepository _gameSessionRepository;
   final SessionQuestionRepository _sessionQuestionRepository;
   final PronunciationAttemptRepository _pronunciationAttemptRepository;
-  final SpeechRecognitionService _speechService;
 
-  StreamSubscription<String>? _textSub;
-  StreamSubscription<bool>? _recSub;
-  StreamSubscription<bool>? _silenceSub;
+  late final AudioRecorder _audioRecorder;
+  final AudioPlayer player = AudioPlayer();
+  // final FlutterTts flutterTts = FlutterTts();
 
-  final AudioPlayer _soundPlayer = AudioPlayer();
+  sherpa.OnlineRecognizer? _recognizer;
+  sherpa.OnlineStream? _stream;
+  final int _sampleRate = 16000;
+
+  Isolate? _sherpaIsolate;
+  SendPort? _sherpaSend;
+  late ReceivePort _sherpaReceivePort;
+  late ReceivePort _sherpaInitPort;
+
+  StreamSubscription<RecordState>? _recordSub;
   Timer? _maxTimer;
+  Timer? _silenceTimer;
+
+  bool _isInitialized = false;
+
+  String _accumulatedText = '';
 
   PronunciationGameBloc({
     required this.initialState,
     required GameQuestionRepository gameQuestionRepository,
     required GameSessionRepository gameSessionRepository,
     required SessionQuestionRepository sessionQuestionRepository,
-    required SpeechRecognitionService speechService,
     required PronunciationAttemptRepository pronunciationAttemptRepository,
   }) : _gameQuestionRepository = gameQuestionRepository,
        _gameSessionRepository = gameSessionRepository,
        _sessionQuestionRepository = sessionQuestionRepository,
-       _speechService = speechService,
        _pronunciationAttemptRepository = pronunciationAttemptRepository,
        super(initialState) {
     on<PronunciationGameScreenCreated>(_screenCreated);
+    on<PronunciationGameSessionFetched>(_sessionFetched);
     on<PronunciationGameQuestionNext>(_questionNext);
     on<PronunciationGameGameEnd>(_gameEnd);
     on<PronunciationGameRecordingToggle>(_recordingToggle);
-    on<PronunciationGameTextRecognized>(_onTextRecognized);
-    _textSub = _speechService.textStream.listen((recognizedText) {
-      add(PronunciationGameTextRecognized(recognizedText));
-    });
-
-    _silenceSub = _speechService.silenceStream.listen((isSilent) {
-      if (isSilent && _speechService.isRecording) {
-        add(const PronunciationGameRecordingToggle());
-      }
-    });
+    on<PronunciationGameTextRecognized>(_textRecognized);
+    on<PronunciationGameModelReady>(_modelReady);
+    on<PronunciationGameTextSpeech>(_textSpeech);
   }
 
   Future<void> _screenCreated(
@@ -63,54 +76,85 @@ class PronunciationGameBloc
       ),
     );
 
+    if (!_isInitialized) {
+      _audioRecorder = AudioRecorder();
+
+      _recordSub = _audioRecorder.onStateChanged().listen((recordState) {
+        debugPrint('Record state changed: $recordState');
+      });
+
+      await _startSherpaIsolate();
+      _isInitialized = true;
+    }
+
+    emit(
+      state.copyWith(
+        screenRequestStatus: RequestStatus.success,
+      ),
+    );
+
+    add(const PronunciationGameSessionFetched());
+  }
+
+  Future<void> _sessionFetched(
+    PronunciationGameSessionFetched event,
+    Emitter<PronunciationGameState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        sessionRequestStatus: RequestStatus.inProgress,
+      ),
+    );
+
     final gameSessionResult = await _gameSessionRepository.startSession(
       studentId: state.student?.id ?? 0,
       gameId: state.game?.id ?? 0,
     );
 
-    if (gameSessionResult.resultStatus == ResultStatus.success) {
-      final gameQuestionResult = await _gameQuestionRepository.getQuestion(
-        gameId: state.game?.id ?? 0,
-        limit: 5,
-      );
-
-      if (gameQuestionResult.resultStatus == ResultStatus.success &&
-          (gameQuestionResult.data?.isNotEmpty ?? false)) {
-        final firstQuestion = gameQuestionResult.data!.first;
-
-        final sessionQuestionResult = await _sessionQuestionRepository
-            .addSessionQuestion(
-              entry: SessionQuestion(
-                sessionId: gameSessionResult.data ?? 0,
-                questionId: firstQuestion.id ?? 0,
-              ),
-            );
-
-        emit(
-          state.copyWith(
-            sessionId: gameSessionResult.data ?? 0,
-            question: gameQuestionResult.data ?? [],
-            score: 0,
-            currentIndex: 0,
-            currentSessionQuestionId: sessionQuestionResult.data ?? 0,
-            screenRequestStatus: RequestStatus.success,
-          ),
-        );
-      } else {
-        emit(
-          state.copyWith(
-            question: [],
-            screenRequestStatus: RequestStatus.failure,
-          ),
-        );
-      }
-    } else {
+    if (gameSessionResult.resultStatus != ResultStatus.success) {
       emit(
         state.copyWith(
-          screenRequestStatus: RequestStatus.failure,
+          sessionRequestStatus: RequestStatus.failure,
         ),
       );
+      return;
     }
+
+    final gameQuestionResult = await _gameQuestionRepository.getQuestion(
+      gameId: state.game?.id ?? 0,
+      limit: 5,
+    );
+
+    if (gameQuestionResult.resultStatus != ResultStatus.success ||
+        (gameQuestionResult.data?.isEmpty ?? true)) {
+      emit(
+        state.copyWith(
+          question: [],
+          sessionRequestStatus: RequestStatus.failure,
+        ),
+      );
+      return;
+    }
+
+    final firstQuestion = gameQuestionResult.data!.first;
+    final sessionQuestionResult = await _sessionQuestionRepository
+        .addSessionQuestion(
+          entry: SessionQuestion(
+            sessionId: gameSessionResult.data ?? 0,
+            questionId: firstQuestion.id ?? 0,
+          ),
+        );
+
+    emit(
+      state.copyWith(
+        sessionId: gameSessionResult.data ?? 0,
+        question: gameQuestionResult.data ?? [],
+        score: 0,
+        currentIndex: 0,
+        currentSessionQuestionId: sessionQuestionResult.data ?? 0,
+        sessionRequestStatus: RequestStatus.success,
+      ),
+    );
   }
 
   Future<void> _questionNext(
@@ -119,6 +163,11 @@ class PronunciationGameBloc
   ) async {
     final nextIndex = state.currentIndex + 1;
     if (nextIndex >= state.question.length) {
+      emit(
+        state.copyWith(
+          isGameEnded: true,
+        ),
+      );
       add(const PronunciationGameGameEnd());
       return;
     }
@@ -134,8 +183,15 @@ class PronunciationGameBloc
       state.copyWith(
         currentIndex: nextIndex,
         currentSessionQuestionId: result.data ?? 0,
+        recognizedText: '',
+        isCorrect: false,
+        confidenceScore: 0,
       ),
     );
+
+    _accumulatedText = '';
+
+    _sherpaSend?.send({'type': 'reset'});
   }
 
   Future<void> _gameEnd(
@@ -166,74 +222,193 @@ class PronunciationGameBloc
     PronunciationGameRecordingToggle event,
     Emitter<PronunciationGameState> emit,
   ) async {
-    if (_speechService.isRecording) {
-      await _stopRecording(emit);
-    } else {
-      _speechService.clearText();
-      await _soundPlayer.play(AssetSource(Assets.startRecord));
-      await _soundPlayer.setVolume(1.0);
-      await _speechService.startRecording();
+    final currentlyRecording = state.isRecording;
 
-      _maxTimer?.cancel();
-      _maxTimer = Timer(const Duration(seconds: 8), () {
-        if (_speechService.isRecording) {
-          add(const PronunciationGameRecordingToggle());
-        }
-      });
-
+    if (!currentlyRecording) {
       emit(
         state.copyWith(
           isRecording: true,
+          recognizedText: '',
+          isCorrect: false,
+          confidenceScore: 0,
         ),
+      );
+
+      _accumulatedText = '';
+
+      _sherpaSend?.send({'type': 'reset'});
+
+      await player.setVolume(1.0);
+      await player.play(
+        AssetSource(Assets.startRecord),
+      );
+
+      const config = RecordConfig(
+        encoder: AudioEncoder.pcm16bits,
+        sampleRate: 16000,
+        numChannels: 1,
+        bitRate: 128000,
+        autoGain: false,
+        echoCancel: false,
+        noiseSuppress: false,
+      );
+
+      try {
+        final stream = await _audioRecorder.startStream(config);
+        stream.listen(
+          (data) {
+            try {
+              final samplesFloat32 = convertBytesToFloat32(
+                Uint8List.fromList(data),
+              );
+              _sherpaSend?.send({
+                'type': 'audio',
+                'samples': samplesFloat32,
+                'sampleRate': _sampleRate,
+              });
+
+              _resetSilenceTimer();
+            } catch (e, st) {
+              debugPrint('Error while streaming audio: $e\n$st');
+            }
+          },
+          onDone: () => debugPrint('audio stream done'),
+          onError: (e, st) => debugPrint('audio stream error: $e\n$st'),
+        );
+      } catch (e) {
+        debugPrint('startStream error: $e');
+      }
+
+      _startMaxTimer();
+      _resetSilenceTimer();
+    } else {
+      await _stopRecording(
+        emit,
+        triggeredByUser: true,
       );
     }
   }
 
-  void _onTextRecognized(
+  Future<void> _textRecognized(
     PronunciationGameTextRecognized event,
     Emitter<PronunciationGameState> emit,
   ) async {
     if (!state.isRecording) return;
 
-    final current = state.question[state.currentIndex];
-    final expectedText = current.question?.toLowerCase().trim() ?? '';
-    final recognizedText = event.recognizedText.toLowerCase().trim();
+    final recognizedRaw = event.recognizedText;
+    debugPrint('text recognized: $recognizedRaw');
 
-    final similarity = _calculateSimilarity(expectedText, recognizedText);
-    final isCorrect = similarity >= 0.8;
-    final confidence = (similarity * 100).clamp(0, 100);
+    _accumulatedText = recognizedRaw;
+
+    final current = state.question.isNotEmpty
+        ? state.question[state.currentIndex]
+        : null;
+    final expectedText = current?.question?.toLowerCase().trim() ?? '';
+
+    final recognizedWords = _accumulatedText
+        .toLowerCase()
+        .trim()
+        .split(RegExp(r'\s+'))
+        .where((w) => w.isNotEmpty)
+        .toList();
+
+    double bestSimilarity = 0.0;
+    String bestMatch = '';
+
+    for (final word in recognizedWords) {
+      final similarity = calculateSimilarity(expectedText, word);
+      if (similarity > bestSimilarity) {
+        bestSimilarity = similarity;
+        bestMatch = word;
+      }
+    }
+
+    final fullSimilarity = calculateSimilarity(
+      expectedText,
+      _accumulatedText.toLowerCase().trim(),
+    );
+    if (fullSimilarity > bestSimilarity) {
+      bestSimilarity = fullSimilarity;
+      bestMatch = _accumulatedText.trim();
+    }
+
+    final isCorrect = bestSimilarity >= 0.8;
+    final confidence = (bestSimilarity * 100).clamp(0, 100);
+
+    debugPrint(
+      'Expected: "$expectedText" | Best match: "$bestMatch" | Similarity: $bestSimilarity',
+    );
+
+    _resetSilenceTimer();
 
     emit(
       state.copyWith(
-        recognizedText: event.recognizedText,
+        recognizedText: recognizedRaw,
         isCorrect: isCorrect,
         confidenceScore: double.parse(confidence.toStringAsFixed(2)),
       ),
     );
 
-    if (isCorrect && _speechService.isRecording && state.isRecording) {
-      _stopRecording(emit);
-      await _soundPlayer.play(AssetSource(Assets.correctRecord));
-      await _soundPlayer.setVolume(1.0);
+    if (isCorrect) {
+      await _stopRecording(
+        emit,
+        triggeredByUser: false,
+        wasCorrect: true,
+      );
     }
   }
 
-  Future<void> _stopRecording(Emitter<PronunciationGameState> emit) async {
-    if (state.isCorrect) {
-      add(const PronunciationGameQuestionNext());
-    }
-    await _speechService.stopRecording();
-    _maxTimer?.cancel();
-    final result = await _pronunciationAttemptRepository.addAttempt(
-      attempt: PronunciationAttempt(
-        isCorrect: state.isCorrect,
-        sessionQuestionId: state.currentSessionQuestionId ?? 0,
-        recognizedText: state.recognizedText,
-        word: state.question[state.currentIndex].question ?? '',
-        confidence: state.confidenceScore,
+  Future<void> _stopRecording(
+    Emitter<PronunciationGameState> emit, {
+    bool triggeredByUser = false,
+    bool wasCorrect = false,
+  }) async {
+    emit(
+      state.copyWith(
+        pronunciationRequestStatus: RequestStatus.inProgress,
       ),
     );
-    print('attempt: ${result.resultStatus}');
+
+    final finalIsCorrect = wasCorrect || state.isCorrect;
+    final finalRecognized = state.recognizedText;
+    final finalConfidence = state.confidenceScore;
+
+    _maxTimer?.cancel();
+    _silenceTimer?.cancel();
+
+    try {
+      await _audioRecorder.stop();
+    } catch (e) {
+      debugPrint('audioRecorder.stop() error: $e');
+    }
+
+    await _recordSub?.cancel();
+    _recordSub = null;
+
+    _accumulatedText = '';
+
+    _sherpaSend?.send({'type': 'reset'});
+
+    final result = await _pronunciationAttemptRepository.addAttempt(
+      attempt: PronunciationAttempt(
+        isCorrect: finalIsCorrect,
+        sessionQuestionId: state.currentSessionQuestionId ?? 0,
+        recognizedText: finalRecognized,
+        word: state.question.isNotEmpty
+            ? state.question[state.currentIndex].question ?? ''
+            : '',
+        confidence: finalConfidence,
+      ),
+    );
+
+    emit(
+      state.copyWith(
+        pronunciationRequestStatus: result.resultStatus == ResultStatus.success
+            ? RequestStatus.success
+            : RequestStatus.failure,
+      ),
+    );
+
     emit(
       state.copyWith(
         attempts: state.attempts + 1,
@@ -241,44 +416,137 @@ class PronunciationGameBloc
         isCorrect: false,
       ),
     );
+
+    if (finalIsCorrect) {
+      try {
+        await player.setVolume(1.0);
+        await player.play(AssetSource(Assets.correctRecord));
+      } catch (e) {
+        debugPrint('play correct sound error: $e');
+      }
+
+      await Future.delayed(
+        const Duration(
+          seconds: 1,
+        ),
+      );
+      player.stop();
+
+      emit(
+        state.copyWith(
+          recognizedText: '',
+          confidenceScore: 0,
+          isCorrect: false,
+        ),
+      );
+
+      add(const PronunciationGameQuestionNext());
+    } else {
+      // not correct: if user triggered stop, UI already reflects stopped. If automatic stop (silence/max) we do nothing more.
+    }
+  }
+
+  Future<void> _modelReady(
+    PronunciationGameModelReady event,
+    Emitter<PronunciationGameState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        isModelReady: true,
+      ),
+    );
+  }
+
+  Future<void> _textSpeech(
+    PronunciationGameTextSpeech event,
+    Emitter<PronunciationGameState> emit,
+  ) async {
+    // await flutterTts.setLanguage('en-US');
+    // await flutterTts.speak('Hello from your Windows application!');
+    // await tts.setLanguage('en-US'); // or other language
+    // await tts.setSpeechRate(0.5); // adjust speed
+    // await tts.setVolume(1.0);
+    // await tts.setPitch(1.0);
+    // await tts.speak(event.text);
+  }
+
+  void _startMaxTimer() {
+    _maxTimer?.cancel();
+    _maxTimer = Timer(
+      state.maxRecordingTime,
+      () {
+        if (state.isRecording) {
+          add(const PronunciationGameRecordingToggle());
+        }
+      },
+    );
+  }
+
+  void _resetSilenceTimer() {
+    _silenceTimer?.cancel();
+    _silenceTimer = Timer(
+      state.silenceTimeout,
+      () {
+        _handleSilenceTimeout();
+      },
+    );
+  }
+
+  void _handleSilenceTimeout() {
+    if (state.isRecording) {
+      add(const PronunciationGameRecordingToggle());
+    }
+  }
+
+  Future<void> _startSherpaIsolate() async {
+    _sherpaInitPort = ReceivePort();
+
+    _sherpaIsolate = await Isolate.spawn(
+      sherpaWorker,
+      _sherpaInitPort.sendPort,
+      debugName: 'SherpaWorker',
+    );
+
+    _sherpaSend = await _sherpaInitPort.first as SendPort;
+    _sherpaInitPort.close();
+
+    _sherpaReceivePort = ReceivePort();
+    _sherpaReceivePort.listen((msg) {
+      if (msg is Map && msg['type'] == 'ready') {
+        add(const PronunciationGameModelReady());
+      } else if (msg is Map && msg['type'] == 'result') {
+        final text = msg['text'] as String? ?? '';
+        add(PronunciationGameTextRecognized(text));
+      } else if (msg is Map && msg['type'] == 'silence') {
+        _handleSilenceTimeout();
+      }
+    });
+
+    final modelConfig = await getOnlineModelConfig(type: 0);
+    final config = sherpa.OnlineRecognizerConfig(
+      model: modelConfig,
+      ruleFsts: '',
+    );
+
+    _sherpaSend!.send({
+      'type': 'init',
+      'config': config,
+      'replyPort': _sherpaReceivePort.sendPort,
+      'quietFramesForSilence': 100,
+    });
   }
 
   @override
   Future<void> close() async {
-    await _textSub?.cancel();
-    await _recSub?.cancel();
-    await _silenceSub?.cancel();
+    _sherpaSend?.send({'type': 'dispose'});
+    _sherpaReceivePort.close();
+    _sherpaIsolate?.kill(priority: Isolate.immediate);
+    await _recordSub?.cancel();
+    await _audioRecorder.dispose();
+    _stream?.free();
+    _recognizer?.free();
+    _silenceTimer?.cancel();
     _maxTimer?.cancel();
-    _speechService.dispose();
     return super.close();
-  }
-
-  double _calculateSimilarity(String s1, String s2) {
-    if (s1.isEmpty && s2.isEmpty) return 1.0;
-    if (s1.isEmpty || s2.isEmpty) return 0.0;
-
-    final m = List.generate(
-      s1.length + 1,
-      (i) => List<int>.filled(s2.length + 1, 0),
-    );
-
-    for (int i = 0; i <= s1.length; i++) {
-      for (int j = 0; j <= s2.length; j++) {
-        if (i == 0) {
-          m[i][j] = j;
-        } else if (j == 0) {
-          m[i][j] = i;
-        } else {
-          m[i][j] = min(
-            min(m[i - 1][j] + 1, m[i][j - 1] + 1),
-            m[i - 1][j - 1] + (s1[i - 1] == s2[j - 1] ? 0 : 1),
-          );
-        }
-      }
-    }
-
-    final distance = m[s1.length][s2.length];
-    final maxLen = s1.length > s2.length ? s1.length : s2.length;
-    return 1.0 - (distance / maxLen);
   }
 }

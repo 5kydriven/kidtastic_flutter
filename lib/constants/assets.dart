@@ -54,18 +54,42 @@ class Assets {
   static const String triangle = 'assets/shapes/triangle.png';
 
   // **Pronunciation**
-  static const String foxWearingNecktie =
-      'assets/pronunciation/fox_wearing_necktie.png';
+  static const String alligator = 'assets/pronunciation/aligator.png';
+  static const String ball = 'assets/pronunciation/ball.png';
   static const String birdFeedingWorm =
       'assets/pronunciation/bird_feeding_worm.png';
+  static const String cat = 'assets/pronunciation/cat.png';
+  static const String duck = 'assets/pronunciation/duck.png';
+  static const String elephant = 'assets/pronunciation/elephant.png';
+  static const String foxWearingNecktie =
+      'assets/pronunciation/fox_wearing_necktie.png';
+  static const String giraffe = 'assets/pronunciation/giraffe.png';
+  static const String hat = 'assets/pronunciation/hat.png';
+  static const String iceCream = 'assets/pronunciation/ice_cream.png';
+  static const String jar = 'assets/pronunciation/jar.png';
+  static const String kite = 'assets/pronunciation/kite.png';
+  static const String lion = 'assets/pronunciation/lion.png';
+  static const String mice = 'assets/pronunciation/mice.png';
+  static const String net = 'assets/pronunciation/net.png';
+  static const String pig = 'assets/pronunciation/pig.png';
+  static const String queen = 'assets/pronunciation/queen.png';
   static const String rabbitWithBall =
       'assets/pronunciation/rabbit_with_ball.png';
-  static const String giraffe = 'assets/pronunciation/giraffe.png';
-  static const String aligator = 'assets/pronunciation/aligator.png';
+  static const String rainbow = 'assets/pronunciation/rainbow.png';
 
   // **Audios**
-  static const String startRecord = 'audios/start_record.mp3';
+  static const String applause = 'audios/applause.mp3';
+  static const String buzzerWrong = 'audios/buzzer-wrong.mp3';
   static const String correctRecord = 'audios/correct.mp3';
+  static const String crowdCheer = 'audios/crowd-cheer.mp3';
+  static const String letsGo = 'audios/lets-go.mp3';
+  static const String startRecord = 'audios/start_record.mp3';
+  static const String tadaFanfare = 'audios/tada-fanfare.mp3';
+  static const String weNeedToTryAgainChild =
+      'audios/audios/we-need-to-try-again-child.mp3';
+  static const String wow = 'audios/wow.mp3';
+  static const String wrongZap = 'audios/wrong-zap.mp3';
+  static const String wrongChime = 'audios/wrong-chime.mp3';
 
   // **Backgrounds**
   static const String matchTheShapeHome =

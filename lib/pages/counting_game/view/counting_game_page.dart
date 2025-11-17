@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_confetti/flutter_confetti.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kidtastic_flutter/models/models.dart';
 import 'package:kidtastic_flutter/pages/counting_game/view/view.dart';
@@ -9,7 +10,7 @@ import '../../../constants/constants.dart';
 import '../../../repositories/repositories.dart';
 import '../bloc/bloc.dart';
 
-class CountingGamePage extends StatelessWidget {
+class CountingGamePage extends StatefulWidget {
   static const route = '/counting_game';
   final CountingGameState initialState;
 
@@ -18,7 +19,29 @@ class CountingGamePage extends StatelessWidget {
     required this.initialState,
   });
 
-  void _gameListener(BuildContext context, CountingGameState state) {
+  @override
+  State<CountingGamePage> createState() => _CountingGamePageState();
+}
+
+class _CountingGamePageState extends State<CountingGamePage> {
+  late final ConfettiController _confettiController;
+
+  @override
+  void initState() {
+    super.initState();
+    _confettiController = ConfettiController();
+  }
+
+  @override
+  void dispose() {
+    _confettiController.kill();
+    super.dispose();
+  }
+
+  void _gameListener(
+    BuildContext context,
+    CountingGameState state,
+  ) {
     final bloc = context.read<CountingGameBloc>();
     if (state.hasEnded) {
       showDialog(
@@ -50,16 +73,27 @@ class CountingGamePage extends StatelessWidget {
           );
         },
       );
-    } else {
-      return;
     }
+  }
+
+  void _nextQuestionListener(
+    BuildContext context,
+    CountingGameState state,
+  ) async {
+    final bloc = context.read<CountingGameBloc>();
+    await Future.delayed(
+      const Duration(
+        seconds: 1,
+      ),
+    );
+    bloc.add(const CountingGameNextQuestion());
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => CountingGameBloc(
-        initialState: initialState,
+        initialState: widget.initialState,
         gameQuestionRepository: RepositoryProvider.of<GameQuestionRepository>(
           context,
         ),
@@ -71,12 +105,23 @@ class CountingGamePage extends StatelessWidget {
               context,
             ),
       )..add(const CountingGameScreenCreated()),
-      child: BlocListener<CountingGameBloc, CountingGameState>(
-        listener: _gameListener,
-        listenWhen: (previous, current) =>
-            previous.gameSessionRequestStatus !=
-                current.gameSessionRequestStatus &&
-            current.gameSessionRequestStatus == RequestStatus.success,
+      child: MultiBlocListener(
+        listeners: [
+          BlocListener<CountingGameBloc, CountingGameState>(
+            listener: _gameListener,
+            listenWhen: (previous, current) =>
+                previous.gameSessionRequestStatus !=
+                    current.gameSessionRequestStatus &&
+                current.gameSessionRequestStatus == RequestStatus.success,
+          ),
+          BlocListener<CountingGameBloc, CountingGameState>(
+            listener: _nextQuestionListener,
+            listenWhen: (previous, current) =>
+                previous.sessionQuestionRequestStatus !=
+                    current.sessionQuestionRequestStatus &&
+                current.sessionQuestionRequestStatus == RequestStatus.success,
+          ),
+        ],
         child: GameScaffold(
           imageAssets: Assets.mathBg,
           appBar: CountingGameAppBar(),
@@ -90,7 +135,9 @@ class CountingGamePage extends StatelessWidget {
                 vertical: 20,
                 horizontal: 16,
               ),
-              child: CountingGameBody(),
+              child: CountingGameBody(
+                confettiController: _confettiController,
+              ),
             ),
           ),
         ),

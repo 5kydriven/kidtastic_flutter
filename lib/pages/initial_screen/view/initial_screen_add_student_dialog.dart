@@ -208,6 +208,9 @@ class _InitialScreenAddStudentDialogState
                         const Text(
                           'Create your profile to start learning and playing',
                         ),
+                        const SizedBox(
+                          height: 16,
+                        ),
                         CompositedTransformTarget(
                           link: _layerLink,
                           child: Row(
@@ -241,7 +244,9 @@ class _InitialScreenAddStudentDialogState
                             ],
                           ),
                         ),
-
+                        const SizedBox(
+                          height: 16,
+                        ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -278,6 +283,9 @@ class _InitialScreenAddStudentDialogState
                               ),
                             ),
                           ],
+                        ),
+                        const SizedBox(
+                          height: 8,
                         ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -316,7 +324,9 @@ class _InitialScreenAddStudentDialogState
                             ),
                           ],
                         ),
-
+                        const SizedBox(
+                          height: 24,
+                        ),
                         Container(
                           width: double.infinity,
                           height: 44,
@@ -335,6 +345,9 @@ class _InitialScreenAddStudentDialogState
                             },
                             child: const Text("Let's Go!"),
                           ),
+                        ),
+                        const SizedBox(
+                          height: 8,
                         ),
                         TextButton(
                           style: TextButton.styleFrom(

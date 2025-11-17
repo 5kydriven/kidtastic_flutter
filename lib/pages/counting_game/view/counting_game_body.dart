@@ -1,15 +1,21 @@
 import 'dart:convert';
-import 'dart:math' hide log;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_confetti/flutter_confetti.dart';
 import 'package:kidtastic_flutter/models/result/result.dart';
 
 import '../bloc/bloc.dart';
 
 class CountingGameBody extends StatelessWidget {
-  const CountingGameBody({super.key});
+  final ConfettiController confettiController;
+
+  const CountingGameBody({
+    super.key,
+    required this.confettiController,
+  });
 
   void _checkAnswer(BuildContext context, String selected) {
+    confettiController.kill();
     final bloc = context.read<CountingGameBloc>();
     final state = bloc.state;
     final isCorrect =
@@ -28,6 +34,22 @@ class CountingGameBody extends StatelessWidget {
       ),
     );
 
+    if (isCorrect) {
+      Confetti.launch(
+        context,
+        options: ConfettiOptions(
+          particleCount: 250,
+          spread: 275,
+          gravity: 3,
+          colors: [
+            Color(0xFFC8C8FF),
+            Color(0xFFC8EFFF),
+            Color(0xFFBBEEE9),
+          ],
+        ),
+      );
+    }
+
     bloc.add(
       CountingGameButtonPressed(
         answer: selected,
@@ -39,9 +61,9 @@ class CountingGameBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<CountingGameBloc, CountingGameState>(
       builder: (context, state) {
+        final bloc = context.read<CountingGameBloc>();
         if (state.screenRequestStatus == RequestStatus.success) {
           final current = state.question[state.currentIndex];
-          final random = Random();
           final choices = List<String>.from(
             jsonDecode(current.choices ?? '[]'),
           );
@@ -61,26 +83,24 @@ class CountingGameBody extends StatelessWidget {
               Expanded(
                 child: LayoutBuilder(
                   builder: (context, constraints) {
-                    final size = Size(
-                      constraints.maxWidth,
-                      constraints.maxHeight,
-                    );
-                    final imagePosition = List.generate(
-                      int.parse(current.correctAnswer ?? '0'),
-                      (_) => Offset(
-                        random.nextDouble() * (size.width - 80),
-                        random.nextDouble() * (size.height - 80),
-                      ),
-                    );
+                    if (state.imagePositions.isEmpty) {
+                      bloc.add(
+                        CountingGamePositionsGenerated(
+                          questionIndex: state.currentIndex,
+                          maxWidth: constraints.maxWidth,
+                          maxHeight: constraints.maxHeight,
+                        ),
+                      );
+                    }
 
                     return Stack(
                       children: [
-                        for (var pos in imagePosition)
+                        for (final pos in state.imagePositions)
                           Positioned(
                             left: pos.dx,
                             top: pos.dy,
                             child: Image.asset(
-                              current.image ?? '',
+                              state.question[state.currentIndex].image ?? '',
                               width: 80,
                               height: 80,
                             ),

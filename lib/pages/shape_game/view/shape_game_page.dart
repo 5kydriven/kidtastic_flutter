@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_confetti/flutter_confetti.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kidtastic_flutter/pages/shape_game/shape_game.dart';
 import 'package:kidtastic_flutter/widgets/widgets.dart';
@@ -8,7 +9,7 @@ import '../../../constants/constants.dart';
 import '../../../models/models.dart';
 import '../../../repositories/repositories.dart';
 
-class ShapeGamePage extends StatelessWidget {
+class ShapeGamePage extends StatefulWidget {
   static const String route = '/shape-game';
   final ShapeGameState initialState;
 
@@ -16,6 +17,25 @@ class ShapeGamePage extends StatelessWidget {
     super.key,
     required this.initialState,
   });
+
+  @override
+  State<ShapeGamePage> createState() => _ShapeGamePageState();
+}
+
+class _ShapeGamePageState extends State<ShapeGamePage> {
+  late final ConfettiController _confettiController;
+
+  @override
+  void initState() {
+    super.initState();
+    _confettiController = ConfettiController();
+  }
+
+  @override
+  void dispose() {
+    _confettiController.kill();
+    super.dispose();
+  }
 
   void _gameListener(BuildContext context, ShapeGameState state) {
     final bloc = context.read<ShapeGameBloc>();
@@ -58,7 +78,7 @@ class ShapeGamePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => ShapeGameBloc(
-        initialState: initialState,
+        initialState: widget.initialState,
         gameQuestionRepository: RepositoryProvider.of<GameQuestionRepository>(
           context,
         ),
@@ -77,7 +97,9 @@ class ShapeGamePage extends StatelessWidget {
         child: GameScaffold(
           appBar: ShapeGameAppBar(),
           imageAssets: Assets.matchTheShape,
-          child: ShapeGameBody(),
+          child: ShapeGameBody(
+            confettiController: _confettiController,
+          ),
         ),
       ),
     );

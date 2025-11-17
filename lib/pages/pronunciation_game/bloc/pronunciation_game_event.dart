@@ -26,3 +26,15 @@ class PronunciationGameSessionFetched extends PronunciationGameEvent {
 class PronunciationGameRecordingToggle extends PronunciationGameEvent {
   const PronunciationGameRecordingToggle();
 }
+
+class PronunciationGameModelReady extends PronunciationGameEvent {
+  const PronunciationGameModelReady();
+}
+
+class PronunciationGameTextSpeech extends PronunciationGameEvent {
+  final String text;
+
+  const PronunciationGameTextSpeech({
+    required this.text,
+  });
+}

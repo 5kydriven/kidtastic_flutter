@@ -1,13 +1,12 @@
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_confetti/flutter_confetti.dart';
 import 'package:go_router/go_router.dart';
-import 'package:record/record.dart';
 
 import '../../../constants/constants.dart';
 import '../../../models/models.dart';
 import '../../../repositories/repositories.dart';
-import '../../../services/services.dart';
+import '../../../widgets/widgets.dart';
 import '../bloc/bloc.dart';
 import 'view.dart';
 
@@ -25,25 +24,23 @@ class PronunciationGamePage extends StatefulWidget {
 }
 
 class _PronunciationGamePageState extends State<PronunciationGamePage> {
-  final audioPlayer = AudioPlayer();
-  final audioRecorder = AudioRecorder();
-  final speechService = SpeechRecognitionService.instance;
+  late final ConfettiController _confettiController;
 
   @override
   void initState() {
+    _confettiController = ConfettiController();
     super.initState();
-    speechService.initialize();
   }
 
   @override
   void dispose() {
-    audioPlayer.dispose();
-    audioRecorder.dispose();
+    _confettiController.kill();
     super.dispose();
   }
 
   void _gameListener(BuildContext context, PronunciationGameState state) {
     final bloc = context.read<PronunciationGameBloc>();
+    if (!state.isGameEnded) return;
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -71,6 +68,25 @@ class _PronunciationGamePageState extends State<PronunciationGamePage> {
     );
   }
 
+  void _correctRecordListener(
+    BuildContext context,
+    PronunciationGameState state,
+  ) {
+    Confetti.launch(
+      context,
+      options: ConfettiOptions(
+        particleCount: 250,
+        spread: 275,
+        gravity: 3,
+        colors: [
+          Color(0xFFC8C8FF),
+          Color(0xFFC8EFFF),
+          Color(0xFFBBEEE9),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -84,42 +100,39 @@ class _PronunciationGamePageState extends State<PronunciationGamePage> {
         ),
         sessionQuestionRepository:
             RepositoryProvider.of<SessionQuestionRepository>(context),
-        speechService: speechService,
         pronunciationAttemptRepository:
             RepositoryProvider.of<PronunciationAttemptRepository>(context),
       )..add(const PronunciationGameScreenCreated()),
-      child: BlocListener<PronunciationGameBloc, PronunciationGameState>(
-        listener: _gameListener,
-        listenWhen: (previous, current) =>
-            previous.gameSessionRequestStatus !=
-                current.gameSessionRequestStatus &&
-            current.gameSessionRequestStatus == RequestStatus.success,
-        child: Scaffold(
-          extendBodyBehindAppBar: true,
-          appBar: const PronunciationGameAppBar(),
-          body: Stack(
-            children: [
-              Positioned.fill(
-                child: Image.asset(
-                  Assets.pronunciationBg,
-                  fit: BoxFit.cover,
-                ),
-              ),
-
-              SafeArea(
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    return Center(
-                      child: SizedBox(
-                        width: constraints.maxWidth * 0.8,
-                        height: constraints.maxHeight * 0.8,
-                        child: const PronunciationGameBody(),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ],
+      child: MultiBlocListener(
+        listeners: [
+          BlocListener<PronunciationGameBloc, PronunciationGameState>(
+            listener: _gameListener,
+            listenWhen: (previous, current) =>
+                previous.gameSessionRequestStatus !=
+                    current.gameSessionRequestStatus &&
+                current.gameSessionRequestStatus == RequestStatus.success,
+          ),
+          BlocListener<PronunciationGameBloc, PronunciationGameState>(
+            listener: _correctRecordListener,
+            listenWhen: (previous, current) =>
+                previous.pronunciationRequestStatus !=
+                    current.pronunciationRequestStatus &&
+                current.isCorrect,
+          ),
+        ],
+        child: GameScaffold(
+          appBar: PronunciationGameAppBar(),
+          imageAssets: Assets.pronunciationBg,
+          child: Card(
+            color: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            elevation: 8,
+            child: Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: PronunciationGameBody(),
+            ),
           ),
         ),
       ),
