@@ -222,4 +222,32 @@ class SeedData {
       difficulty: Difficulty.easy,
     ),
   ];
+
+  static const shapeCutouts = [
+    Question(
+      correctAnswer: 'circle',
+      image: Assets.circleCutout,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      correctAnswer: 'heart',
+      image: Assets.heartCutout,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      correctAnswer: 'hexagon',
+      image: Assets.hexagonCutout,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      correctAnswer: 'oval',
+      image: Assets.ovalCutout,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      correctAnswer: 'triangle',
+      image: Assets.triangleCutout,
+      difficulty: Difficulty.easy,
+    ),
+  ];
 }

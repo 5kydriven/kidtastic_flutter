@@ -49,7 +49,7 @@ class InitialDataSeeder {
       ),
       Game(
         name: 'Match the Shapes',
-        category: GameType.shape,
+        category: GameType.matching,
         imageAsset: Assets.shapes,
         description: 'Match shapes to learn geometry.',
         route: ShapeGamePage.route,
@@ -141,28 +141,32 @@ class InitialDataSeeder {
   Future<void> _seedShapes(int gameId) async {
     final random = Random();
 
+    const shapeCutouts = SeedData.shapeCutouts;
     const shapes = SeedData.shapes;
 
-    for (final shape in shapes) {
-      final otherAnswers = shapes
-          .where((s) => s.correctAnswer != shape.correctAnswer)
-          .map((s) => s.correctAnswer)
+    for (final shapeCutout in shapeCutouts) {
+      final correctShape = shapes.firstWhere(
+        (s) => s.correctAnswer == shapeCutout.correctAnswer,
+      );
+
+      final wrongAnswers = shapes
+          .where((s) => s.correctAnswer != correctShape.correctAnswer)
+          .map((s) => s)
           .toList();
+      wrongAnswers.shuffle(random);
 
-      otherAnswers.shuffle(random);
-      final randomChoices = otherAnswers.take(5).toList();
-
-      randomChoices.add(shape.correctAnswer);
-      randomChoices.shuffle(random);
+      final choices = wrongAnswers.take(5).toList();
+      choices.add(correctShape);
+      choices.shuffle(random);
 
       await _gameQuestionRepository.addQuestion(
         question: Question(
           gameId: gameId,
-          question: 'What shape is this?',
-          correctAnswer: shape.correctAnswer,
-          image: shape.image,
-          difficulty: shape.difficulty,
-          choices: jsonEncode(randomChoices),
+          question: shapeCutout.correctAnswer,
+          correctAnswer: correctShape.correctAnswer,
+          image: shapeCutout.image,
+          difficulty: shapeCutout.difficulty,
+          choices: jsonEncode(choices),
         ),
       );
     }

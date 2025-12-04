@@ -60,9 +60,44 @@ class InitialScreenBloc extends Bloc<InitialScreenEvent, InitialScreenState> {
   ) async {
     emit(
       state.copyWith(
-        requestStatus: RequestStatus.inProgress,
+        studentRequestStatus: RequestStatus.inProgress,
       ),
     );
+
+    var firstErrorType = ErrorType.empty;
+    var lastErrorType = ErrorType.empty;
+
+    if (state.firstName.value.isEmpty) {
+      firstErrorType = ErrorType.empty;
+    } else {
+      firstErrorType = ErrorType.none;
+    }
+
+    if (state.lastName.value.isEmpty) {
+      lastErrorType = ErrorType.empty;
+    } else {
+      lastErrorType = ErrorType.none;
+    }
+
+    emit(
+      state.copyWith.firstName(
+        errorType: firstErrorType,
+      ),
+    );
+    emit(
+      state.copyWith.lastName(
+        errorType: lastErrorType,
+      ),
+    );
+
+    if (firstErrorType != ErrorType.none || lastErrorType != ErrorType.none) {
+      emit(
+        state.copyWith(
+          studentRequestStatus: RequestStatus.failure,
+        ),
+      );
+      return;
+    }
 
     final response = await _studentRepository.addStudent(
       student: Student(
@@ -83,7 +118,7 @@ class InitialScreenBloc extends Bloc<InitialScreenEvent, InitialScreenState> {
             lastName: TextFieldInput(
               value: '',
             ),
-            requestStatus: RequestStatus.success,
+            studentRequestStatus: RequestStatus.success,
           ),
         );
         add(const InitialScreenScreenCreated());
@@ -97,7 +132,7 @@ class InitialScreenBloc extends Bloc<InitialScreenEvent, InitialScreenState> {
             lastName: TextFieldInput(
               value: '',
             ),
-            requestStatus: RequestStatus.failure,
+            studentRequestStatus: RequestStatus.failure,
           ),
         );
         break;

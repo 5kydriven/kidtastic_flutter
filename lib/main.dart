@@ -10,6 +10,8 @@ import 'package:kidtastic_flutter/pages/counting_game/bloc/state/counting_game_s
 import 'package:kidtastic_flutter/pages/counting_game/view/counting_game_page.dart';
 import 'package:kidtastic_flutter/pages/home/bloc/state/home_state.dart';
 import 'package:kidtastic_flutter/pages/initial_screen/view/view.dart';
+import 'package:kidtastic_flutter/pages/match_game/match_game.dart';
+import 'package:kidtastic_flutter/pages/match_game/view/match_game_page.dart';
 import 'package:kidtastic_flutter/pages/math_game/view/math_game_page.dart';
 import 'package:kidtastic_flutter/pages/number_game/view/number_game_page.dart';
 import 'package:kidtastic_flutter/pages/pronunciation_game/pronunciation_game.dart';
@@ -212,12 +214,19 @@ class _MyAppState extends State<MyApp> {
             );
           },
         ),
-
         GoRoute(
           path: ShapeGamePage.route,
           builder: (context, state) {
             return ShapeGamePage(
               initialState: state.extra as ShapeGameState,
+            );
+          },
+        ),
+        GoRoute(
+          path: MatchGamePage.route,
+          builder: (context, state) {
+            return MatchGamePage(
+              initialState: state.extra as MatchGameState,
             );
           },
         ),

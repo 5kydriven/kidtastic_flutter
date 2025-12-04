@@ -123,6 +123,7 @@ class PronunciationGameBloc
     final gameQuestionResult = await _gameQuestionRepository.getQuestion(
       gameId: state.game?.id ?? 0,
       limit: 5,
+      isRandom: true,
     );
 
     if (gameQuestionResult.resultStatus != ResultStatus.success ||
@@ -332,7 +333,7 @@ class PronunciationGameBloc
       bestMatch = _accumulatedText.trim();
     }
 
-    final isCorrect = bestSimilarity >= 0.8;
+    final isCorrect = bestSimilarity >= 0.75;
     final confidence = (bestSimilarity * 100).clamp(0, 100);
 
     debugPrint(
