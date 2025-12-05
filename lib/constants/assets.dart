@@ -43,14 +43,19 @@ class Assets {
   static const String zebraAvatar = 'assets/avatars/zebra_avatar.jpg';
 
   // **Shapes Assets**
+  static const String circleCutout = 'assets/shapes/circle_cutout.png';
   static const String circle = 'assets/shapes/circle.png';
+  static const String heartCutout = 'assets/shapes/heart_cutout.png';
   static const String heart = 'assets/shapes/heart.png';
+  static const String hexagonCutout = 'assets/shapes/hexagon_cutout.png';
   static const String hexagon = 'assets/shapes/hexagon.png';
+  static const String ovalCutout = 'assets/shapes/oval_cutout.png';
   static const String oval = 'assets/shapes/oval.png';
   static const String pentagon = 'assets/shapes/pentagon.png';
   static const String rectangle = 'assets/shapes/rectangle.png';
   static const String square = 'assets/shapes/square.png';
   static const String trapezoid = 'assets/shapes/trapezoid.png';
+  static const String triangleCutout = 'assets/shapes/triangle_cutout.png';
   static const String triangle = 'assets/shapes/triangle.png';
 
   // **Pronunciation**

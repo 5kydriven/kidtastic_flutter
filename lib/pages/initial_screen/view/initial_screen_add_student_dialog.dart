@@ -61,7 +61,6 @@ class _InitialScreenAddStudentDialogState
     _overlayEntry = OverlayEntry(
       builder: (context) => Stack(
         children: [
-          // Transparent layer to detect outside taps
           Positioned.fill(
             child: GestureDetector(
               behavior: HitTestBehavior.translucent,
@@ -73,7 +72,6 @@ class _InitialScreenAddStudentDialogState
             ),
           ),
 
-          // The actual floating avatar grid
           Positioned(
             width: 300,
             child: CompositedTransformFollower(
@@ -192,8 +190,8 @@ class _InitialScreenAddStudentDialogState
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Container(
-                    width: 400,
-                    height: 500,
+                    width: 450,
+                    height: 550,
                     padding: const EdgeInsets.all(24),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -267,12 +265,9 @@ class _InitialScreenAddStudentDialogState
                                 ),
                               ),
                               autofocus: true,
-                              onFieldSubmitted: (_) {
-                                bloc.add(
-                                  const InitialScreenAddStudentPressed(),
-                                );
-                                context.pop();
-                              },
+                              onFieldSubmitted: (_) => bloc.add(
+                                const InitialScreenAddStudentPressed(),
+                              ),
                               keyboardType: TextInputType.name,
                               decoration: InputDecoration(
                                 border: OutlineInputBorder(),
@@ -307,12 +302,9 @@ class _InitialScreenAddStudentDialogState
                                 ),
                               ),
                               autofocus: true,
-                              onFieldSubmitted: (_) {
-                                bloc.add(
-                                  const InitialScreenAddStudentPressed(),
-                                );
-                                context.pop();
-                              },
+                              onFieldSubmitted: (_) => bloc.add(
+                                const InitialScreenAddStudentPressed(),
+                              ),
                               keyboardType: TextInputType.name,
                               decoration: InputDecoration(
                                 border: OutlineInputBorder(),
@@ -339,10 +331,9 @@ class _InitialScreenAddStudentDialogState
                                 borderRadius: BorderRadius.circular(12),
                               ),
                             ),
-                            onPressed: () {
-                              bloc.add(const InitialScreenAddStudentPressed());
-                              context.pop();
-                            },
+                            onPressed: () => bloc.add(
+                              const InitialScreenAddStudentPressed(),
+                            ),
                             child: const Text("Let's Go!"),
                           ),
                         ),
