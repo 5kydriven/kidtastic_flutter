@@ -37,13 +37,22 @@ jobs:
       - name: Build Windows
         run: flutter build windows --release
 
-      - name: 🛠️ Set up Inno Setup Compiler
-        uses: minovatech/setup-inno@v1
+      - name: 🛠️ Install Inno Setup (Chocolatey)
+        shell: powershell
+        run: |
+          choco install innosetup -y
+          refreshenv
+          $iscc = Get-Command iscc -ErrorAction SilentlyContinue
+          if (-not $iscc) { throw 'ISCC not found after installation.' }
+          iscc /?  # verify installation
 
       - name: ⚙️ Compile Installer with Inno Setup
-        # Assuming your 'installer.iss' script correctly references the build output
-        # (build\windows\x64\release) and places the final installer in an 'Output' directory.
-        run: iscc installer.iss
+        shell: powershell
+        run: |
+          # Use ISCC from PATH; if you want to call the default install path explicitly, you can:
+          $isccPath = (Get-Command iscc).Path
+          if (-not (Test-Path $isccPath)) { throw "ISCC executable not found at $isccPath" }
+          & $isccPath installer.iss
 
       # --- Artifact Upload Steps ---
 
