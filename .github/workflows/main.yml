@@ -2,7 +2,7 @@ name: Build Flutter Windows Installer
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ['main']
 
 jobs:
   build:
@@ -15,8 +15,8 @@ jobs:
       # 2. Install Flutter
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: 'stable'
-          channel: stable
+          flutter-version: '3.35.2'
+          channel: https://github.com/flutter/flutter.git
 
       # 3. Enable Windows build
       - name: Enable Windows Desktop
@@ -25,6 +25,9 @@ jobs:
       # 4. Install dependencies
       - name: Flutter Pub Get
         run: flutter pub get
+
+      - name: Generate freezed
+        run: flutter pub run build_runner build --delete-conflicting-outputs
 
       # 5. Build Windows App
       - name: Build Windows
@@ -45,4 +48,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: Windows-Installer
-          path: "*.exe"
+          path: '*.exe'
