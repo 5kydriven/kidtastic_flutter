@@ -23,6 +23,10 @@ class MatchGameBody extends StatelessWidget {
   void _checkAnswer(BuildContext context, Question dropItem) {
     final bloc = context.read<MatchGameBloc>();
     final state = bloc.state;
+
+    if (state.sessionQuestionRequestStatus == RequestStatus.inProgress) return;
+
+    confettiController.kill();
     final currentShape = state.question[state.currentIndex];
     final isCorrect = dropItem.correctAnswer == currentShape.correctAnswer;
 

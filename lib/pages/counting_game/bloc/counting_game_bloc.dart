@@ -121,6 +121,14 @@ class CountingGameBloc extends Bloc<CountingGameEvent, CountingGameState> {
 
     switch (sessionQuestionResult.resultStatus) {
       case ResultStatus.success:
+        await Future.delayed(
+          const Duration(
+            seconds: 1,
+          ),
+        );
+        player.stop();
+        add(const CountingGameNextQuestion());
+
         emit(
           state.copyWith(
             score: isCorrect ? state.score + 1 : state.score,

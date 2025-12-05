@@ -76,19 +76,6 @@ class _CountingGamePageState extends State<CountingGamePage> {
     }
   }
 
-  void _nextQuestionListener(
-    BuildContext context,
-    CountingGameState state,
-  ) async {
-    final bloc = context.read<CountingGameBloc>();
-    await Future.delayed(
-      const Duration(
-        seconds: 1,
-      ),
-    );
-    bloc.add(const CountingGameNextQuestion());
-  }
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -105,23 +92,13 @@ class _CountingGamePageState extends State<CountingGamePage> {
               context,
             ),
       )..add(const CountingGameScreenCreated()),
-      child: MultiBlocListener(
-        listeners: [
-          BlocListener<CountingGameBloc, CountingGameState>(
-            listener: _gameListener,
-            listenWhen: (previous, current) =>
-                previous.gameSessionRequestStatus !=
-                    current.gameSessionRequestStatus &&
-                current.gameSessionRequestStatus == RequestStatus.success,
-          ),
-          BlocListener<CountingGameBloc, CountingGameState>(
-            listener: _nextQuestionListener,
-            listenWhen: (previous, current) =>
-                previous.sessionQuestionRequestStatus !=
-                    current.sessionQuestionRequestStatus &&
-                current.sessionQuestionRequestStatus == RequestStatus.success,
-          ),
-        ],
+      child: BlocListener<CountingGameBloc, CountingGameState>(
+        listener: _gameListener,
+        listenWhen: (previous, current) =>
+            previous.gameSessionRequestStatus !=
+                current.gameSessionRequestStatus &&
+            current.gameSessionRequestStatus == RequestStatus.success,
+
         child: GameScaffold(
           imageAssets: Assets.mathBg,
           appBar: CountingGameAppBar(),

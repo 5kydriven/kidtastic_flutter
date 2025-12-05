@@ -15,9 +15,12 @@ class CountingGameBody extends StatelessWidget {
   });
 
   void _checkAnswer(BuildContext context, String selected) {
-    confettiController.kill();
     final bloc = context.read<CountingGameBloc>();
     final state = bloc.state;
+
+    if (state.sessionQuestionRequestStatus == RequestStatus.inProgress) return;
+
+    confettiController.kill();
     final isCorrect =
         selected == state.question[state.currentIndex].correctAnswer;
 
