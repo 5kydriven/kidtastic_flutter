@@ -41,23 +41,29 @@ jobs:
         shell: powershell
         run: |
           choco install innosetup -y
-          refreshenv
-          $iscc = Get-Command iscc -ErrorAction SilentlyContinue
-          if (-not $iscc) { throw 'ISCC not found after installation.' }
-          iscc /?  # verify installation
 
       - name: ⚙️ Compile Installer with Inno Setup
         shell: powershell
         run: |
-          # Use ISCC from PATH; if you want to call the default install path explicitly, you can:
-          $isccPath = (Get-Command iscc).Path
-          if (-not (Test-Path $isccPath)) { throw "ISCC executable not found at $isccPath" }
+          # Use the default Inno Setup installation path
+          $isccPath = "C:\Program Files (x86)\Inno Setup 6\ISCC.exe"
+
+          if (-not (Test-Path $isccPath)) { 
+            throw "ISCC executable not found at $isccPath" 
+          }
+
+          Write-Host "Found ISCC at: $isccPath"
+
+          # Compile the installer
           & $isccPath installer.iss
+
+          if ($LASTEXITCODE -ne 0) {
+            throw "Inno Setup compilation failed with exit code $LASTEXITCODE"
+          }
 
       # --- Artifact Upload Steps ---
 
       - name: 📤 Find Installer Executable
-        # The default output directory for Inno Setup is 'Output'. We find the .exe file.
         id: find_file
         shell: powershell
         run: |
@@ -65,12 +71,12 @@ jobs:
           if ($InstallerPath) {
             echo "installer_file_path=$($InstallerPath.FullName)" >> $env:GITHUB_OUTPUT
             echo "installer_file_name=$($InstallerPath.Name)" >> $env:GITHUB_OUTPUT
+            Write-Host "Found installer: $($InstallerPath.Name)"
           } else {
             throw "Could not find a compiled .exe installer in the 'Output' directory."
           }
 
       - name: 🚀 Upload Installer Artifact
-        # Uploads the final .exe file to the workflow run artifacts.
         uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.find_file.outputs.installer_file_name }}
