@@ -3,6 +3,8 @@ name: Build Flutter Windows Installer
 on:
   push:
     branches: ['main']
+    tags:
+      - 'v*'
 
 jobs:
   build:
@@ -45,7 +47,6 @@ jobs:
       - name: ⚙️ Compile Installer with Inno Setup
         shell: powershell
         run: |
-          # Use the default Inno Setup installation path
           $isccPath = "C:\Program Files (x86)\Inno Setup 6\ISCC.exe"
 
           if (-not (Test-Path $isccPath)) { 
@@ -54,14 +55,11 @@ jobs:
 
           Write-Host "Found ISCC at: $isccPath"
 
-          # Compile the installer
           & $isccPath installer.iss
 
           if ($LASTEXITCODE -ne 0) {
             throw "Inno Setup compilation failed with exit code $LASTEXITCODE"
           }
-
-      # --- Artifact Upload Steps ---
 
       - name: 📤 Find Installer Executable
         id: find_file
@@ -82,3 +80,31 @@ jobs:
           name: ${{ steps.find_file.outputs.installer_file_name }}
           path: ${{ steps.find_file.outputs.installer_file_path }}
           retention-days: 7
+
+      # --- Release Creation (only for tags) ---
+
+      - name: 🎉 Create GitHub Release
+        # Only run this step if a tag was pushed
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: Release ${{ github.ref_name }}
+          draft: false
+          prerelease: false
+          files: ${{ steps.find_file.outputs.installer_file_path }}
+          body: |
+            ## 🚀 Windows Installer Release
+
+            **Version:** ${{ github.ref_name }}
+            **Build Date:** ${{ github.event.head_commit.timestamp }}
+            **Commit:** ${{ github.sha }}
+
+            ### 📥 Download
+            Download the installer below to install the application on Windows.
+
+            ### 📋 Changes
+            ${{ github.event.head_commit.message }}
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
