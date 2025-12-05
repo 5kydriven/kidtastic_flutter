@@ -37,19 +37,34 @@ jobs:
       - name: Build Windows
         run: flutter build windows --release
 
-      # 6. Install Inno Setup
-      - name: Install Inno Setup
-        run: |
-          choco install innosetup -y
+      - name: 🛠️ Set up Inno Setup Compiler
+        # This action automatically downloads and sets up the Inno Setup compiler.
+        uses: jrsoftware/setup-inno@v1
 
-      # 7. Compile Installer
-      - name: Build Installer (.exe)
-        run: |
-          "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" installer.iss
+      - name: ⚙️ Compile Installer with Inno Setup
+        # Assuming your 'installer.iss' script correctly references the build output
+        # (build\windows\x64\release) and places the final installer in an 'Output' directory.
+        run: iscc installer.iss
 
-      # 8. Upload installer artifact
-      - name: Upload Installer EXE
+      # --- Artifact Upload Steps ---
+
+      - name: 📤 Find Installer Executable
+        # The default output directory for Inno Setup is 'Output'. We find the .exe file.
+        id: find_file
+        shell: powershell
+        run: |
+          $InstallerPath = Get-ChildItem -Path "Output" -Filter "*.exe" | Select-Object -First 1
+          if ($InstallerPath) {
+            echo "installer_file_path=$($InstallerPath.FullName)" >> $env:GITHUB_OUTPUT
+            echo "installer_file_name=$($InstallerPath.Name)" >> $env:GITHUB_OUTPUT
+          } else {
+            throw "Could not find a compiled .exe installer in the 'Output' directory."
+          }
+
+      - name: 🚀 Upload Installer Artifact
+        # Uploads the final .exe file to the workflow run artifacts.
         uses: actions/upload-artifact@v4
         with:
-          name: Windows-Installer
-          path: '*.exe'
+          name: ${{ steps.find_file.outputs.installer_file_name }}
+          path: ${{ steps.find_file.outputs.installer_file_path }}
+          retention-days: 7

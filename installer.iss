@@ -6,6 +6,7 @@ DefaultGroupName=Kidtastic
 OutputBaseFilename=KidtasticSetup
 Compression=lzma
 SolidCompression=yes
+ArchitecturesInstallIn64BitMode=x64
 
 ; Your app icon
 SetupIconFile=windows\runner\resources\logo.ico
