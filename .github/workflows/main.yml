@@ -38,8 +38,7 @@ jobs:
         run: flutter build windows --release
 
       - name: 🛠️ Set up Inno Setup Compiler
-        # This action automatically downloads and sets up the Inno Setup compiler.
-        uses: jrsoftware/setup-inno@v1
+        uses: minovatech/setup-inno@v1
 
       - name: ⚙️ Compile Installer with Inno Setup
         # Assuming your 'installer.iss' script correctly references the build output
