@@ -46,7 +46,6 @@ flutter:
     - assets/fonts/
     - assets/fonts/Vag/
     - assets/fruits/
-    - assets/animals/
     - assets/shapes/
     - assets/models/sherpa-onnx-streaming-zipformer-en-kroko/
     - assets/avatars/
