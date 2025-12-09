@@ -19,7 +19,11 @@ samples, guidance on mobile development, and a full API reference.
 
 Commands to create a release:
 
-`git tag v1.0.0 && git push origin main --tags`
+`git tag v1.0.0 && git push origin v1.0.0`
+
+Delete tag remote and local:
+
+`git tag -d v1.0.0 && git push --delete origin v1.0.0`
 
 Versioning:
 
