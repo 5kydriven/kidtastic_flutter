@@ -70,8 +70,7 @@ jobs:
         run: |
           Write-Host "Installing Inno Setup via winget..."
           winget install --id JRSoftware.InnoSetup -e -s winget -i
-          Write-Host "Installed Inno Setup, checking version..."
-          & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" /?
+          Write-Host "Inno Setup installed."
 
       # ------------------------------
       - name: Compile Installer
