@@ -36,8 +36,6 @@ jobs:
         run: |
           echo "Starting Flutter Windows build..."
           flutter build windows --release
-          echo "Flutter build complete. Listing output folder:"
-          ls -la build/windows/runner/Release/
 
       - name: Upload Windows Build Artifact
         uses: actions/upload-artifact@v4
