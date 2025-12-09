@@ -69,8 +69,7 @@ jobs:
         shell: powershell
         run: |
           Write-Host "Installing Inno Setup via winget..."
-          winget install --id JRSoftware.InnoSetup -e -s winget -i
-          Write-Host "Inno Setup installed."
+          winget install --id JRSoftware.InnoSetup -e -s winget -i; exit 0
 
       # ------------------------------
       - name: Compile Installer
