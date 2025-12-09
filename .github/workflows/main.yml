@@ -33,15 +33,16 @@ jobs:
         run: flutter pub run build_runner build --delete-conflicting-outputs
 
       - name: Build Windows App
+        shell: powershell
         run: |
-          echo "Starting Flutter Windows build..."
+          Write-Host "Starting Flutter Windows build..."
           flutter build windows --release
 
       - name: Upload Windows Build Artifact
         uses: actions/upload-artifact@v4
         with:
           name: windows_build
-          path: build/windows/runner/Release/
+          path: build/windows/x64/runner/Release/
           retention-days: 7
 
   # ------------------------------
@@ -55,13 +56,13 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: windows_build
-          path: build/windows/runner/Release/
+          path: build/windows/x64/runner/Release/
 
       - name: List downloaded build files
         shell: powershell
         run: |
           Write-Host "Listing build files in runner:"
-          Get-ChildItem -Path build/windows/runner/Release/ -Recurse
+          Get-ChildItem -Path build/windows/x64/runner/Release/ -Recurse
 
       # ------------------------------
       - name: Install Inno Setup with winget
@@ -78,9 +79,7 @@ jobs:
         run: |
           $iscc = "C:\Program Files (x86)\Inno Setup 6\ISCC.exe"
           if (-not (Test-Path $iscc)) { throw "ISCC.exe not found!" }
-          Write-Host "ISCC found at: $iscc"
 
-          # Ensure Output folder exists
           New-Item -ItemType Directory -Force -Path Output
 
           Write-Host "Compiling installer..."
@@ -89,7 +88,6 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw "Inno Setup compilation failed with exit code $LASTEXITCODE" }
 
           Write-Host "Installer compilation completed."
-          Write-Host "Listing files in Output folder:"
           Get-ChildItem -Path Output
 
       # ------------------------------
@@ -99,7 +97,7 @@ jobs:
         run: |
           $installer = Get-ChildItem -Path Output -Filter "*.exe" | Select-Object -First 1
           if (-not $installer) { throw "Installer not found!" }
-          Write-Host "Installer found: $($installer.FullName)"
+
           echo "installer_file_path=$($installer.FullName)" >> $env:GITHUB_OUTPUT
           echo "installer_file_name=$($installer.Name)" >> $env:GITHUB_OUTPUT
 
@@ -109,10 +107,9 @@ jobs:
         shell: powershell
         run: |
           $zipPath = "Output\$($env:installer_file_name).zip"
-          Write-Host "Zipping installer to $zipPath..."
+
           Compress-Archive -Path $env:installer_file_path -DestinationPath $zipPath -Force
-          Write-Host "Zip complete. Contents of Output folder:"
-          Get-ChildItem -Path Output
+
           echo "zip_file_path=$zipPath" >> $env:GITHUB_OUTPUT
           echo "zip_file_name=$($env:installer_file_name).zip" >> $env:GITHUB_OUTPUT
 
@@ -138,6 +135,8 @@ jobs:
           name: Release ${{ github.ref_name }}
           draft: false
           prerelease: false
-          files: ${{ steps.find_installer.outputs.installer_file_path }},${{ steps.zip_installer.outputs.zip_file_path }}
+          files: |
+            ${{ steps.find_installer.outputs.installer_file_path }},
+            ${{ steps.zip_installer.outputs.zip_file_path }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
