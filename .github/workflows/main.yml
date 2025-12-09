@@ -67,17 +67,20 @@ jobs:
       - name: Install Inno Setup with winget
         shell: powershell
         run: |
-          Write-Host "Installing Inno Setup via winget..."
-          winget install --id JRSoftware.InnoSetup -e --silent --accept-source-agreements --accept-package-agreements
+          $iscc = "C:\Program Files (x86)\Inno Setup 6\ISCC.exe"
 
-          if ($LASTEXITCODE -ne 0) { 
-            Write-Host "Warning: winget returned exit code $LASTEXITCODE"
+          # Check if already installed
+          if (Test-Path $iscc) {
+            Write-Host "Inno Setup is already installed at: $iscc"
+            exit 0
           }
+
+          Write-Host "Installing Inno Setup via winget..."
+          winget install --id JRSoftware.InnoSetup -e -s winget -i
 
           Start-Sleep -Seconds 5
 
           # Verify installation
-          $iscc = "C:\Program Files (x86)\Inno Setup 6\ISCC.exe"
           if (-not (Test-Path $iscc)) { 
             throw "ISCC.exe not found after installation at: $iscc" 
           }
