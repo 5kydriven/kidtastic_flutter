@@ -104,12 +104,20 @@ jobs:
         id: zip_installer
         shell: powershell
         run: |
-          $zipPath = "Output\$($env:installer_file_name).zip"
+          $installerPath = "${{ steps.find_installer.outputs.installer_file_path }}"
+          $installerName = "${{ steps.find_installer.outputs.installer_file_name }}"
 
-          Compress-Archive -Path $env:installer_file_path -DestinationPath $zipPath -Force
+          if (-not $installerPath) {
+            throw "Installer path is empty!"
+          }
+
+          $zipPath = "Output\$installerName.zip"
+
+          Write-Host "Zipping: $installerPath"
+          Compress-Archive -Path $installerPath -DestinationPath $zipPath -Force
 
           echo "zip_file_path=$zipPath" >> $env:GITHUB_OUTPUT
-          echo "zip_file_name=$($env:installer_file_name).zip" >> $env:GITHUB_OUTPUT
+          echo "zip_file_name=$installerName.zip" >> $env:GITHUB_OUTPUT
 
       # ------------------------------
       - name: Upload .exe Artifact
