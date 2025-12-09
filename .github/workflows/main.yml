@@ -9,7 +9,6 @@ on:
       - 'v*'
 
 jobs:
-  # ------------------------------
   build_app:
     runs-on: windows-latest
     outputs:
@@ -69,7 +68,20 @@ jobs:
         shell: powershell
         run: |
           Write-Host "Installing Inno Setup via winget..."
-          winget install --id JRSoftware.InnoSetup -e -s winget -i; exit 0
+          winget install --id JRSoftware.InnoSetup -e --silent --accept-source-agreements --accept-package-agreements
+
+          if ($LASTEXITCODE -ne 0) { 
+            Write-Host "Warning: winget returned exit code $LASTEXITCODE"
+          }
+
+          Start-Sleep -Seconds 5
+
+          # Verify installation
+          $iscc = "C:\Program Files (x86)\Inno Setup 6\ISCC.exe"
+          if (-not (Test-Path $iscc)) { 
+            throw "ISCC.exe not found after installation at: $iscc" 
+          }
+          Write-Host "Inno Setup installed successfully at: $iscc"
 
       # ------------------------------
       - name: Compile Installer
@@ -83,9 +95,12 @@ jobs:
           Write-Host "Compiling installer..."
           & $iscc "installer.iss" /OOutput
 
-          if ($LASTEXITCODE -ne 0) { throw "Inno Setup compilation failed with exit code $LASTEXITCODE" }
+          if ($LASTEXITCODE -ne 0) { 
+            throw "Inno Setup compilation failed with exit code $LASTEXITCODE" 
+          }
 
           Write-Host "Installer compilation completed."
+          Write-Host "Contents of Output directory:"
           Get-ChildItem -Path Output
 
       # ------------------------------
@@ -94,55 +109,31 @@ jobs:
         shell: powershell
         run: |
           $installer = Get-ChildItem -Path Output -Filter "*.exe" | Select-Object -First 1
-          if (-not $installer) { throw "Installer not found!" }
-
-          echo "installer_file_path=$($installer.FullName)" >> $env:GITHUB_OUTPUT
-          echo "installer_file_name=$($installer.Name)" >> $env:GITHUB_OUTPUT
-
-      # ------------------------------
-      - name: Zip Installer
-        id: zip_installer
-        shell: powershell
-        run: |
-          $installerPath = "${{ steps.find_installer.outputs.installer_file_path }}"
-          $installerName = "${{ steps.find_installer.outputs.installer_file_name }}"
-
-          if (-not $installerPath) {
-            throw "Installer path is empty!"
+          if (-not $installer) { 
+            Write-Host "No installer found in Output directory"
+            Get-ChildItem -Path Output
+            throw "Installer not found!" 
           }
 
-          $zipPath = "Output\$installerName.zip"
-
-          Write-Host "Zipping: $installerPath"
-          Compress-Archive -Path $installerPath -DestinationPath $zipPath -Force
-
-          echo "zip_file_path=$zipPath" >> $env:GITHUB_OUTPUT
-          echo "zip_file_name=$installerName.zip" >> $env:GITHUB_OUTPUT
+          Write-Host "Found installer: $($installer.FullName)"
+          echo "installer_file_path=$($installer.FullName)" >> $env:GITHUB_OUTPUT
+          echo "installer_file_name=$($installer.Name)" >> $env:GITHUB_OUTPUT
 
       # ------------------------------
       - name: Upload .exe Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ steps.find_installer.outputs.installer_file_name }}
+          name: installer
           path: ${{ steps.find_installer.outputs.installer_file_path }}
 
-      - name: Upload .zip Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ steps.zip_installer.outputs.zip_file_name }}
-          path: ${{ steps.zip_installer.outputs.zip_file_path }}
-
       # ------------------------------
-      - name: Create GitHub Release
-        if: startsWith(github.ref, 'refs/tags/')
-        uses: softprops/action-gh-release@v1
+      - name: Create Release and Upload Asset
+        uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ github.ref_name }}
+          files: ${{ steps.find_installer.outputs.installer_file_path }}
           name: Release ${{ github.ref_name }}
           draft: false
           prerelease: false
-          files: |
-            ${{ steps.find_installer.outputs.installer_file_path }},
-            ${{ steps.zip_installer.outputs.zip_file_path }}
+          generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
