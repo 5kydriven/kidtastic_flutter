@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class RegisterPage extends StatelessWidget {
+  static const route = '/register';
+
   const RegisterPage({super.key});
 
   @override

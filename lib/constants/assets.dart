@@ -101,4 +101,8 @@ class Assets {
       'assets/backgrounds/match_the_shape_home.png';
   static const String matchTheShape = 'assets/backgrounds/match_the_shape.png';
   static const String homeBg = 'assets/backgrounds/home_bg.png';
+  static const String login = 'assets/backgrounds/login.jpg';
+
+  // **Icons**
+  static const String logo = 'assets/icon/logo.png';
 }
