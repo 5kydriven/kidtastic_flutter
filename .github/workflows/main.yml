@@ -126,7 +126,7 @@ jobs:
       - name: Upload .exe Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: installer
+          name: kidtastic-${{github.ref_name}}
           path: ${{ steps.find_installer.outputs.installer_file_path }}
 
       # ------------------------------
