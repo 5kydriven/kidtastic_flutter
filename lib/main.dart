@@ -6,22 +6,20 @@ import 'package:go_router/go_router.dart';
 import 'package:kidtastic_flutter/daos/daos.dart';
 import 'package:kidtastic_flutter/database/seeder/seed.dart';
 import 'package:kidtastic_flutter/database/kidtastic_database.dart';
-import 'package:kidtastic_flutter/pages/counting_game/bloc/state/counting_game_state.dart';
-import 'package:kidtastic_flutter/pages/counting_game/view/counting_game_page.dart';
-import 'package:kidtastic_flutter/pages/home/bloc/state/home_state.dart';
-import 'package:kidtastic_flutter/pages/initial_screen/view/view.dart';
-import 'package:kidtastic_flutter/pages/match_game/match_game.dart';
-import 'package:kidtastic_flutter/pages/match_game/view/match_game_page.dart';
-import 'package:kidtastic_flutter/pages/math_game/view/math_game_page.dart';
-import 'package:kidtastic_flutter/pages/number_game/view/number_game_page.dart';
-import 'package:kidtastic_flutter/pages/pronunciation_game/pronunciation_game.dart';
-import 'package:kidtastic_flutter/pages/shape_game/bloc/shape_game_state/shape_game_state.dart';
-import 'package:kidtastic_flutter/pages/shape_game/view/shape_game_page.dart';
+import 'package:kidtastic_flutter/pages/counting_game/counting_game.dart';
 import 'package:path/path.dart' as p;
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:window_manager/window_manager.dart';
 
-import 'pages/home/view/view.dart';
+import 'pages/home/home.dart';
+import 'pages/initial_screen/initial_screen.dart';
+import 'pages/login/login.dart';
+import 'pages/match_game/match_game.dart';
+import 'pages/math_game/math_game.dart';
+import 'pages/number_game/number_game.dart';
+import 'pages/pronunciation_game/pronunciation_game.dart';
+import 'pages/register/register.dart';
+import 'pages/shape_game/shape_game.dart';
 import 'repositories/repositories.dart';
 
 Future<void> main() async {
@@ -169,8 +167,8 @@ class _MyAppState extends State<MyApp> {
     super.initState();
 
     router = GoRouter(
-      initialLocation: InitialScreenPage.route,
-      // initialLocation: StreamingAsrPage.route,
+      // initialLocation: InitialScreenPage.route,
+      initialLocation: LoginPage.route,
       routes: <RouteBase>[
         GoRoute(
           path: HomePage.route,
@@ -228,6 +226,18 @@ class _MyAppState extends State<MyApp> {
             return MatchGamePage(
               initialState: state.extra as MatchGameState,
             );
+          },
+        ),
+        GoRoute(
+          path: RegisterPage.route,
+          builder: (context, state) {
+            return RegisterPage();
+          },
+        ),
+        GoRoute(
+          path: LoginPage.route,
+          builder: (context, state) {
+            return LoginPage();
           },
         ),
       ],
@@ -293,12 +303,16 @@ class _MyAppState extends State<MyApp> {
         ),
         theme: ThemeData(
           fontFamily: 'Vag',
+          textTheme: Typography.blackMountainView.apply(
+            fontFamily: 'Vag',
+          ),
+
           appBarTheme: const AppBarTheme(
             backgroundColor: Colors.white,
           ),
           colorScheme: ColorScheme.fromSeed(
-            seedColor: const Color(0xFFBC5D19),
-            primary: const Color(0xFFBC5D19),
+            seedColor: Colors.blueAccent,
+            primary: Colors.blueAccent,
             onPrimary: const Color(0xFFFFFFFF),
             surface: const Color(0xFFFFFFFF),
             secondary: const Color(0xFFE9C46A),
@@ -319,41 +333,20 @@ class _MyAppState extends State<MyApp> {
             surfaceTint: const Color(0xFF474D66),
           ),
           inputDecorationTheme: InputDecorationTheme(
-            hintStyle: TextStyle(
-              color: Colors.black,
-            ),
             labelStyle: TextStyle(
-              color: Colors.black,
+              fontFamily: 'Vag',
+            ),
+            hintStyle: TextStyle(
+              fontFamily: 'Vag',
+            ),
+            errorStyle: TextStyle(
+              fontFamily: 'Vag',
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
             ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
             ),
-            enabledBorder: const OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(12.0)),
-              borderSide: BorderSide(
-                color: Color(0xFFEF4444),
-              ),
-            ),
-            errorBorder: OutlineInputBorder(
-              borderSide: const BorderSide(
-                color: Color(0xFFEF4444),
-              ),
-              borderRadius: BorderRadius.circular(16.0),
-            ),
-            floatingLabelBehavior: FloatingLabelBehavior.never,
-            focusedBorder: const OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(12.0)),
-              borderSide: BorderSide(color: Color(0xFFBC5D19)),
-            ),
-            focusedErrorBorder: const OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(12.0)),
-              borderSide: BorderSide(
-                color: Color(0xFFEF4444),
-              ),
-            ),
-            filled: true,
-            prefixIconColor: const Color(0xFFFFFFFF),
-            suffixIconColor: const Color(0xFFBC5D19),
           ),
           textButtonTheme: TextButtonThemeData(
             style: TextButton.styleFrom(
@@ -375,7 +368,9 @@ class _MyAppState extends State<MyApp> {
               shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(16.0)),
               ),
-              side: const BorderSide(color: Color(0xFFBC5D19)),
+              side: const BorderSide(
+                color: Color(0xFFBC5D19),
+              ),
             ),
           ),
           elevatedButtonTheme: ElevatedButtonThemeData(
