@@ -4,8 +4,10 @@ AppVersion=1.0.0
 DefaultDirName={autopf}\Kidtastic
 DefaultGroupName=Kidtastic
 OutputBaseFilename=KidtasticSetup
+OutputDir=Output
 Compression=lzma
 SolidCompression=yes
+ArchitecturesInstallIn64BitMode=x64
 
 ; Your app icon
 SetupIconFile=windows\runner\resources\logo.ico
