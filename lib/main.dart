@@ -168,7 +168,7 @@ class _MyAppState extends State<MyApp> {
 
     router = GoRouter(
       // initialLocation: InitialScreenPage.route,
-      initialLocation: LoginPage.route,
+      initialLocation: RegisterPage.route,
       routes: <RouteBase>[
         GoRoute(
           path: HomePage.route,
@@ -240,6 +240,12 @@ class _MyAppState extends State<MyApp> {
             return LoginPage();
           },
         ),
+        GoRoute(
+          path: RegisterPage.route,
+          builder: (context, state) {
+            return RegisterPage();
+          },
+        ),
       ],
     );
   }
@@ -306,7 +312,6 @@ class _MyAppState extends State<MyApp> {
           textTheme: Typography.blackMountainView.apply(
             fontFamily: 'Vag',
           ),
-
           appBarTheme: const AppBarTheme(
             backgroundColor: Colors.white,
           ),
@@ -429,7 +434,9 @@ class _MyAppState extends State<MyApp> {
             showSelectedLabels: false,
             showUnselectedLabels: false,
             selectedIconTheme: const IconThemeData(color: Color(0xFFBC5D19)),
-            unselectedIconTheme: const IconThemeData(color: Color(0xFFFFFFFF)),
+            unselectedIconTheme: const IconThemeData(
+              color: Color(0xFFFFFFFF),
+            ),
             backgroundColor: const Color(0xFF27272A),
           ),
         ),
