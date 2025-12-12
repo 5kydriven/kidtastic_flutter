@@ -10,7 +10,7 @@ class GameQuestionRepository {
     required GameQuestionDao gameQuestionDao,
   }) : _gameQuestionDao = gameQuestionDao;
 
-  Future<Result> addQuestion({
+  Future<Result<int>> addQuestion({
     required Question question,
   }) async {
     try {
