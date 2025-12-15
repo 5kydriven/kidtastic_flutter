@@ -54,36 +54,12 @@ Future<void> main() async {
 
     final db = KidtasticDatabase.withPath(dbPath);
 
-    final studentRepository = StudentRepository(
-      studentDao: StudentDao(db),
-    );
-
     final gameQuestionRepository = GameQuestionRepository(
       gameQuestionDao: GameQuestionDao(db),
     );
 
     final gameRepository = GameRepository(
       gameDao: GameDao(db),
-    );
-
-    final gameSessionRepository = GameSessionRepository(
-      gameSessionDao: GameSessionDao(db),
-    );
-
-    final sessionQuestionRepository = SessionQuestionRepository(
-      sessionQuestionDao: SessionQuestionDao(db),
-    );
-
-    final studentInsightRepository = StudentInsightRepository(
-      studentInstightDao: StudentInsightDao(db),
-    );
-
-    final teacherRepository = TeacherRepository(
-      teacherDao: TeacherDao(db),
-    );
-
-    final pronunciationAttemptRepository = PronunciationAttemptRepository(
-      pronunciationAttemptDao: PronunciationAttemptDao(db),
     );
 
     final seeder = InitialDataSeeder(
@@ -93,14 +69,26 @@ Future<void> main() async {
 
     runApp(
       MyApp(
-        studentRepository: studentRepository,
+        studentRepository: StudentRepository(
+          studentDao: StudentDao(db),
+        ),
         gameQuestionRepository: gameQuestionRepository,
         gameRepository: gameRepository,
-        gameSessionRepository: gameSessionRepository,
-        sessionQuestionRepository: sessionQuestionRepository,
-        studentInsightRepository: studentInsightRepository,
-        teacherRepository: teacherRepository,
-        pronunciationAttemptRepository: pronunciationAttemptRepository,
+        gameSessionRepository: GameSessionRepository(
+          gameSessionDao: GameSessionDao(db),
+        ),
+        sessionQuestionRepository: SessionQuestionRepository(
+          sessionQuestionDao: SessionQuestionDao(db),
+        ),
+        studentInsightRepository: StudentInsightRepository(
+          studentInstightDao: StudentInsightDao(db),
+        ),
+        teacherRepository: TeacherRepository(
+          teacherDao: TeacherDao(db),
+        ),
+        pronunciationAttemptRepository: PronunciationAttemptRepository(
+          pronunciationAttemptDao: PronunciationAttemptDao(db),
+        ),
       ),
     );
     await seeder.seed();

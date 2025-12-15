@@ -137,7 +137,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   ) async {
     emit(
       state.copyWith(
-        screenRequestStatus: RequestStatus.inProgress,
+        registerRequestStatus: RequestStatus.inProgress,
       ),
     );
 
@@ -151,14 +151,14 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       case ResultStatus.success:
         emit(
           state.copyWith(
-            screenRequestStatus: RequestStatus.success,
+            registerRequestStatus: RequestStatus.success,
           ),
         );
         break;
       default:
         emit(
           state.copyWith(
-            screenRequestStatus: RequestStatus.failure,
+            registerRequestStatus: RequestStatus.failure,
           ),
         );
         break;
