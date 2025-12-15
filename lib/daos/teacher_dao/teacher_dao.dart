@@ -14,4 +14,14 @@ class TeacherDao extends DatabaseAccessor<KidtasticDatabase>
   Future<TeacherTableData?> getSingleTeacher() async {
     return await select(teacherTable).getSingleOrNull();
   }
+
+  Future<int> insertTeacher(TeacherTableCompanion teacherTableCompanion) async {
+    return await into(teacherTable).insert(teacherTableCompanion);
+  }
+
+  Future<TeacherTableData> getTeacherByUsername(String username) async {
+    return await (select(
+      teacherTable,
+    )..where((teacher) => teacher.username.equals(username))).getSingle();
+  }
 }
