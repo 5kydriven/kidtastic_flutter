@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:kidtastic_flutter/models/models.dart';
 import 'package:kidtastic_flutter/pages/initial_screen/bloc/bloc.dart';
 import 'package:kidtastic_flutter/pages/initial_screen/view/initial_screen_body.dart';
+import 'package:kidtastic_flutter/pages/login/view/login_page.dart';
 import 'package:kidtastic_flutter/repositories/repositories.dart';
 import 'package:kidtastic_flutter/widgets/game_scaffold.dart';
 
@@ -83,7 +84,7 @@ class _InitialScreenPageState extends State<InitialScreenPage> {
               style: FilledButton.styleFrom(
                 backgroundColor: Color(0xffFFC30E),
               ),
-              onPressed: () {},
+              onPressed: () => context.push(LoginPage.route),
               child: Text('Teacher'),
             ),
           ),
