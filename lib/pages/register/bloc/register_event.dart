@@ -9,17 +9,27 @@ class RegisterScreenCreated extends RegisterEvent {
 class RegisterNameChanged extends RegisterEvent {
   final String name;
 
-  const RegisterNameChanged(this.name);
+  const RegisterNameChanged({required this.name});
 }
 
-class RegisterEmailChanged extends RegisterEvent {
-  final String email;
+class RegisterUsernameChanged extends RegisterEvent {
+  final String username;
 
-  const RegisterEmailChanged(this.email);
+  const RegisterUsernameChanged({required this.username});
 }
 
 class RegisterPasswordChanged extends RegisterEvent {
   final String password;
 
-  const RegisterPasswordChanged(this.password);
+  const RegisterPasswordChanged({required this.password});
+}
+
+class RegisterConfirmPasswordChanged extends RegisterEvent {
+  final String confirmPassword;
+
+  const RegisterConfirmPasswordChanged({required this.confirmPassword});
+}
+
+class RegisterButtonPressed extends RegisterEvent {
+  const RegisterButtonPressed();
 }
