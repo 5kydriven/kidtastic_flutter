@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:kidtastic_flutter/constants/assets.dart';
+import 'package:kidtastic_flutter/pages/dashboard/view/dashboard_page.dart';
 import 'package:kidtastic_flutter/pages/login/view/view.dart';
 
+import '../../../models/models.dart';
 import '../../../repositories/repositories.dart';
 import '../../../widgets/widgets.dart';
 import '../bloc/bloc.dart';
@@ -12,7 +15,16 @@ class LoginPage extends StatelessWidget {
 
   const LoginPage({super.key});
 
-  void _loginListener(BuildContext context, LoginState state) {}
+  void _loginListener(BuildContext context, LoginState state) {
+    switch (state.screenRequestStatus) {
+      case RequestStatus.success:
+        context.push(DashboardPage.route);
+        break;
+      case RequestStatus.failure:
+      default:
+        break;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -15,8 +15,25 @@ class RegisterPage extends StatelessWidget {
 
   const RegisterPage({super.key});
 
-  void _teacherListener(BuildContext context, RegisterState state) {
+  void _screenListener(
+    BuildContext context,
+    RegisterState state,
+  ) {
     switch (state.screenRequestStatus) {
+      case RequestStatus.success:
+        context.push(InitialScreenPage.route);
+        break;
+      case RequestStatus.failure:
+      default:
+        break;
+    }
+  }
+
+  void _registerListener(
+    BuildContext context,
+    RegisterState state,
+  ) {
+    switch (state.registerRequestStatus) {
       case RequestStatus.success:
         context.push(InitialScreenPage.route);
         break;
@@ -33,10 +50,19 @@ class RegisterPage extends StatelessWidget {
         initialState: RegisterState(),
         teacherRepository: RepositoryProvider.of<TeacherRepository>(context),
       ),
-      child: BlocListener<RegisterBloc, RegisterState>(
-        listener: _teacherListener,
-        listenWhen: (previous, current) =>
-            previous.screenRequestStatus != current.screenRequestStatus,
+      child: MultiBlocListener(
+        listeners: [
+          BlocListener<RegisterBloc, RegisterState>(
+            listener: _screenListener,
+            listenWhen: (previous, current) =>
+                previous.screenRequestStatus != current.screenRequestStatus,
+          ),
+          BlocListener<RegisterBloc, RegisterState>(
+            listener: _registerListener,
+            listenWhen: (previous, current) =>
+                previous.registerRequestStatus != current.registerRequestStatus,
+          ),
+        ],
         child: GameScaffold(
           constraintsBox: 550,
           imageAssets: Assets.login,

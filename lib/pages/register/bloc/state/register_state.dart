@@ -13,5 +13,6 @@ sealed class RegisterState with _$RegisterState {
     @Default(TextFieldInput(value: '')) TextFieldInput password,
     @Default(TextFieldInput(value: '')) TextFieldInput confirmPassword,
     @Default(RequestStatus.waiting) RequestStatus screenRequestStatus,
+    @Default(RequestStatus.waiting) RequestStatus registerRequestStatus,
   }) = _RegisterState;
 }
