@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kidtastic_flutter/constants/assets.dart';
 import 'package:kidtastic_flutter/pages/initial_screen/view/initial_screen_page.dart';
-import 'package:kidtastic_flutter/widgets/labeled_text_form_field.dart';
+import 'package:kidtastic_flutter/pages/register/view/register_body.dart';
 
 import '../../../models/models.dart';
 import '../../../repositories/repositories.dart';
@@ -40,74 +40,7 @@ class RegisterPage extends StatelessWidget {
         child: GameScaffold(
           constraintsBox: 550,
           imageAssets: Assets.login,
-          child: Card(
-            elevation: 12,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(32),
-            ),
-
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 68.0,
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    Assets.logo,
-                    height: 100,
-                    width: 150,
-                    fit: BoxFit.fill,
-                  ),
-                  Text(
-                    'KIDTASTIC',
-                    style: TextStyle(
-                      fontSize: 36,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 24,
-                  ),
-                  LabeledTextFormField(
-                    label: 'Name',
-                    isRequired: true,
-                  ),
-                  const SizedBox(
-                    height: 12,
-                  ),
-                  LabeledTextFormField(
-                    label: 'Email',
-                    isRequired: true,
-                  ),
-                  const SizedBox(
-                    height: 12,
-                  ),
-                  LabeledTextFormField(
-                    label: 'Password',
-                    isRequired: true,
-                    obscure: true,
-                  ),
-                  const SizedBox(
-                    height: 24,
-                  ),
-                  SizedBox(
-                    height: 40,
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      child: Text('Register'),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
+          child: RegisterBody(),
         ),
       ),
     );

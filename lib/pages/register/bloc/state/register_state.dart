@@ -9,8 +9,9 @@ sealed class RegisterState with _$RegisterState {
   const factory RegisterState({
     Teacher? teacher,
     @Default(TextFieldInput(value: '')) TextFieldInput name,
-    @Default(TextFieldInput(value: '')) TextFieldInput email,
+    @Default(TextFieldInput(value: '')) TextFieldInput username,
     @Default(TextFieldInput(value: '')) TextFieldInput password,
+    @Default(TextFieldInput(value: '')) TextFieldInput confirmPassword,
     @Default(RequestStatus.waiting) RequestStatus screenRequestStatus,
   }) = _RegisterState;
 }

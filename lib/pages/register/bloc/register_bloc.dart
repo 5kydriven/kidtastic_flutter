@@ -14,8 +14,10 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
        super(initialState) {
     on<RegisterScreenCreated>(_screenCreated);
     on<RegisterNameChanged>(_nameChanged);
-    on<RegisterEmailChanged>(_emailChanged);
+    on<RegisterUsernameChanged>(_usernameChanged);
     on<RegisterPasswordChanged>(_passwordChanged);
+    on<RegisterConfirmPasswordChanged>(_confirmPasswordChanged);
+    on<RegisterButtonPressed>(_buttonPressed);
   }
 
   Future<void> _screenCreated(
@@ -53,20 +55,38 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     RegisterNameChanged event,
     Emitter<RegisterState> emit,
   ) async {
+    var errorType = ErrorType.empty;
+
+    if (event.name.isEmpty) {
+      errorType = ErrorType.empty;
+    } else {
+      errorType = ErrorType.none;
+    }
+
     emit(
-      state.copyWith(
-        name: TextFieldInput(value: event.name),
+      state.copyWith.name(
+        value: event.name,
+        errorType: errorType,
       ),
     );
   }
 
-  void _emailChanged(
-    RegisterEmailChanged event,
+  void _usernameChanged(
+    RegisterUsernameChanged event,
     Emitter<RegisterState> emit,
   ) async {
+    var errorType = ErrorType.empty;
+
+    if (event.username.isEmpty) {
+      errorType = ErrorType.empty;
+    } else {
+      errorType = ErrorType.none;
+    }
+
     emit(
-      state.copyWith(
-        email: TextFieldInput(value: event.email),
+      state.copyWith.username(
+        value: event.username,
+        errorType: errorType,
       ),
     );
   }
@@ -75,10 +95,73 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     RegisterPasswordChanged event,
     Emitter<RegisterState> emit,
   ) async {
+    var errorType = ErrorType.empty;
+
+    if (event.password.isEmpty) {
+      errorType = ErrorType.empty;
+    } else {
+      errorType = ErrorType.none;
+    }
+
     emit(
-      state.copyWith(
-        password: TextFieldInput(value: event.password),
+      state.copyWith.password(
+        value: event.password,
+        errorType: errorType,
       ),
     );
+  }
+
+  void _confirmPasswordChanged(
+    RegisterConfirmPasswordChanged event,
+    Emitter<RegisterState> emit,
+  ) async {
+    var errorType = ErrorType.empty;
+
+    if (event.confirmPassword.isEmpty) {
+      errorType = ErrorType.empty;
+    } else {
+      errorType = ErrorType.none;
+    }
+
+    emit(
+      state.copyWith.confirmPassword(
+        value: event.confirmPassword,
+        errorType: errorType,
+      ),
+    );
+  }
+
+  Future<void> _buttonPressed(
+    RegisterButtonPressed event,
+    Emitter<RegisterState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        screenRequestStatus: RequestStatus.inProgress,
+      ),
+    );
+
+    final result = await _teacherRepository.signUp(
+      name: state.name.value,
+      username: state.username.value,
+      password: state.password.value,
+    );
+
+    switch (result.resultStatus) {
+      case ResultStatus.success:
+        emit(
+          state.copyWith(
+            screenRequestStatus: RequestStatus.success,
+          ),
+        );
+        break;
+      default:
+        emit(
+          state.copyWith(
+            screenRequestStatus: RequestStatus.failure,
+          ),
+        );
+        break;
+    }
   }
 }
