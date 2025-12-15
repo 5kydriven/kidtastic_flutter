@@ -7,6 +7,7 @@ import 'package:kidtastic_flutter/daos/daos.dart';
 import 'package:kidtastic_flutter/database/seeder/seed.dart';
 import 'package:kidtastic_flutter/database/kidtastic_database.dart';
 import 'package:kidtastic_flutter/pages/counting_game/counting_game.dart';
+import 'package:kidtastic_flutter/pages/dashboard/view/dashboard_page.dart';
 import 'package:path/path.dart' as p;
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:window_manager/window_manager.dart';
@@ -244,6 +245,12 @@ class _MyAppState extends State<MyApp> {
           path: RegisterPage.route,
           builder: (context, state) {
             return RegisterPage();
+          },
+        ),
+        GoRoute(
+          path: DashboardPage.route,
+          builder: (context, state) {
+            return DashboardPage();
           },
         ),
       ],
