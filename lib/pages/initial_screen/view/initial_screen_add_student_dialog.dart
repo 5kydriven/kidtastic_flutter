@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../constants/constants.dart';
 import '../../../models/models.dart';
+import '../../../widgets/widgets.dart';
 import '../bloc/bloc.dart';
 
 class InitialScreenAddStudentDialog extends StatefulWidget {
@@ -174,17 +175,32 @@ class _InitialScreenAddStudentDialogState
           return Shortcuts(
             shortcuts: {
               LogicalKeySet(LogicalKeyboardKey.escape): const DismissIntent(),
+              LogicalKeySet(LogicalKeyboardKey.enter): const ActivateIntent(),
+              LogicalKeySet(LogicalKeyboardKey.numpadEnter):
+                  const ActivateIntent(),
             },
             child: Actions(
               actions: {
                 DismissIntent: CallbackAction<DismissIntent>(
                   onInvoke: (intent) {
+                    bloc.add(const InitialScreenErrorTypeCleared());
                     context.pop();
+                    return null;
+                  },
+                ),
+                ActivateIntent: CallbackAction<ActivateIntent>(
+                  onInvoke: (_) {
+                    if (state.studentRequestStatus ==
+                        RequestStatus.inProgress) {
+                      return null;
+                    }
+                    bloc.add(const InitialScreenAddStudentPressed());
                     return null;
                   },
                 ),
               },
               child: Focus(
+                autofocus: true,
                 child: Dialog(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
@@ -245,86 +261,41 @@ class _InitialScreenAddStudentDialogState
                         const SizedBox(
                           height: 16,
                         ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'First Name',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                              ),
+                        LabeledTextFormField(
+                          label: 'First Name',
+                          isRequired: true,
+                          onChanged: (value) => bloc.add(
+                            InitialScreenFirstNameChanged(
+                              value: value,
                             ),
-                            SizedBox(
-                              height: 8,
-                            ),
-                            TextFormField(
-                              onChanged: (value) => bloc.add(
-                                InitialScreenFirstNameChanged(
-                                  value: value,
-                                ),
-                              ),
-                              autofocus: true,
-                              onFieldSubmitted: (_) => bloc.add(
-                                const InitialScreenAddStudentPressed(),
-                              ),
-                              keyboardType: TextInputType.name,
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(),
-                                errorText: _firstNameErrorText(
-                                  context: context,
-                                  state: state,
-                                ),
-                              ),
-                            ),
-                          ],
+                          ),
+                          errorMessage: _firstNameErrorText(
+                            context: context,
+                            state: state,
+                          ),
                         ),
                         const SizedBox(
                           height: 8,
                         ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Last Name',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                              ),
+                        LabeledTextFormField(
+                          label: 'Last Name',
+                          isRequired: true,
+                          onChanged: (value) => bloc.add(
+                            InitialScreenLastNameChanged(
+                              value: value,
                             ),
-                            SizedBox(
-                              height: 8,
-                            ),
-                            TextFormField(
-                              onChanged: (value) => bloc.add(
-                                InitialScreenLastNameChanged(
-                                  value: value,
-                                ),
-                              ),
-                              autofocus: true,
-                              onFieldSubmitted: (_) => bloc.add(
-                                const InitialScreenAddStudentPressed(),
-                              ),
-                              keyboardType: TextInputType.name,
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(),
-                                errorText: _lastNameErrorText(
-                                  context: context,
-                                  state: state,
-                                ),
-                              ),
-                            ),
-                          ],
+                          ),
+                          errorMessage: _lastNameErrorText(
+                            context: context,
+                            state: state,
+                          ),
                         ),
                         const SizedBox(
                           height: 24,
                         ),
-                        Container(
-                          width: double.infinity,
+                        SizedBox(
+                          width: 300,
                           height: 44,
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 44,
-                          ),
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
@@ -337,6 +308,7 @@ class _InitialScreenAddStudentDialogState
                             child: const Text("Let's Go!"),
                           ),
                         ),
+
                         const SizedBox(
                           height: 8,
                         ),
@@ -344,7 +316,10 @@ class _InitialScreenAddStudentDialogState
                           style: TextButton.styleFrom(
                             backgroundColor: Colors.transparent,
                           ),
-                          onPressed: () => context.pop(),
+                          onPressed: () {
+                            bloc.add(const InitialScreenErrorTypeCleared());
+                            context.pop();
+                          },
                           child: const Text(
                             'Cancel',
                             style: TextStyle(

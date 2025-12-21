@@ -53,3 +53,7 @@ class InitialScreenAvatarSelected extends InitialScreenEvent {
     required this.avatar,
   });
 }
+
+class InitialScreenErrorTypeCleared extends InitialScreenEvent {
+  const InitialScreenErrorTypeCleared();
+}

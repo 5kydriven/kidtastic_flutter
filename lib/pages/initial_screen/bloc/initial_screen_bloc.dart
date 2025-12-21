@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 
 import '../../../models/models.dart';
 import '../../../repositories/repositories.dart';
+import '../../../utils/utils.dart';
 import 'bloc.dart';
 
 class InitialScreenBloc extends Bloc<InitialScreenEvent, InitialScreenState> {
@@ -22,6 +23,7 @@ class InitialScreenBloc extends Bloc<InitialScreenEvent, InitialScreenState> {
     on<InitialScreenNextButtonPressed>(_nextButtonPressed);
     on<InitialScreenPrevButtonPressed>(_prevButtonPressed);
     on<InitialScreenAvatarSelected>(_avatarSelected);
+    on<InitialScreenErrorTypeCleared>(_errorTypeCleared);
   }
 
   Future<void> _screenCreated(
@@ -64,40 +66,22 @@ class InitialScreenBloc extends Bloc<InitialScreenEvent, InitialScreenState> {
       ),
     );
 
-    var firstErrorType = ErrorType.empty;
-    var lastErrorType = ErrorType.empty;
-
-    if (state.firstName.value.isEmpty) {
-      firstErrorType = ErrorType.empty;
-    } else {
-      firstErrorType = ErrorType.none;
-    }
-
-    if (state.lastName.value.isEmpty) {
-      lastErrorType = ErrorType.empty;
-    } else {
-      lastErrorType = ErrorType.none;
-    }
+    final hasError =
+        state.firstName.value.isEmpty || state.lastName.value.isEmpty;
 
     emit(
-      state.copyWith.firstName(
-        errorType: firstErrorType,
-      ),
-    );
-    emit(
-      state.copyWith.lastName(
-        errorType: lastErrorType,
-      ),
-    );
-
-    if (firstErrorType != ErrorType.none || lastErrorType != ErrorType.none) {
-      emit(
-        state.copyWith(
-          studentRequestStatus: RequestStatus.failure,
+      state.copyWith(
+        firstName: state.firstName.copyWith(
+          errorType: validateRequired(state.firstName.value),
         ),
-      );
-      return;
-    }
+        lastName: state.lastName.copyWith(
+          errorType: validateRequired(state.lastName.value),
+        ),
+        studentRequestStatus: RequestStatus.failure,
+      ),
+    );
+
+    if (hasError) return;
 
     final response = await _studentRepository.addStudent(
       student: Student(
@@ -241,6 +225,22 @@ class InitialScreenBloc extends Bloc<InitialScreenEvent, InitialScreenState> {
     emit(
       state.copyWith(
         selectedAvatar: event.avatar,
+      ),
+    );
+  }
+
+  void _errorTypeCleared(
+    InitialScreenErrorTypeCleared event,
+    Emitter<InitialScreenState> emit,
+  ) {
+    emit(
+      state.copyWith(
+        firstName: state.firstName.copyWith(
+          errorType: ErrorType.none,
+        ),
+        lastName: state.lastName.copyWith(
+          errorType: ErrorType.none,
+        ),
       ),
     );
   }
