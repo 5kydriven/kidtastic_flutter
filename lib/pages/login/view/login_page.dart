@@ -40,6 +40,7 @@ class LoginPage extends StatelessWidget {
         child: GameScaffold(
           constraintsBox: 550,
           imageAssets: Assets.login,
+          appBar: LoginAppBar(),
           child: LoginBody(),
         ),
       ),
