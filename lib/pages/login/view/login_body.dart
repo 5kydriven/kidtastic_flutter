@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kidtastic_flutter/widgets/labeled_text_form_field.dart';
 
@@ -39,65 +40,120 @@ class LoginBody extends StatelessWidget {
       builder: (context, state) {
         final bloc = context.read<LoginBloc>();
 
-        return Card(
-          elevation: 8,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(32),
-          ),
-          child: Column(
-            children: [
-              Image.asset(
-                Assets.logo,
-                height: 200,
-                width: 200,
+        return Shortcuts(
+          shortcuts: {
+            LogicalKeySet(LogicalKeyboardKey.enter): ActivateIntent(),
+            LogicalKeySet(LogicalKeyboardKey.numpadEnter): ActivateIntent(),
+          },
+          child: Actions(
+            actions: {
+              ActivateIntent: CallbackAction<ActivateIntent>(
+                onInvoke: (_) {
+                  if (state.loginRequestStatus == RequestStatus.inProgress) {
+                    return null;
+                  }
+                  bloc.add(const LoginButtonPressed());
+                  return null;
+                },
               ),
-              Text(
-                'KIDTASTIC',
-                style: TextStyle(
-                  fontSize: 48,
-                  fontWeight: FontWeight.bold,
+            },
+            child: Focus(
+              autofocus: true,
+              child: Card(
+                elevation: 12,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(32),
                 ),
-              ),
-              LabeledTextFormField(
-                label: 'Username',
-                isRequired: true,
-                onChanged: (value) => bloc.add(
-                  LoginUsernameChanged(
-                    username: value,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 68.0,
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        Assets.logo,
+                        height: 100,
+                        width: 150,
+                        fit: BoxFit.fill,
+                      ),
+                      const Text(
+                        'KIDTASTIC',
+                        style: TextStyle(
+                          fontSize: 36,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 24,
+                      ),
+                      LabeledTextFormField(
+                        label: 'Username',
+                        isRequired: true,
+                        onChanged: (value) => bloc.add(
+                          LoginUsernameChanged(
+                            username: value,
+                          ),
+                        ),
+                        errorMessage: _usernameErrorText(
+                          context: context,
+                          state: state,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 12,
+                      ),
+                      LabeledTextFormField(
+                        label: 'Password',
+                        isRequired: true,
+                        obscure: !state.password.obscureText,
+                        suffixIcon: IconButton(
+                          onPressed: () =>
+                              bloc.add(LoginObscurePasswordPressed()),
+                          icon: Icon(
+                            !state.password.obscureText
+                                ? Icons.visibility_off_outlined
+                                : Icons.visibility_outlined,
+                            color: Theme.of(context).colorScheme.onSurface,
+                          ),
+                        ),
+                        onChanged: (value) => bloc.add(
+                          LoginPasswordChanged(
+                            password: value,
+                          ),
+                        ),
+                        errorMessage: _passwordErrorText(
+                          context: context,
+                          state: state,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 24,
+                      ),
+                      SizedBox(
+                        height: 40,
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () => bloc.add(const LoginButtonPressed()),
+                          style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          child: Text(
+                            'Login',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                errorMessage: _usernameErrorText(
-                  context: context,
-                  state: state,
-                ),
               ),
-              LabeledTextFormField(
-                label: 'Password',
-                isRequired: true,
-                obscure: true,
-                onChanged: (value) => bloc.add(
-                  LoginPasswordChanged(
-                    password: value,
-                  ),
-                ),
-                errorMessage: _passwordErrorText(
-                  context: context,
-                  state: state,
-                ),
-              ),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () => bloc.add(const LoginButtonPressed()),
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  child: Text('Login'),
-                ),
-              ),
-            ],
+            ),
           ),
         );
       },

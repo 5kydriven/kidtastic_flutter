@@ -15,6 +15,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<LoginButtonPressed>(_buttonPressed);
     on<LoginUsernameChanged>(_usernameChanged);
     on<LoginPasswordChanged>(_passwordChanged);
+    on<LoginObscurePasswordPressed>(_obscurePasswordPressed);
   }
 
   Future<void> _buttonPressed(
@@ -86,6 +87,17 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       state.copyWith.password(
         value: event.password,
         errorType: errorType,
+      ),
+    );
+  }
+
+  void _obscurePasswordPressed(
+    LoginObscurePasswordPressed event,
+    Emitter<LoginState> emit,
+  ) {
+    emit(
+      state.copyWith.password(
+        obscureText: !state.password.obscureText,
       ),
     );
   }

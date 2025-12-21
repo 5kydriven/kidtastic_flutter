@@ -17,3 +17,7 @@ class LoginPasswordChanged extends LoginEvent {
 
   const LoginPasswordChanged({required this.password});
 }
+
+class LoginObscurePasswordPressed extends LoginEvent {
+  const LoginObscurePasswordPressed();
+}
