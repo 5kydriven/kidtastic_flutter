@@ -6,6 +6,8 @@ class LabeledTextFormField extends StatelessWidget {
   final bool obscure;
   final String? errorMessage;
   final ValueChanged<String>? onChanged;
+  final Widget? suffixIcon;
+  final TextInputAction? textInputAction;
 
   const LabeledTextFormField({
     super.key,
@@ -14,6 +16,8 @@ class LabeledTextFormField extends StatelessWidget {
     this.obscure = false,
     this.errorMessage,
     this.onChanged,
+    this.suffixIcon,
+    this.textInputAction,
   });
 
   @override
@@ -21,7 +25,6 @@ class LabeledTextFormField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Label (with optional red *)
         Padding(
           padding: const EdgeInsets.only(
             left: 12.0,
@@ -51,11 +54,12 @@ class LabeledTextFormField extends StatelessWidget {
         ),
         const SizedBox(
           height: 6,
-        ), // spacing above input
+        ),
 
         TextFormField(
           obscureText: obscure,
           onChanged: onChanged,
+          textInputAction: textInputAction,
           decoration: InputDecoration(
             isDense: true,
             contentPadding: const EdgeInsets.symmetric(
@@ -66,6 +70,7 @@ class LabeledTextFormField extends StatelessWidget {
               borderRadius: BorderRadius.circular(8),
             ),
             errorText: errorMessage,
+            suffixIcon: suffixIcon,
           ),
         ),
       ],
