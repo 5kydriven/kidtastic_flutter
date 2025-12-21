@@ -33,3 +33,7 @@ class RegisterConfirmPasswordChanged extends RegisterEvent {
 class RegisterButtonPressed extends RegisterEvent {
   const RegisterButtonPressed();
 }
+
+class RegisterObscurePasswordPressed extends RegisterEvent {
+  const RegisterObscurePasswordPressed();
+}

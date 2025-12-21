@@ -49,7 +49,7 @@ class RegisterPage extends StatelessWidget {
       create: (context) => RegisterBloc(
         initialState: RegisterState(),
         teacherRepository: RepositoryProvider.of<TeacherRepository>(context),
-      ),
+      )..add(const RegisterScreenCreated()),
       child: MultiBlocListener(
         listeners: [
           BlocListener<RegisterBloc, RegisterState>(
