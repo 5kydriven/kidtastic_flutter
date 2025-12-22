@@ -139,7 +139,10 @@ class PronunciationGameBody extends StatelessWidget {
                   icon: const Icon(Icons.volume_up, color: Colors.white),
                   label: const Text(
                     'Tap to listen',
-                    style: TextStyle(color: Colors.white, fontSize: 18),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                    ),
                   ),
                 ),
                 const SizedBox(

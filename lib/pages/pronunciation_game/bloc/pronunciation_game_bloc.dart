@@ -5,7 +5,7 @@ import 'dart:typed_data';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter_tts/flutter_tts.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:kidtastic_flutter/workers/sherpa_worker.dart';
 import 'package:record/record.dart';
 import 'package:sherpa_onnx/sherpa_onnx.dart' as sherpa;
@@ -26,7 +26,7 @@ class PronunciationGameBloc
 
   late final AudioRecorder _audioRecorder;
   final AudioPlayer player = AudioPlayer();
-  // final FlutterTts flutterTts = FlutterTts();
+  final FlutterTts flutterTts = FlutterTts();
 
   sherpa.OnlineRecognizer? _recognizer;
   sherpa.OnlineStream? _stream;
@@ -86,6 +86,28 @@ class PronunciationGameBloc
       await _startSherpaIsolate();
       _isInitialized = true;
     }
+
+    await flutterTts.setLanguage('en-US');
+
+    final voices = await flutterTts.getVoices;
+
+    final voiceList = (voices as List)
+        .map((e) => Voices.fromJson(Map<String, dynamic>.from(e)))
+        .toList();
+
+    final selected = voiceList.firstWhere(
+      (v) => v.locale == 'en-US' && v.gender == 'female',
+      orElse: () => voiceList.first,
+    );
+
+    await flutterTts.setVoice({
+      'name': selected.name ?? '',
+      'locale': selected.locale ?? '',
+    });
+
+    await flutterTts.setPitch(1.6);
+    await flutterTts.setSpeechRate(0.6);
+    await flutterTts.setVolume(1.0);
 
     emit(
       state.copyWith(
@@ -462,13 +484,7 @@ class PronunciationGameBloc
     PronunciationGameTextSpeech event,
     Emitter<PronunciationGameState> emit,
   ) async {
-    // await flutterTts.setLanguage('en-US');
-    // await flutterTts.speak('Hello from your Windows application!');
-    // await tts.setLanguage('en-US'); // or other language
-    // await tts.setSpeechRate(0.5); // adjust speed
-    // await tts.setVolume(1.0);
-    // await tts.setPitch(1.0);
-    // await tts.speak(event.text);
+    await flutterTts.speak(event.text);
   }
 
   void _startMaxTimer() {
