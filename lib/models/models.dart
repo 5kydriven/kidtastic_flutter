@@ -10,3 +10,4 @@ export 'student/student.dart';
 export 'student_insight/student_insight.dart';
 export 'teacher/teacher.dart';
 export 'text_field_input/text_field_input.dart';
+export 'voices/voices.dart';
