@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
+import '../../../models/models.dart';
 import '../../home/home.dart';
 import '../bloc/bloc.dart';
 import '../widgets/widgets.dart';
@@ -15,6 +16,28 @@ class InitialScreenBody extends StatelessWidget {
     super.key,
     required this.pageController,
   });
+
+  void _handleStudentCard(BuildContext context, Student student) {
+    final bloc = context.read<InitialScreenBloc>();
+    bloc.add(const InitialScreenSfxButtonPressed());
+    context.push(
+      HomePage.route,
+      extra: HomeState(
+        student: student,
+      ),
+    );
+  }
+
+  void _handleAddStudentDialog(BuildContext context) {
+    final bloc = context.read<InitialScreenBloc>();
+    bloc.add(const InitialScreenSfxButtonPressed());
+    showDialog(
+      context: context,
+      builder: (context) => InitialScreenAddStudentDialog(
+        initialScreenBloc: bloc,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -112,10 +135,8 @@ class InitialScreenBody extends StatelessWidget {
                                     return StudentCard(
                                       name: student.firstName ?? '',
                                       image: student.image ?? '',
-                                      onTap: () => context.push(
-                                        HomePage.route,
-                                        extra: HomeState(student: student),
-                                      ),
+                                      onTap: () =>
+                                          _handleStudentCard(context, student),
                                       onPressed: () => bloc.add(
                                         InitialScreenDeleteStudentPressed(
                                           id: student.id ?? 0,
@@ -134,13 +155,8 @@ class InitialScreenBody extends StatelessWidget {
                                     ),
                                     child: InkWell(
                                       borderRadius: BorderRadius.circular(24),
-                                      onTap: () => showDialog(
-                                        context: context,
-                                        builder: (context) =>
-                                            InitialScreenAddStudentDialog(
-                                              initialScreenBloc: bloc,
-                                            ),
-                                      ),
+                                      onTap: () =>
+                                          _handleAddStudentDialog(context),
                                       child: const Center(
                                         child: Column(
                                           mainAxisSize: MainAxisSize.min,
@@ -150,10 +166,14 @@ class InitialScreenBody extends StatelessWidget {
                                               size: 48,
                                               color: Colors.grey,
                                             ),
-                                            SizedBox(height: 12),
+                                            SizedBox(
+                                              height: 12,
+                                            ),
                                             Text(
                                               'Add Student',
-                                              style: TextStyle(fontSize: 18),
+                                              style: TextStyle(
+                                                fontSize: 18,
+                                              ),
                                             ),
                                           ],
                                         ),

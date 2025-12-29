@@ -51,6 +51,7 @@ class _InitialScreenAddStudentDialogState
   void _toggleAvatarMenu(BuildContext context) {
     final bloc = context.read<InitialScreenBloc>();
     final state = bloc.state;
+    bloc.add(const InitialScreenSfxButtonPressed());
     if (_overlayEntry != null) {
       _overlayEntry!.remove();
       _overlayEntry = null;
@@ -318,6 +319,7 @@ class _InitialScreenAddStudentDialogState
                           ),
                           onPressed: () {
                             bloc.add(const InitialScreenErrorTypeCleared());
+                            bloc.add(const InitialScreenSfxButtonPressed());
                             context.pop();
                           },
                           child: const Text(
