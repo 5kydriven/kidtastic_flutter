@@ -12,6 +12,7 @@ import 'package:path/path.dart' as p;
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:window_manager/window_manager.dart';
 
+import 'constants/constants.dart';
 import 'pages/home/home.dart';
 import 'pages/initial_screen/initial_screen.dart';
 import 'pages/login/login.dart';
@@ -22,6 +23,7 @@ import 'pages/pronunciation_game/pronunciation_game.dart';
 import 'pages/register/register.dart';
 import 'pages/shape_game/shape_game.dart';
 import 'repositories/repositories.dart';
+import 'service/services.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -65,6 +67,10 @@ Future<void> main() async {
     final seeder = InitialDataSeeder(
       gameRepository: gameRepository,
       gameQuestionRepository: gameQuestionRepository,
+    );
+
+    await AudioService.instance.init(
+      bgmAsset: Audios.pptBackground,
     );
 
     runApp(
