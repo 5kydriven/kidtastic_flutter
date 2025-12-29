@@ -82,20 +82,6 @@ class Assets {
       'assets/pronunciation/rabbit_with_ball.png';
   static const String rainbow = 'assets/pronunciation/rainbow.png';
 
-  // **Audios**
-  static const String applause = 'audios/applause.mp3';
-  static const String buzzerWrong = 'audios/buzzer-wrong.mp3';
-  static const String correctRecord = 'audios/correct.mp3';
-  static const String crowdCheer = 'audios/crowd-cheer.mp3';
-  static const String letsGo = 'audios/lets-go.mp3';
-  static const String startRecord = 'audios/start_record.mp3';
-  static const String tadaFanfare = 'audios/tada-fanfare.mp3';
-  static const String weNeedToTryAgainChild =
-      'audios/audios/we-need-to-try-again-child.mp3';
-  static const String wow = 'audios/wow.mp3';
-  static const String wrongZap = 'audios/wrong-zap.mp3';
-  static const String wrongChime = 'audios/wrong-chime.mp3';
-
   // **Backgrounds**
   static const String matchTheShapeHome =
       'assets/backgrounds/match_the_shape_home.png';
