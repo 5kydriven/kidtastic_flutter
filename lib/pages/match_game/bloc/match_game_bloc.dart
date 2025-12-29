@@ -99,7 +99,7 @@ class MatchGameBloc extends Bloc<MatchGameEvent, MatchGameState> {
 
     await player.setVolume(1.0);
     if (isCorrect) {
-      await player.play(AssetSource(Assets.correctRecord));
+      await player.play(AssetSource(Audios.correctRecord));
       emit(
         state.copyWith(
           droppedItem: event.question,
@@ -107,7 +107,7 @@ class MatchGameBloc extends Bloc<MatchGameEvent, MatchGameState> {
         ),
       );
     } else {
-      await player.play(AssetSource(Assets.wrongChime));
+      await player.play(AssetSource(Audios.wrongChime));
     }
 
     final sessionQuestionResult = await _sessionQuestionRepository

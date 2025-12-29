@@ -104,9 +104,9 @@ class CountingGameBloc extends Bloc<CountingGameEvent, CountingGameState> {
 
     await player.setVolume(1.0);
     if (isCorrect) {
-      await player.play(AssetSource(Assets.correctRecord));
+      await player.play(AssetSource(Audios.correctRecord));
     } else {
-      await player.play(AssetSource(Assets.wrongChime));
+      await player.play(AssetSource(Audios.wrongChime));
     }
 
     final sessionQuestionResult = await _sessionQuestionRepository

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../bloc/bloc.dart';
 
 class StudentCard extends StatelessWidget {
   final String name;
@@ -16,6 +19,7 @@ class StudentCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bloc = context.read<InitialScreenBloc>();
     return Card(
       elevation: 4,
       shape: RoundedRectangleBorder(
@@ -32,6 +36,8 @@ class StudentCard extends StatelessWidget {
               Align(
                 alignment: Alignment.topRight,
                 child: PopupMenuButton<String>(
+                  onOpened: () =>
+                      bloc.add(const InitialScreenSfxButtonPressed()),
                   icon: const Icon(Icons.more_vert),
                   onSelected: (value) {
                     if (value == 'edit') {

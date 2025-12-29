@@ -57,3 +57,7 @@ class InitialScreenAvatarSelected extends InitialScreenEvent {
 class InitialScreenErrorTypeCleared extends InitialScreenEvent {
   const InitialScreenErrorTypeCleared();
 }
+
+class InitialScreenSfxButtonPressed extends InitialScreenEvent {
+  const InitialScreenSfxButtonPressed();
+}

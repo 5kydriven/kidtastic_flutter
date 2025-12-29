@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:kidtastic_flutter/service/services.dart';
 
+import '../../../constants/constants.dart';
 import '../../../models/models.dart';
 import '../../../repositories/repositories.dart';
 import '../../../utils/utils.dart';
@@ -9,6 +11,7 @@ import 'bloc.dart';
 
 class InitialScreenBloc extends Bloc<InitialScreenEvent, InitialScreenState> {
   final StudentRepository _studentRepository;
+  final AudioService _audioService = AudioService.instance;
 
   InitialScreenBloc({
     required InitialScreenState initialState,
@@ -24,6 +27,7 @@ class InitialScreenBloc extends Bloc<InitialScreenEvent, InitialScreenState> {
     on<InitialScreenPrevButtonPressed>(_prevButtonPressed);
     on<InitialScreenAvatarSelected>(_avatarSelected);
     on<InitialScreenErrorTypeCleared>(_errorTypeCleared);
+    on<InitialScreenSfxButtonPressed>(_sfxButtonPressed);
   }
 
   Future<void> _screenCreated(
@@ -65,6 +69,8 @@ class InitialScreenBloc extends Bloc<InitialScreenEvent, InitialScreenState> {
         studentRequestStatus: RequestStatus.inProgress,
       ),
     );
+
+    add(const InitialScreenSfxButtonPressed());
 
     final hasError =
         state.firstName.value.isEmpty || state.lastName.value.isEmpty;
@@ -173,6 +179,8 @@ class InitialScreenBloc extends Bloc<InitialScreenEvent, InitialScreenState> {
       ),
     );
 
+    add(const InitialScreenSfxButtonPressed());
+
     final response = await _studentRepository.deleteStudent(
       id: event.id,
     );
@@ -243,5 +251,12 @@ class InitialScreenBloc extends Bloc<InitialScreenEvent, InitialScreenState> {
         ),
       ),
     );
+  }
+
+  Future<void> _sfxButtonPressed(
+    InitialScreenSfxButtonPressed event,
+    Emitter<InitialScreenState> emit,
+  ) async {
+    await _audioService.playSfx(Audios.pop2Wav);
   }
 }

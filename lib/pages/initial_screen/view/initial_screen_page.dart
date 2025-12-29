@@ -72,36 +72,44 @@ class _InitialScreenPageState extends State<InitialScreenPage> {
                 previous.studentRequestStatus != current.studentRequestStatus,
           ),
         ],
-        child: GameScaffold(
-          constraintsBox: 800,
-          imageAssets: Assets.homeBg,
-          bottomBar: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 40,
-              vertical: 16,
-            ),
-            child: FilledButton(
-              style: FilledButton.styleFrom(
-                backgroundColor: Color(0xffFFC30E),
+        child: BlocBuilder<InitialScreenBloc, InitialScreenState>(
+          builder: (context, state) {
+            final bloc = context.read<InitialScreenBloc>();
+            return GameScaffold(
+              constraintsBox: 800,
+              imageAssets: Assets.homeBg,
+              bottomBar: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 40,
+                  vertical: 16,
+                ),
+                child: FilledButton(
+                  style: FilledButton.styleFrom(
+                    backgroundColor: Color(0xffFFC30E),
+                  ),
+                  onPressed: () {
+                    bloc.add(const InitialScreenSfxButtonPressed());
+                    context.push(LoginPage.route);
+                  },
+                  child: Text('Teacher'),
+                ),
               ),
-              onPressed: () => context.push(LoginPage.route),
-              child: Text('Teacher'),
-            ),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              vertical: 32,
-            ),
-            child: Card(
-              elevation: 8,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(32),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 32,
+                ),
+                child: Card(
+                  elevation: 8,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(32),
+                  ),
+                  child: InitialScreenBody(
+                    pageController: _pageController,
+                  ),
+                ),
               ),
-              child: InitialScreenBody(
-                pageController: _pageController,
-              ),
-            ),
-          ),
+            );
+          },
         ),
       ),
     );

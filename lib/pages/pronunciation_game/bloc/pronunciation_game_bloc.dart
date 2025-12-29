@@ -263,7 +263,7 @@ class PronunciationGameBloc
 
       await player.setVolume(1.0);
       await player.play(
-        AssetSource(Assets.startRecord),
+        AssetSource(Audios.startRecord),
       );
 
       const config = RecordConfig(
@@ -443,7 +443,7 @@ class PronunciationGameBloc
     if (finalIsCorrect) {
       try {
         await player.setVolume(1.0);
-        await player.play(AssetSource(Assets.correctRecord));
+        await player.play(AssetSource(Audios.correctRecord));
       } catch (e) {
         debugPrint('play correct sound error: $e');
       }
