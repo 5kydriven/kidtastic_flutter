@@ -78,6 +78,7 @@ class MatchGameBody extends StatelessWidget {
 
     return BlocBuilder<MatchGameBloc, MatchGameState>(
       builder: (context, state) {
+        final bloc = context.read<MatchGameBloc>();
         if (state.screenRequestStatus != RequestStatus.success) {
           return const Center(
             child: CircularProgressIndicator(),
@@ -207,27 +208,30 @@ class MatchGameBody extends StatelessWidget {
                                 (index) {
                                   final label = choices[index];
 
-                                  return SizedBox(
-                                    width: itemWidth,
-                                    child: Center(
-                                      child: Draggable<Question>(
-                                        data: label,
-
-                                        feedback: Image.asset(
-                                          label.image ?? '',
-                                          height: 150,
-                                          width: 150,
-                                        ),
-
-                                        childWhenDragging: const Opacity(
-                                          opacity: 0.3,
-                                          child: SizedBox(),
-                                        ),
-
-                                        child: Image.asset(
-                                          label.image ?? '',
-                                          height: 150,
-                                          width: 150,
+                                  return MouseRegion(
+                                    cursor: SystemMouseCursors.click,
+                                    child: SizedBox(
+                                      width: itemWidth,
+                                      child: Center(
+                                        child: Draggable<Question>(
+                                          data: label,
+                                          onDragStarted: () => bloc.add(
+                                            const MatchGameSfxButtonPressed(),
+                                          ),
+                                          feedback: Image.asset(
+                                            label.image ?? '',
+                                            height: 150,
+                                            width: 150,
+                                          ),
+                                          childWhenDragging: const Opacity(
+                                            opacity: 0.3,
+                                            child: SizedBox(),
+                                          ),
+                                          child: Image.asset(
+                                            label.image ?? '',
+                                            height: 150,
+                                            width: 150,
+                                          ),
                                         ),
                                       ),
                                     ),

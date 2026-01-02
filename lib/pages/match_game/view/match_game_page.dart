@@ -66,6 +66,43 @@ class _MatchGamePageState extends State<MatchGamePage>
     }
   }
 
+  void _confirmExit(BuildContext context, MatchGameBloc bloc) {
+    final state = bloc.state;
+    bloc.add(const MatchGameSfxButtonPressed());
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Exit Game'),
+          content: const Text(
+            'Are you sure you want to exit the game?',
+            textAlign: TextAlign.center,
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                bloc.add(const MatchGameSfxButtonPressed());
+                context.pop();
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                bloc.add(const MatchGameSfxButtonPressed());
+                if (state.currentIndex != 0) {
+                  bloc.add(const MatchGameGameEnd());
+                }
+                context.pop();
+                context.pop();
+              },
+              child: const Text('Exit'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -116,14 +153,43 @@ class _MatchGamePageState extends State<MatchGamePage>
             previous.gameSessionRequestStatus !=
                 current.gameSessionRequestStatus &&
             current.gameSessionRequestStatus == RequestStatus.success,
-        child: GameScaffold(
-          appBar: MatchGameAppBar(),
-          imageAssets: Assets.matchTheShape,
-          child: MatchGameBody(
-            confettiController: _confettiController,
-            animationController: _animationController,
-            shake: _shake,
-          ),
+        child: BlocBuilder<MatchGameBloc, MatchGameState>(
+          builder: (context, state) {
+            final bloc = context.read<MatchGameBloc>();
+            final progress = state.question.isNotEmpty
+                ? ((state.currentIndex + 1) / state.question.length).clamp(
+                    0.0,
+                    1.0,
+                  )
+                : 0.0;
+            return GameScaffold(
+              header: GameHeaderConfig(
+                showBack: true,
+                showSettings: true,
+                onBack: () => _confirmExit(context, bloc),
+                onSettings: () {
+                  bloc.add(const MatchGameSfxButtonPressed());
+                  showDialog(
+                    context: context,
+                    builder: (_) => SizedBox(
+                      child: MatchGameSettingsDialog(
+                        context: context,
+                      ),
+                    ),
+                  );
+                },
+                center: GameProgressBar(
+                  value: progress,
+                ),
+              ),
+              imageAssets: Assets.matchTheShape,
+              child: MatchGameBody(
+                confettiController: _confettiController,
+                animationController: _animationController,
+                shake: _shake,
+              ),
+            );
+          },
         ),
       ),
     );

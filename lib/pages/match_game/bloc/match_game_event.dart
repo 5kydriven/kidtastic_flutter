@@ -31,3 +31,31 @@ class MatchGameItemDropped extends MatchGameEvent {
     required this.question,
   });
 }
+
+class MatchGameBgmToggled extends MatchGameEvent {
+  const MatchGameBgmToggled();
+}
+
+class MatchGameSfxToggled extends MatchGameEvent {
+  const MatchGameSfxToggled();
+}
+
+class MatchGameBgmVolumeChanged extends MatchGameEvent {
+  final double volume;
+
+  const MatchGameBgmVolumeChanged({
+    required this.volume,
+  });
+}
+
+class MatchGameSfxVolumeChanged extends MatchGameEvent {
+  final double volume;
+
+  const MatchGameSfxVolumeChanged({
+    required this.volume,
+  });
+}
+
+class MatchGameSfxButtonPressed extends MatchGameEvent {
+  const MatchGameSfxButtonPressed();
+}
