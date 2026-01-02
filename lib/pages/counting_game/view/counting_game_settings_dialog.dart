@@ -112,19 +112,17 @@ class CountingGameSettingsDialog extends StatelessWidget {
                   ),
                   SizedBox(
                     width: double.infinity,
-                    child: FilledButton(
-                      onPressed: () => context.pop(),
-                      child: Text('Close'),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  SizedBox(
-                    width: double.infinity,
-                    child: FilledButton(
-                      onPressed: () => context.pop(),
-                      child: Text('Quit'),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        bloc.add(const CountingGameSfxButtonPressed());
+                        context.pop();
+                      },
+                      child: Text(
+                        'Close',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
                     ),
                   ),
                 ],
