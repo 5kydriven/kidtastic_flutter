@@ -87,6 +87,38 @@ class LoginBody extends StatelessWidget {
                       const SizedBox(
                         height: 24,
                       ),
+                      Visibility(
+                        visible:
+                            state.loginRequestStatus == RequestStatus.failure,
+                        child: Container(
+                          margin: EdgeInsets.only(
+                            bottom: 24,
+                          ),
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 8,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.red.withValues(
+                              alpha: 0.1,
+                            ),
+                            border: Border.all(
+                              color: Colors.red,
+                              width: 1,
+                            ),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: const Text(
+                            'Incorrect username or password',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
                       LabeledTextFormField(
                         label: 'Username',
                         isRequired: true,

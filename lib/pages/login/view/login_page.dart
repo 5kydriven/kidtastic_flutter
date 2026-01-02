@@ -16,7 +16,7 @@ class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
 
   void _loginListener(BuildContext context, LoginState state) {
-    switch (state.screenRequestStatus) {
+    switch (state.loginRequestStatus) {
       case RequestStatus.success:
         context.push(DashboardPage.route);
         break;
@@ -37,11 +37,22 @@ class LoginPage extends StatelessWidget {
         listener: _loginListener,
         listenWhen: (previous, current) =>
             previous.loginRequestStatus != current.loginRequestStatus,
-        child: GameScaffoldOne(
-          constraintsBox: 550,
-          imageAssets: Assets.login,
-          appBar: LoginAppBar(),
-          child: LoginBody(),
+        child: BlocBuilder<LoginBloc, LoginState>(
+          builder: (context, state) {
+            final bloc = context.read<LoginBloc>();
+            return GameScaffold(
+              constraintsBox: 550,
+              imageAssets: Assets.login,
+              header: GameHeaderConfig(
+                showBack: true,
+                onBack: () {
+                  context.pop();
+                  bloc.add(const LoginSfxButtonPressed());
+                },
+              ),
+              child: LoginBody(),
+            );
+          },
         ),
       ),
     );
