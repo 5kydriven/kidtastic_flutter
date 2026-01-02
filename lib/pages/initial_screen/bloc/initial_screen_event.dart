@@ -61,3 +61,27 @@ class InitialScreenErrorTypeCleared extends InitialScreenEvent {
 class InitialScreenSfxButtonPressed extends InitialScreenEvent {
   const InitialScreenSfxButtonPressed();
 }
+
+class InitialScreenBgmToggled extends InitialScreenEvent {
+  const InitialScreenBgmToggled();
+}
+
+class InitialScreenSfxToggled extends InitialScreenEvent {
+  const InitialScreenSfxToggled();
+}
+
+class InitialScreenBgmVolumeChanged extends InitialScreenEvent {
+  final double volume;
+
+  const InitialScreenBgmVolumeChanged({
+    required this.volume,
+  });
+}
+
+class InitialScreenSfxVolumeChanged extends InitialScreenEvent {
+  final double volume;
+
+  const InitialScreenSfxVolumeChanged({
+    required this.volume,
+  });
+}

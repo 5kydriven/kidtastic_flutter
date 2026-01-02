@@ -3,12 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kidtastic_flutter/models/models.dart';
 import 'package:kidtastic_flutter/pages/initial_screen/bloc/bloc.dart';
-import 'package:kidtastic_flutter/pages/initial_screen/view/initial_screen_body.dart';
 import 'package:kidtastic_flutter/pages/login/view/login_page.dart';
 import 'package:kidtastic_flutter/repositories/repositories.dart';
-import 'package:kidtastic_flutter/widgets/game_scaffold.dart';
 
 import '../../../constants/constants.dart';
+import '../../../widgets/widgets.dart';
+import 'view.dart';
 
 class InitialScreenPage extends StatefulWidget {
   static const route = '/initial_screen';
@@ -28,7 +28,9 @@ class _InitialScreenPageState extends State<InitialScreenPage> {
   ) {
     _pageController.animateToPage(
       state.currentPage,
-      duration: const Duration(milliseconds: 350),
+      duration: const Duration(
+        milliseconds: 350,
+      ),
       curve: Curves.easeInOut,
     );
   }
@@ -76,8 +78,21 @@ class _InitialScreenPageState extends State<InitialScreenPage> {
           builder: (context, state) {
             final bloc = context.read<InitialScreenBloc>();
             return GameScaffold(
-              constraintsBox: 800,
               imageAssets: Assets.homeBg,
+              header: GameHeaderConfig(
+                showSettings: true,
+                onSettings: () {
+                  bloc.add(const InitialScreenSfxButtonPressed());
+                  showDialog(
+                    context: context,
+                    builder: (_) => SizedBox(
+                      child: InitialScreenSettingsDialog(
+                        context: context,
+                      ),
+                    ),
+                  );
+                },
+              ),
               bottomBar: Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 40,
