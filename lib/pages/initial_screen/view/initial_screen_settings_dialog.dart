@@ -112,25 +112,17 @@ class InitialScreenSettingsDialog extends StatelessWidget {
                   ),
                   SizedBox(
                     width: double.infinity,
-                    child: FilledButton(
+                    child: ElevatedButton(
                       onPressed: () {
                         bloc.add(const InitialScreenSfxButtonPressed());
                         context.pop();
                       },
-                      child: Text('Close'),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  SizedBox(
-                    width: double.infinity,
-                    child: FilledButton(
-                      onPressed: () {
-                        bloc.add(const InitialScreenSfxButtonPressed());
-                        context.pop();
-                      },
-                      child: Text('Quit'),
+                      child: Text(
+                        'Close',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
                     ),
                   ),
                 ],

@@ -36,6 +36,7 @@ class CountingGameBloc extends Bloc<CountingGameEvent, CountingGameState> {
     on<CountingGameSfxToggled>(_sfxToggled);
     on<CountingGameBgmVolumeChanged>(_bgmVolumeChanged);
     on<CountingGameSfxVolumeChanged>(_sfxVolumeChanged);
+    on<CountingGameSfxButtonPressed>(_sfxButtonPressed);
   }
 
   Future<void> _screenCreated(
@@ -250,6 +251,8 @@ class CountingGameBloc extends Bloc<CountingGameEvent, CountingGameState> {
       await _audioService.muteBgm();
     }
 
+    add(const CountingGameSfxButtonPressed());
+
     emit(
       state.copyWith(
         isBgmMuted: !state.isBgmMuted,
@@ -266,6 +269,8 @@ class CountingGameBloc extends Bloc<CountingGameEvent, CountingGameState> {
     } else {
       await _audioService.muteSfx();
     }
+
+    add(const CountingGameSfxButtonPressed());
 
     emit(
       state.copyWith(
@@ -298,5 +303,12 @@ class CountingGameBloc extends Bloc<CountingGameEvent, CountingGameState> {
         sfxVolume: event.volume,
       ),
     );
+  }
+
+  Future<void> _sfxButtonPressed(
+    CountingGameSfxButtonPressed event,
+    Emitter<CountingGameState> emit,
+  ) async {
+    await _audioService.playSfx(Audios.pop2Wav);
   }
 }

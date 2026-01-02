@@ -57,3 +57,7 @@ class CountingGameSfxVolumeChanged extends CountingGameEvent {
     required this.volume,
   });
 }
+
+class CountingGameSfxButtonPressed extends CountingGameEvent {
+  const CountingGameSfxButtonPressed();
+}

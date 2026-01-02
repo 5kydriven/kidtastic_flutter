@@ -57,6 +57,7 @@ class _CountingGamePageState extends State<CountingGamePage> {
             actions: [
               TextButton(
                 onPressed: () {
+                  bloc.add(const CountingGameSfxButtonPressed());
                   context.pop();
                   context.pop();
                 },
@@ -64,6 +65,7 @@ class _CountingGamePageState extends State<CountingGamePage> {
               ),
               TextButton(
                 onPressed: () {
+                  bloc.add(const CountingGameSfxButtonPressed());
                   bloc.add(const CountingGameScreenCreated());
                   context.pop();
                 },
@@ -78,6 +80,7 @@ class _CountingGamePageState extends State<CountingGamePage> {
 
   void _confirmExit(BuildContext context, CountingGameBloc bloc) {
     final state = bloc.state;
+    bloc.add(const CountingGameSfxButtonPressed());
     showDialog(
       context: context,
       builder: (context) {
@@ -89,11 +92,15 @@ class _CountingGamePageState extends State<CountingGamePage> {
           ),
           actions: [
             TextButton(
-              onPressed: () => context.pop(),
+              onPressed: () {
+                bloc.add(const CountingGameSfxButtonPressed());
+                context.pop();
+              },
               child: const Text('Cancel'),
             ),
             TextButton(
               onPressed: () {
+                bloc.add(const CountingGameSfxButtonPressed());
                 if (state.currentIndex != 0) {
                   bloc.add(const CountingGameGameEnd());
                 }
@@ -147,14 +154,17 @@ class _CountingGamePageState extends State<CountingGamePage> {
                 showBack: true,
                 showSettings: true,
                 onBack: () => _confirmExit(context, bloc),
-                onSettings: () => showDialog(
-                  context: context,
-                  builder: (_) => SizedBox(
-                    child: CountingGameSettingsDialog(
-                      context: context,
+                onSettings: () {
+                  bloc.add(const CountingGameSfxButtonPressed());
+                  showDialog(
+                    context: context,
+                    builder: (_) => SizedBox(
+                      child: CountingGameSettingsDialog(
+                        context: context,
+                      ),
                     ),
-                  ),
-                ),
+                  );
+                },
                 center: GameProgressBar(
                   value: progress,
                 ),
