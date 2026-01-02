@@ -87,6 +87,43 @@ class _PronunciationGamePageState extends State<PronunciationGamePage> {
     );
   }
 
+  void _confirmExit(BuildContext context, PronunciationGameBloc bloc) {
+    final state = bloc.state;
+    bloc.add(const PronunciationGameSfxButtonPressed());
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Exit Game'),
+          content: const Text(
+            'Are you sure you want to exit the game?',
+            textAlign: TextAlign.center,
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                bloc.add(const PronunciationGameSfxButtonPressed());
+                context.pop();
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                bloc.add(const PronunciationGameSfxButtonPressed());
+                if (state.currentIndex != 0) {
+                  bloc.add(const PronunciationGameGameEnd());
+                }
+                context.pop();
+                context.pop();
+              },
+              child: const Text('Exit'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -120,20 +157,49 @@ class _PronunciationGamePageState extends State<PronunciationGamePage> {
                 current.isCorrect,
           ),
         ],
-        child: GameScaffold(
-          appBar: PronunciationGameAppBar(),
-          imageAssets: Assets.pronunciationBg,
-          child: Card(
-            color: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-            elevation: 8,
-            child: Padding(
-              padding: const EdgeInsets.all(24.0),
-              child: PronunciationGameBody(),
-            ),
-          ),
+        child: BlocBuilder<PronunciationGameBloc, PronunciationGameState>(
+          builder: (context, state) {
+            final bloc = context.read<PronunciationGameBloc>();
+            final progress = state.question.isNotEmpty
+                ? ((state.currentIndex + 1) / state.question.length).clamp(
+                    0.0,
+                    1.0,
+                  )
+                : 0.0;
+            return GameScaffold(
+              header: GameHeaderConfig(
+                showBack: true,
+                showSettings: true,
+                onBack: () => _confirmExit(context, bloc),
+                onSettings: () {
+                  bloc.add(const PronunciationGameSfxButtonPressed());
+                  showDialog(
+                    context: context,
+                    builder: (_) => SizedBox(
+                      child: PronunciationGameSettingsDialog(
+                        context: context,
+                      ),
+                    ),
+                  );
+                },
+                center: GameProgressBar(
+                  value: progress,
+                ),
+              ),
+              imageAssets: Assets.pronunciationBg,
+              child: Card(
+                color: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                elevation: 8,
+                child: Padding(
+                  padding: const EdgeInsets.all(24.0),
+                  child: PronunciationGameBody(),
+                ),
+              ),
+            );
+          },
         ),
       ),
     );
