@@ -3,10 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kidtastic_flutter/pages/counting_game/counting_game.dart';
 import 'package:kidtastic_flutter/pages/pronunciation_game/pronunciation_game.dart';
-import 'package:kidtastic_flutter/pages/shape_game/shape_game.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../../constants/constants.dart';
+import '../../match_game/match_game.dart';
 import '../bloc/bloc.dart';
 
 class HomeBody extends StatelessWidget {
@@ -103,6 +103,7 @@ class HomeBody extends StatelessWidget {
                                     Radius.circular(24),
                                   ),
                                   onTap: () {
+                                    bloc.add(const HomeSfxButtonPressed());
                                     if (game.route?.isNotEmpty ?? false) {
                                       switch (game.category) {
                                         case GameType.counting:
@@ -124,8 +125,16 @@ class HomeBody extends StatelessWidget {
                                           );
                                         case GameType.shape:
                                           context.push(
-                                            ShapeGamePage.route,
-                                            extra: ShapeGameState(
+                                            MatchGamePage.route,
+                                            extra: MatchGameState(
+                                              game: game,
+                                              student: state.student,
+                                            ),
+                                          );
+                                        case GameType.matching:
+                                          context.push(
+                                            MatchGamePage.route,
+                                            extra: MatchGameState(
                                               game: game,
                                               student: state.student,
                                             ),

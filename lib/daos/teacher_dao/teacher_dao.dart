@@ -4,8 +4,24 @@ import 'package:kidtastic_flutter/tables/teacher_table.dart';
 
 part 'teacher_dao.g.dart';
 
-@DriftAccessor(tables: [TeacherTable])
+@DriftAccessor(
+  tables: [TeacherTable],
+)
 class TeacherDao extends DatabaseAccessor<KidtasticDatabase>
     with _$TeacherDaoMixin {
   TeacherDao(super.db);
+
+  Future<TeacherTableData?> getSingleTeacher() async {
+    return await select(teacherTable).getSingleOrNull();
+  }
+
+  Future<int> insertTeacher(TeacherTableCompanion teacherTableCompanion) async {
+    return await into(teacherTable).insert(teacherTableCompanion);
+  }
+
+  Future<TeacherTableData> getTeacherByUsername(String username) async {
+    return await (select(
+      teacherTable,
+    )..where((teacher) => teacher.username.equals(username))).getSingle();
+  }
 }

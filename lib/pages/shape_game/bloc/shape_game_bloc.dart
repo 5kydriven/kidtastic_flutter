@@ -1,5 +1,7 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:bloc/bloc.dart';
 
+import '../../../constants/constants.dart';
 import '../../../models/models.dart';
 import '../../../repositories/repositories.dart';
 import 'bloc.dart';
@@ -9,6 +11,9 @@ class ShapeGameBloc extends Bloc<ShapeGameEvent, ShapeGameState> {
   final GameQuestionRepository _gameQuestionRepository;
   final GameSessionRepository _gameSessionRepository;
   final SessionQuestionRepository _sessionQuestionRepository;
+
+  final AudioPlayer player = AudioPlayer();
+
   ShapeGameBloc({
     required this.initialState,
     required GameQuestionRepository gameQuestionRepository,
@@ -42,7 +47,7 @@ class ShapeGameBloc extends Bloc<ShapeGameEvent, ShapeGameState> {
       case ResultStatus.success:
         final gameQuestionResult = await _gameQuestionRepository.getQuestion(
           gameId: state.game?.id ?? 0,
-          limit: 5,
+          limit: 10,
           isRandom: true,
         );
 
@@ -91,6 +96,13 @@ class ShapeGameBloc extends Bloc<ShapeGameEvent, ShapeGameState> {
     final isCorrect =
         state.question[state.currentIndex].correctAnswer == event.answer;
 
+    await player.setVolume(1.0);
+    if (isCorrect) {
+      await player.play(AssetSource(Audios.correctRecord));
+    } else {
+      await player.play(AssetSource(Audios.wrongChime));
+    }
+
     final sessionQuestionResult = await _sessionQuestionRepository
         .addSessionQuestion(
           entry: SessionQuestion(
@@ -109,6 +121,12 @@ class ShapeGameBloc extends Bloc<ShapeGameEvent, ShapeGameState> {
             sessionQuestionRequestStatus: RequestStatus.success,
           ),
         );
+        await Future.delayed(
+          const Duration(
+            seconds: 1,
+          ),
+        );
+        player.stop();
         add(const ShapeGameNextQuestion());
         break;
       default:
@@ -173,5 +191,11 @@ class ShapeGameBloc extends Bloc<ShapeGameEvent, ShapeGameState> {
         );
         break;
     }
+  }
+
+  @override
+  Future<void> close() async {
+    await player.dispose();
+    return super.close();
   }
 }

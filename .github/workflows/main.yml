@@ -1,0 +1,161 @@
+name: Build & Release Flutter Windows App
+
+permissions:
+  contents: write
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build_app:
+    runs-on: windows-latest
+    outputs:
+      artifact_name: windows_build
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          architecture: x64
+
+      - name: Flutter Version (Debug)
+        run: flutter --version
+
+      - name: Setup NuGet
+        shell: powershell
+        run: |
+          Write-Host "Setting up NuGet..."
+          Invoke-WebRequest -Uri https://dist.nuget.org/win-x86-commandline/latest/nuget.exe -OutFile nuget.exe
+          $nugetPath = (Get-Location).Path
+          echo "$nugetPath" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          Write-Host "NuGet setup complete"
+          .\nuget.exe help
+
+      - name: Flutter Pub Get
+        run: flutter pub get
+
+      - name: Generate freezed files
+        run: flutter pub run build_runner build --delete-conflicting-outputs
+
+      - name: Clean Build
+        run: flutter clean
+
+      - name: Build Windows App
+        shell: powershell
+        run: |
+          Write-Host "Starting Flutter Windows build..."
+          flutter build windows --release
+
+          # Verify build output
+          if (-not (Test-Path "build/windows/x64/runner/Release")) {
+            throw "Build output directory not found!"
+          }
+          Write-Host "Build completed successfully"
+
+      - name: Upload Windows Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows_build
+          path: build/windows/x64/runner/Release/
+          retention-days: 7
+
+  # ------------------------------
+  compile_installer:
+    runs-on: windows-latest
+    needs: build_app
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download Windows Build Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: windows_build
+          path: build/windows/x64/runner/Release/
+
+      - name: List downloaded build files
+        shell: powershell
+        run: |
+          Write-Host "Listing build files in runner:"
+          Get-ChildItem -Path build/windows/x64/runner/Release/ -Recurse
+
+      # ------------------------------
+      - name: Install Inno Setup with winget
+        shell: powershell
+        run: |
+          $iscc = "C:\Program Files (x86)\Inno Setup 6\ISCC.exe"
+
+          # Check if already installed
+          if (Test-Path $iscc) {
+            Write-Host "Inno Setup is already installed at: $iscc"
+            exit 0
+          }
+
+          Write-Host "Installing Inno Setup via winget..."
+          winget install --id JRSoftware.InnoSetup -e -s winget -i
+
+          Start-Sleep -Seconds 5
+
+          # Verify installation
+          if (-not (Test-Path $iscc)) { 
+            throw "ISCC.exe not found after installation at: $iscc" 
+          }
+          Write-Host "Inno Setup installed successfully at: $iscc"
+
+      # ------------------------------
+      - name: Compile Installer
+        shell: powershell
+        run: |
+          $iscc = "C:\Program Files (x86)\Inno Setup 6\ISCC.exe"
+          if (-not (Test-Path $iscc)) { throw "ISCC.exe not found!" }
+
+          New-Item -ItemType Directory -Force -Path Output
+
+          Write-Host "Compiling installer..."
+          & $iscc "installer.iss" /OOutput
+
+          if ($LASTEXITCODE -ne 0) { 
+            throw "Inno Setup compilation failed with exit code $LASTEXITCODE" 
+          }
+
+          Write-Host "Installer compilation completed."
+          Write-Host "Contents of Output directory:"
+          Get-ChildItem -Path Output
+
+      # ------------------------------
+      - name: Find Installer
+        id: find_installer
+        shell: powershell
+        run: |
+          $installer = Get-ChildItem -Path Output -Filter "*.exe" | Select-Object -First 1
+          if (-not $installer) { 
+            Write-Host "No installer found in Output directory"
+            Get-ChildItem -Path Output
+            throw "Installer not found!" 
+          }
+
+          Write-Host "Found installer: $($installer.FullName)"
+          echo "installer_file_path=$($installer.FullName)" >> $env:GITHUB_OUTPUT
+          echo "installer_file_name=$($installer.Name)" >> $env:GITHUB_OUTPUT
+
+      # ------------------------------
+      - name: Upload .exe Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: kidtastic-${{github.ref_name}}
+          path: ${{ steps.find_installer.outputs.installer_file_path }}
+
+      # ------------------------------
+      - name: Create Release and Upload Asset
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ steps.find_installer.outputs.installer_file_path }}
+          name: Release ${{ github.ref_name }}
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

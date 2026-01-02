@@ -5,7 +5,7 @@ class TeacherTable extends Table {
   TextColumn get name => text().withLength(min: 1, max: 255)();
   TextColumn get username => text().withLength(min: 1, max: 255)();
   TextColumn get password => text().withLength(min: 1, max: 255)();
-  TextColumn get avatar => text().withLength(min: 1, max: 255)();
+  TextColumn get avatar => text().nullable()();
   BoolColumn get isSynced => boolean().withDefault(const Constant(false))();
   DateTimeColumn get syncedAt =>
       dateTime().clientDefault(() => DateTime.now())();

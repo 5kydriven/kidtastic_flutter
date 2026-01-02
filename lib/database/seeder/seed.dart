@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:math' hide log;
 
 import 'package:kidtastic_flutter/constants/constants.dart';
@@ -29,7 +30,7 @@ class InitialDataSeeder {
     // log(gameResult.data.toString());
     if ((gameResult.data ?? []).isNotEmpty) return;
 
-    print('🌱 Seeding initial games & questions... ');
+    log('🌱 Seeding initial games & questions... ');
 
     // --- Base Games ---
     final games = [
@@ -49,7 +50,7 @@ class InitialDataSeeder {
       ),
       Game(
         name: 'Match the Shapes',
-        category: GameType.shape,
+        category: GameType.matching,
         imageAsset: Assets.shapes,
         description: 'Match shapes to learn geometry.',
         route: ShapeGamePage.route,
@@ -62,7 +63,7 @@ class InitialDataSeeder {
         game: game,
       );
       if (result.resultStatus == ResultStatus.error) {
-        print('error $game');
+        log('error $game');
       }
       gameIds.add(result.data ?? 0);
     }
@@ -78,21 +79,7 @@ class InitialDataSeeder {
   // 🍎 COUNTING FRUITS GAME
   // ---------------------------
   Future<void> _seedCountingFruits(int gameId) async {
-    final fruits = <Fruit>[
-      Fruit(name: 'apple', image: Assets.apple),
-      Fruit(name: 'banana', image: Assets.banana),
-      Fruit(name: 'carrot', image: Assets.carrot),
-      Fruit(name: 'chili pepper', image: Assets.chiliPepper),
-      Fruit(name: 'grape', image: Assets.grape),
-      Fruit(name: 'lemon', image: Assets.lemon),
-      Fruit(name: 'orange', image: Assets.orange),
-      Fruit(name: 'pear', image: Assets.pear),
-      Fruit(name: 'pineapple', image: Assets.pineapple),
-      Fruit(name: 'squash', image: Assets.squash),
-      Fruit(name: 'strawberry', image: Assets.strawberry),
-      Fruit(name: 'tomato', image: Assets.tomato),
-      Fruit(name: 'watermelon', image: Assets.watermelon),
-    ];
+    final fruits = SeedData.fruits;
 
     final questions = <Question>[];
 
@@ -117,6 +104,7 @@ class InitialDataSeeder {
           question: 'How many $fruitName are there?',
           correctAnswer: correctCount.toString(),
           image: fruit.image,
+          difficulty: Difficulty.easy,
           choices: jsonEncode(options),
         ),
       );
@@ -133,28 +121,7 @@ class InitialDataSeeder {
   // 🗣️ PRONUNCIATION GAME
   // ---------------------------
   Future<void> _seedPronunciation(int gameId) async {
-    const words = <Question>[
-      Question(
-        question: 'Fox wearing a necktie',
-        image: Assets.foxWearingNecktie,
-      ),
-      Question(
-        question: 'Bird feeding worm',
-        image: Assets.birdFeedingWorm,
-      ),
-      Question(
-        question: 'Rabbit with ball',
-        image: Assets.rabbitWithBall,
-      ),
-      Question(
-        question: 'There are two giraffes.',
-        image: Assets.giraffe,
-      ),
-      Question(
-        question: 'There is an aligator.',
-        image: Assets.aligator,
-      ),
-    ];
+    const words = SeedData.words;
 
     for (final word in words) {
       await _gameQuestionRepository.addQuestion(
@@ -162,6 +129,7 @@ class InitialDataSeeder {
           gameId: gameId,
           question: word.question,
           correctAnswer: word.question,
+          difficulty: word.difficulty,
           image: word.image,
         ),
       );
@@ -174,64 +142,32 @@ class InitialDataSeeder {
   Future<void> _seedShapes(int gameId) async {
     final random = Random();
 
-    const shapes = <Question>[
-      Question(
-        correctAnswer: 'circle',
-        image: Assets.circle,
-      ),
-      Question(
-        correctAnswer: 'heart',
-        image: Assets.heart,
-      ),
-      Question(
-        correctAnswer: 'hexagon',
-        image: Assets.hexagon,
-      ),
-      Question(
-        correctAnswer: 'oval',
-        image: Assets.oval,
-      ),
-      Question(
-        correctAnswer: 'pentagon',
-        image: Assets.pentagon,
-      ),
-      Question(
-        correctAnswer: 'rectangle',
-        image: Assets.rectangle,
-      ),
-      Question(
-        correctAnswer: 'square',
-        image: Assets.square,
-      ),
-      Question(
-        correctAnswer: 'trapezoid',
-        image: Assets.trapezoid,
-      ),
-      Question(
-        correctAnswer: 'triangle',
-        image: Assets.triangle,
-      ),
-    ];
+    const shapeCutouts = SeedData.shapeCutouts;
+    const shapes = SeedData.shapes;
 
-    for (final shape in shapes) {
-      final otherAnswers = shapes
-          .where((s) => s.correctAnswer != shape.correctAnswer)
-          .map((s) => s.correctAnswer)
+    for (final shapeCutout in shapeCutouts) {
+      final correctShape = shapes.firstWhere(
+        (s) => s.correctAnswer == shapeCutout.correctAnswer,
+      );
+
+      final wrongAnswers = shapes
+          .where((s) => s.correctAnswer != correctShape.correctAnswer)
+          .map((s) => s)
           .toList();
+      wrongAnswers.shuffle(random);
 
-      otherAnswers.shuffle(random);
-      final randomChoices = otherAnswers.take(5).toList();
-
-      randomChoices.add(shape.correctAnswer);
-      randomChoices.shuffle(random);
+      final choices = wrongAnswers.take(5).toList();
+      choices.add(correctShape);
+      choices.shuffle(random);
 
       await _gameQuestionRepository.addQuestion(
         question: Question(
           gameId: gameId,
-          question: 'What shape is this?',
-          correctAnswer: shape.correctAnswer,
-          image: shape.image,
-          choices: jsonEncode(randomChoices),
+          question: shapeCutout.correctAnswer,
+          correctAnswer: correctShape.correctAnswer,
+          image: shapeCutout.image,
+          difficulty: shapeCutout.difficulty,
+          choices: jsonEncode(choices),
         ),
       );
     }

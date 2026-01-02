@@ -4,8 +4,10 @@ AppVersion=1.0.0
 DefaultDirName={autopf}\Kidtastic
 DefaultGroupName=Kidtastic
 OutputBaseFilename=KidtasticSetup
+OutputDir=Output
 Compression=lzma
 SolidCompression=yes
+ArchitecturesInstallIn64BitMode=x64
 
 ; Your app icon
 SetupIconFile=windows\runner\resources\logo.ico
@@ -39,4 +41,4 @@ Filename: "{app}\kidtastic_flutter.exe"; Description: "Launch Kidtastic"; \
 ; --- Uninstaller cleanup (optional) ---
 [UninstallDelete]
 ; Remove user data folder during uninstall (optional; comment out to preserve data)
-; Type: filesandordirs; Name: "{localappdata}\Kidtastic"
+Type: filesandordirs; Name: "{localappdata}\Kidtastic"

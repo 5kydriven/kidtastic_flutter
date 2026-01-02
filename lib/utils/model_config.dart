@@ -1,7 +1,6 @@
 import 'package:sherpa_onnx/sherpa_onnx.dart';
 import 'utils.dart';
 
-// model type
 Future<OnlineModelConfig> getOnlineModelConfig({
   required int type,
 }) async {

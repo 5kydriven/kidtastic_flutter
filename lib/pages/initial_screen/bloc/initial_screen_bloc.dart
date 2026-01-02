@@ -1,13 +1,18 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:kidtastic_flutter/service/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../constants/constants.dart';
 import '../../../models/models.dart';
 import '../../../repositories/repositories.dart';
+import '../../../utils/utils.dart';
 import 'bloc.dart';
 
 class InitialScreenBloc extends Bloc<InitialScreenEvent, InitialScreenState> {
   final StudentRepository _studentRepository;
+  final AudioService _audioService = AudioService.instance;
 
   InitialScreenBloc({
     required InitialScreenState initialState,
@@ -22,15 +27,30 @@ class InitialScreenBloc extends Bloc<InitialScreenEvent, InitialScreenState> {
     on<InitialScreenNextButtonPressed>(_nextButtonPressed);
     on<InitialScreenPrevButtonPressed>(_prevButtonPressed);
     on<InitialScreenAvatarSelected>(_avatarSelected);
+    on<InitialScreenErrorTypeCleared>(_errorTypeCleared);
+    on<InitialScreenSfxButtonPressed>(_sfxButtonPressed);
+    on<InitialScreenBgmToggled>(_bgmToggled);
+    on<InitialScreenSfxToggled>(_sfxToggled);
+    on<InitialScreenBgmVolumeChanged>(_bgmVolumeChanged);
+    on<InitialScreenSfxVolumeChanged>(_sfxVolumeChanged);
   }
 
   Future<void> _screenCreated(
     InitialScreenScreenCreated event,
     Emitter<InitialScreenState> emit,
   ) async {
+    final prefs = await SharedPreferences.getInstance();
+    final isBgmMuted = prefs.getBool(BoolPreference.keyIsBgmMuted) ?? false;
+    final isSfxMuted = prefs.getBool(BoolPreference.keyIsSfxMuted) ?? false;
+    final bgmVolume = prefs.getDouble(DoublePreference.keyBgmVolume) ?? 1.0;
+    final sfxVolume = prefs.getDouble(DoublePreference.keySfxVolume) ?? 1.0;
     emit(
       state.copyWith(
         requestStatus: RequestStatus.inProgress,
+        isBgmMuted: isBgmMuted,
+        isSfxMuted: isSfxMuted,
+        bgmVolume: bgmVolume,
+        sfxVolume: sfxVolume,
       ),
     );
 
@@ -60,9 +80,28 @@ class InitialScreenBloc extends Bloc<InitialScreenEvent, InitialScreenState> {
   ) async {
     emit(
       state.copyWith(
-        requestStatus: RequestStatus.inProgress,
+        studentRequestStatus: RequestStatus.inProgress,
       ),
     );
+
+    add(const InitialScreenSfxButtonPressed());
+
+    final hasError =
+        state.firstName.value.isEmpty || state.lastName.value.isEmpty;
+
+    emit(
+      state.copyWith(
+        firstName: state.firstName.copyWith(
+          errorType: validateRequired(state.firstName.value),
+        ),
+        lastName: state.lastName.copyWith(
+          errorType: validateRequired(state.lastName.value),
+        ),
+        studentRequestStatus: RequestStatus.failure,
+      ),
+    );
+
+    if (hasError) return;
 
     final response = await _studentRepository.addStudent(
       student: Student(
@@ -83,7 +122,7 @@ class InitialScreenBloc extends Bloc<InitialScreenEvent, InitialScreenState> {
             lastName: TextFieldInput(
               value: '',
             ),
-            requestStatus: RequestStatus.success,
+            studentRequestStatus: RequestStatus.success,
           ),
         );
         add(const InitialScreenScreenCreated());
@@ -97,7 +136,7 @@ class InitialScreenBloc extends Bloc<InitialScreenEvent, InitialScreenState> {
             lastName: TextFieldInput(
               value: '',
             ),
-            requestStatus: RequestStatus.failure,
+            studentRequestStatus: RequestStatus.failure,
           ),
         );
         break;
@@ -154,6 +193,8 @@ class InitialScreenBloc extends Bloc<InitialScreenEvent, InitialScreenState> {
       ),
     );
 
+    add(const InitialScreenSfxButtonPressed());
+
     final response = await _studentRepository.deleteStudent(
       id: event.id,
     );
@@ -206,6 +247,92 @@ class InitialScreenBloc extends Bloc<InitialScreenEvent, InitialScreenState> {
     emit(
       state.copyWith(
         selectedAvatar: event.avatar,
+      ),
+    );
+  }
+
+  void _errorTypeCleared(
+    InitialScreenErrorTypeCleared event,
+    Emitter<InitialScreenState> emit,
+  ) {
+    emit(
+      state.copyWith(
+        firstName: state.firstName.copyWith(
+          errorType: ErrorType.none,
+        ),
+        lastName: state.lastName.copyWith(
+          errorType: ErrorType.none,
+        ),
+      ),
+    );
+  }
+
+  Future<void> _sfxButtonPressed(
+    InitialScreenSfxButtonPressed event,
+    Emitter<InitialScreenState> emit,
+  ) async {
+    await _audioService.playSfx(Audios.pop2Wav);
+  }
+
+  Future<void> _bgmToggled(
+    InitialScreenBgmToggled event,
+    Emitter<InitialScreenState> emit,
+  ) async {
+    if (state.isBgmMuted) {
+      await _audioService.unmuteBgm();
+    } else {
+      await _audioService.muteBgm();
+    }
+    add(const InitialScreenSfxButtonPressed());
+
+    emit(
+      state.copyWith(
+        isBgmMuted: !state.isBgmMuted,
+      ),
+    );
+  }
+
+  Future<void> _sfxToggled(
+    InitialScreenSfxToggled event,
+    Emitter<InitialScreenState> emit,
+  ) async {
+    if (state.isSfxMuted) {
+      await _audioService.unmuteSfx();
+    } else {
+      await _audioService.muteSfx();
+    }
+
+    add(const InitialScreenSfxButtonPressed());
+
+    emit(
+      state.copyWith(
+        isSfxMuted: !state.isSfxMuted,
+      ),
+    );
+  }
+
+  Future<void> _bgmVolumeChanged(
+    InitialScreenBgmVolumeChanged event,
+    Emitter<InitialScreenState> emit,
+  ) async {
+    await _audioService.setBgmVolume(event.volume);
+
+    emit(
+      state.copyWith(
+        bgmVolume: event.volume,
+      ),
+    );
+  }
+
+  Future<void> _sfxVolumeChanged(
+    InitialScreenSfxVolumeChanged event,
+    Emitter<InitialScreenState> emit,
+  ) async {
+    await _audioService.setSfxVolume(event.volume);
+
+    emit(
+      state.copyWith(
+        sfxVolume: event.volume,
       ),
     );
   }

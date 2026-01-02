@@ -13,3 +13,31 @@ class HomeNextButtonPressed extends HomeEvent {
 class HomeScreenCreated extends HomeEvent {
   const HomeScreenCreated();
 }
+
+class HomeBgmToggled extends HomeEvent {
+  const HomeBgmToggled();
+}
+
+class HomeSfxToggled extends HomeEvent {
+  const HomeSfxToggled();
+}
+
+class HomeBgmVolumeChanged extends HomeEvent {
+  final double volume;
+
+  const HomeBgmVolumeChanged({
+    required this.volume,
+  });
+}
+
+class HomeSfxVolumeChanged extends HomeEvent {
+  final double volume;
+
+  const HomeSfxVolumeChanged({
+    required this.volume,
+  });
+}
+
+class HomeSfxButtonPressed extends HomeEvent {
+  const HomeSfxButtonPressed();
+}

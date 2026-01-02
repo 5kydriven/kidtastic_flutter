@@ -43,33 +43,54 @@ class Assets {
   static const String zebraAvatar = 'assets/avatars/zebra_avatar.jpg';
 
   // **Shapes Assets**
+  static const String circleCutout = 'assets/shapes/circle_cutout.png';
   static const String circle = 'assets/shapes/circle.png';
+  static const String heartCutout = 'assets/shapes/heart_cutout.png';
   static const String heart = 'assets/shapes/heart.png';
+  static const String hexagonCutout = 'assets/shapes/hexagon_cutout.png';
   static const String hexagon = 'assets/shapes/hexagon.png';
+  static const String ovalCutout = 'assets/shapes/oval_cutout.png';
   static const String oval = 'assets/shapes/oval.png';
   static const String pentagon = 'assets/shapes/pentagon.png';
   static const String rectangle = 'assets/shapes/rectangle.png';
   static const String square = 'assets/shapes/square.png';
   static const String trapezoid = 'assets/shapes/trapezoid.png';
+  static const String triangleCutout = 'assets/shapes/triangle_cutout.png';
   static const String triangle = 'assets/shapes/triangle.png';
 
   // **Pronunciation**
-  static const String foxWearingNecktie =
-      'assets/pronunciation/fox_wearing_necktie.png';
+  static const String alligator = 'assets/pronunciation/aligator.png';
+  static const String ball = 'assets/pronunciation/ball.png';
   static const String birdFeedingWorm =
       'assets/pronunciation/bird_feeding_worm.png';
+  static const String cat = 'assets/pronunciation/cat.png';
+  static const String duck = 'assets/pronunciation/duck.png';
+  static const String elephant = 'assets/pronunciation/elephant.png';
+  static const String foxWearingNecktie =
+      'assets/pronunciation/fox_wearing_necktie.png';
+  static const String giraffe = 'assets/pronunciation/giraffe.png';
+  static const String hat = 'assets/pronunciation/hat.png';
+  static const String iceCream = 'assets/pronunciation/ice_cream.png';
+  static const String jar = 'assets/pronunciation/jar.png';
+  static const String kite = 'assets/pronunciation/kite.png';
+  static const String lion = 'assets/pronunciation/lion.png';
+  static const String mice = 'assets/pronunciation/mice.png';
+  static const String net = 'assets/pronunciation/net.png';
+  static const String pig = 'assets/pronunciation/pig.png';
+  static const String queen = 'assets/pronunciation/queen.png';
   static const String rabbitWithBall =
       'assets/pronunciation/rabbit_with_ball.png';
-  static const String giraffe = 'assets/pronunciation/giraffe.png';
-  static const String aligator = 'assets/pronunciation/aligator.png';
-
-  // **Audios**
-  static const String startRecord = 'audios/start_record.mp3';
-  static const String correctRecord = 'audios/correct.mp3';
+  static const String rainbow = 'assets/pronunciation/rainbow.png';
 
   // **Backgrounds**
   static const String matchTheShapeHome =
       'assets/backgrounds/match_the_shape_home.png';
   static const String matchTheShape = 'assets/backgrounds/match_the_shape.png';
   static const String homeBg = 'assets/backgrounds/home_bg.png';
+  static const String login = 'assets/backgrounds/login.jpg';
+
+  // **Icons**
+  static const String logo = 'assets/icon/logo.png';
+  static const String gear2 = 'assets/icon/3d_gear.png';
+  static const String gear = 'assets/icon/gear.png';
 }
