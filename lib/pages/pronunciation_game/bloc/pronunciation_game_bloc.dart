@@ -159,7 +159,7 @@ class PronunciationGameBloc
 
     final gameQuestionResult = await _gameQuestionRepository.getQuestion(
       gameId: state.game?.id ?? 0,
-      limit: 5,
+      limit: 10,
       isRandom: true,
     );
 

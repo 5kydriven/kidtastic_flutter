@@ -47,7 +47,7 @@ class ShapeGameBloc extends Bloc<ShapeGameEvent, ShapeGameState> {
       case ResultStatus.success:
         final gameQuestionResult = await _gameQuestionRepository.getQuestion(
           gameId: state.game?.id ?? 0,
-          limit: 5,
+          limit: 10,
           isRandom: true,
         );
 
