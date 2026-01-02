@@ -33,3 +33,27 @@ class CountingGamePositionsGenerated extends CountingGameEvent {
     required this.maxHeight,
   });
 }
+
+class CountingGameBgmToggled extends CountingGameEvent {
+  const CountingGameBgmToggled();
+}
+
+class CountingGameSfxToggled extends CountingGameEvent {
+  const CountingGameSfxToggled();
+}
+
+class CountingGameBgmVolumeChanged extends CountingGameEvent {
+  final double volume;
+
+  const CountingGameBgmVolumeChanged({
+    required this.volume,
+  });
+}
+
+class CountingGameSfxVolumeChanged extends CountingGameEvent {
+  final double volume;
+
+  const CountingGameSfxVolumeChanged({
+    required this.volume,
+  });
+}

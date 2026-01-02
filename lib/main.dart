@@ -418,16 +418,6 @@ class _MyAppState extends State<MyApp> {
             ),
             side: BorderSide(color: const Color(0xFFBC5D19)),
           ),
-          listTileTheme: ListTileThemeData(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(16.0)),
-            ),
-            contentPadding: EdgeInsets.symmetric(
-              horizontal: 16.0,
-            ),
-            tileColor: const Color.fromARGB(0, 255, 255, 255),
-            selectedTileColor: const Color.fromARGB(0, 255, 255, 255),
-          ),
           bottomNavigationBarTheme: BottomNavigationBarThemeData(
             selectedItemColor: Color(0xFFBC5D19),
             unselectedItemColor: Color(0xFFFFFFFF),
@@ -439,6 +429,30 @@ class _MyAppState extends State<MyApp> {
               color: Color(0xFFFFFFFF),
             ),
             backgroundColor: const Color(0xFF27272A),
+          ),
+          switchTheme: SwitchThemeData(
+            trackColor: WidgetStateProperty.resolveWith<Color>((states) {
+              if (states.contains(WidgetState.selected)) {
+                return const Color.fromARGB(255, 220, 112, 35);
+              }
+              return Colors.grey.shade400;
+            }),
+            thumbColor: WidgetStatePropertyAll(Colors.white),
+            trackOutlineColor: WidgetStateProperty.resolveWith<Color>((states) {
+              if (states.contains(WidgetState.selected)) {
+                return const Color.fromARGB(255, 220, 112, 35);
+              }
+              return Colors.transparent;
+            }),
+            splashRadius: 0,
+          ),
+          sliderTheme: SliderThemeData(
+            activeTrackColor: const Color.fromARGB(255, 220, 112, 35),
+            inactiveTrackColor: Colors.grey.shade400,
+            valueIndicatorColor: const Color.fromARGB(255, 220, 112, 35),
+            trackHeight: 8,
+            thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 0),
+            overlayShape: SliderComponentShape.noOverlay,
           ),
         ),
       ),
