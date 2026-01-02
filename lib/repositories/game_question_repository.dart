@@ -60,7 +60,6 @@ class GameQuestionRepository {
         statusCode: 200,
       );
     } catch (e) {
-      print('here: $e');
       return Result(
         statusCode: 400,
       );

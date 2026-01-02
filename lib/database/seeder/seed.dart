@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:math' hide log;
 
 import 'package:kidtastic_flutter/constants/constants.dart';
@@ -29,7 +30,7 @@ class InitialDataSeeder {
     // log(gameResult.data.toString());
     if ((gameResult.data ?? []).isNotEmpty) return;
 
-    print('🌱 Seeding initial games & questions... ');
+    log('🌱 Seeding initial games & questions... ');
 
     // --- Base Games ---
     final games = [
@@ -62,7 +63,7 @@ class InitialDataSeeder {
         game: game,
       );
       if (result.resultStatus == ResultStatus.error) {
-        print('error $game');
+        log('error $game');
       }
       gameIds.add(result.data ?? 0);
     }

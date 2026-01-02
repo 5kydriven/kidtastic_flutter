@@ -12,6 +12,10 @@ sealed class RegisterState with _$RegisterState {
     @Default(TextFieldInput(value: '')) TextFieldInput username,
     @Default(TextFieldInput(value: '')) TextFieldInput password,
     @Default(TextFieldInput(value: '')) TextFieldInput confirmPassword,
+    @Default(0.0) double bgmVolume,
+    @Default(0.0) double sfxVolume,
+    @Default(false) bool isBgmMuted,
+    @Default(false) bool isSfxMuted,
     @Default(RequestStatus.waiting) RequestStatus screenRequestStatus,
     @Default(RequestStatus.waiting) RequestStatus registerRequestStatus,
   }) = _RegisterState;

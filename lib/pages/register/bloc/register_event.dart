@@ -37,3 +37,31 @@ class RegisterButtonPressed extends RegisterEvent {
 class RegisterObscurePasswordPressed extends RegisterEvent {
   const RegisterObscurePasswordPressed();
 }
+
+class RegisterBgmToggled extends RegisterEvent {
+  const RegisterBgmToggled();
+}
+
+class RegisterSfxToggled extends RegisterEvent {
+  const RegisterSfxToggled();
+}
+
+class RegisterBgmVolumeChanged extends RegisterEvent {
+  final double volume;
+
+  const RegisterBgmVolumeChanged({
+    required this.volume,
+  });
+}
+
+class RegisterSfxVolumeChanged extends RegisterEvent {
+  final double volume;
+
+  const RegisterSfxVolumeChanged({
+    required this.volume,
+  });
+}
+
+class RegisterSfxButtonPressed extends RegisterEvent {
+  const RegisterSfxButtonPressed();
+}
