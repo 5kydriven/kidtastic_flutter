@@ -94,7 +94,7 @@ class _ShapeGamePageState extends State<ShapeGamePage> {
             previous.gameSessionRequestStatus !=
                 current.gameSessionRequestStatus &&
             current.gameSessionRequestStatus == RequestStatus.success,
-        child: GameScaffold(
+        child: GameScaffoldOne(
           appBar: ShapeGameAppBar(),
           imageAssets: Assets.matchTheShape,
           child: ShapeGameBody(

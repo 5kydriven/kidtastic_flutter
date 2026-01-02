@@ -33,6 +33,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       password: state.password.value,
     );
 
+    print('here: ${result.statusCode}');
+
     switch (result.resultStatus) {
       case ResultStatus.success:
         emit(

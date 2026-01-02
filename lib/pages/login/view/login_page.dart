@@ -37,7 +37,7 @@ class LoginPage extends StatelessWidget {
         listener: _loginListener,
         listenWhen: (previous, current) =>
             previous.loginRequestStatus != current.loginRequestStatus,
-        child: GameScaffold(
+        child: GameScaffoldOne(
           constraintsBox: 550,
           imageAssets: Assets.login,
           appBar: LoginAppBar(),

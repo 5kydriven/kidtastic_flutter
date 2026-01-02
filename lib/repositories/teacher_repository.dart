@@ -60,7 +60,7 @@ class TeacherRepository {
     }
   }
 
-  Future<Result> signIn({
+  Future<Result<String>> signIn({
     required String username,
     required String password,
   }) async {
@@ -72,15 +72,18 @@ class TeacherRepository {
       if (!checkPassword) {
         return Result(
           statusCode: 401,
+          data: 'Incorrect username or password',
         );
       }
 
       return Result(
         statusCode: 200,
+        data: 'Logged in successfully',
       );
     } catch (e) {
       return Result(
         statusCode: 400,
+        data: 'Incorrect username or password',
       );
     }
   }

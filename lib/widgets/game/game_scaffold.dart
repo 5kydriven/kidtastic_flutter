@@ -48,7 +48,7 @@ class GameScaffold extends StatelessWidget {
 
             Padding(
               padding: EdgeInsets.only(
-                top: header != null ? 92 : 0,
+                top: header?.center != null ? 92 : 0,
                 bottom: 24,
               ),
               child: Center(
@@ -67,7 +67,7 @@ class GameScaffold extends StatelessWidget {
 
             if (bottomBar != null)
               Align(
-                alignment: Alignment.bottomCenter,
+                alignment: Alignment.bottomLeft,
                 child: bottomBar ?? const SizedBox.shrink(),
               ),
           ],

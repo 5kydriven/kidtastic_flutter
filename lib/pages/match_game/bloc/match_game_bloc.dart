@@ -1,9 +1,10 @@
-import 'package:audioplayers/audioplayers.dart';
 import 'package:bloc/bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../constants/constants.dart';
 import '../../../models/models.dart';
 import '../../../repositories/repositories.dart';
+import '../../../service/services.dart';
 import 'bloc.dart';
 
 class MatchGameBloc extends Bloc<MatchGameEvent, MatchGameState> {
@@ -11,8 +12,7 @@ class MatchGameBloc extends Bloc<MatchGameEvent, MatchGameState> {
   final GameQuestionRepository _gameQuestionRepository;
   final GameSessionRepository _gameSessionRepository;
   final SessionQuestionRepository _sessionQuestionRepository;
-
-  final AudioPlayer player = AudioPlayer();
+  final AudioService _audioService = AudioService.instance;
 
   MatchGameBloc({
     required this.initialState,
@@ -27,15 +27,29 @@ class MatchGameBloc extends Bloc<MatchGameEvent, MatchGameState> {
     on<MatchGameItemDropped>(_itemDropped);
     on<MatchGameQuestionNext>(_questionNext);
     on<MatchGameGameEnd>(_gameEnd);
+    on<MatchGameBgmToggled>(_bgmToggled);
+    on<MatchGameSfxToggled>(_sfxToggled);
+    on<MatchGameBgmVolumeChanged>(_bgmVolumeChanged);
+    on<MatchGameSfxVolumeChanged>(_sfxVolumeChanged);
+    on<MatchGameSfxButtonPressed>(_sfxButtonPressed);
   }
 
   Future<void> _screenCreated(
     MatchGameScreenCreated event,
     Emitter<MatchGameState> emit,
   ) async {
+    final prefs = await SharedPreferences.getInstance();
+    final isBgmMuted = prefs.getBool(BoolPreference.keyIsBgmMuted) ?? false;
+    final isSfxMuted = prefs.getBool(BoolPreference.keyIsSfxMuted) ?? false;
+    final bgmVolume = prefs.getDouble(DoublePreference.keyBgmVolume) ?? 1.0;
+    final sfxVolume = prefs.getDouble(DoublePreference.keySfxVolume) ?? 1.0;
     emit(
       state.copyWith(
         screenRequestStatus: RequestStatus.inProgress,
+        isBgmMuted: isBgmMuted,
+        isSfxMuted: isSfxMuted,
+        bgmVolume: bgmVolume,
+        sfxVolume: sfxVolume,
       ),
     );
     final gameSessionResult = await _gameSessionRepository.startSession(
@@ -97,9 +111,8 @@ class MatchGameBloc extends Bloc<MatchGameEvent, MatchGameState> {
         state.question[state.currentIndex].correctAnswer ==
         event.question.correctAnswer;
 
-    await player.setVolume(1.0);
     if (isCorrect) {
-      await player.play(AssetSource(Audios.correctRecord));
+      _audioService.playSfx(Audios.correctRecord);
       emit(
         state.copyWith(
           droppedItem: event.question,
@@ -107,7 +120,7 @@ class MatchGameBloc extends Bloc<MatchGameEvent, MatchGameState> {
         ),
       );
     } else {
-      await player.play(AssetSource(Audios.wrongChime));
+      await _audioService.playSfx(Audios.wrongChime);
     }
 
     final sessionQuestionResult = await _sessionQuestionRepository
@@ -127,7 +140,6 @@ class MatchGameBloc extends Bloc<MatchGameEvent, MatchGameState> {
             seconds: 1,
           ),
         );
-        player.stop();
         add(const MatchGameQuestionNext());
 
         emit(
@@ -201,9 +213,74 @@ class MatchGameBloc extends Bloc<MatchGameEvent, MatchGameState> {
     }
   }
 
-  @override
-  Future<void> close() async {
-    await player.dispose();
-    return super.close();
+  Future<void> _bgmToggled(
+    MatchGameBgmToggled event,
+    Emitter<MatchGameState> emit,
+  ) async {
+    if (state.isBgmMuted) {
+      await _audioService.unmuteBgm();
+    } else {
+      await _audioService.muteBgm();
+    }
+
+    add(const MatchGameSfxButtonPressed());
+
+    emit(
+      state.copyWith(
+        isBgmMuted: !state.isBgmMuted,
+      ),
+    );
+  }
+
+  Future<void> _sfxToggled(
+    MatchGameSfxToggled event,
+    Emitter<MatchGameState> emit,
+  ) async {
+    if (state.isSfxMuted) {
+      await _audioService.unmuteSfx();
+    } else {
+      await _audioService.muteSfx();
+    }
+
+    add(const MatchGameSfxButtonPressed());
+
+    emit(
+      state.copyWith(
+        isSfxMuted: !state.isSfxMuted,
+      ),
+    );
+  }
+
+  Future<void> _bgmVolumeChanged(
+    MatchGameBgmVolumeChanged event,
+    Emitter<MatchGameState> emit,
+  ) async {
+    await _audioService.setBgmVolume(event.volume);
+
+    emit(
+      state.copyWith(
+        bgmVolume: event.volume,
+      ),
+    );
+  }
+
+  Future<void> _sfxVolumeChanged(
+    MatchGameSfxVolumeChanged event,
+    Emitter<MatchGameState> emit,
+  ) async {
+    await _audioService.setSfxVolume(event.volume);
+
+    emit(
+      state.copyWith(
+        sfxVolume: event.volume,
+      ),
+    );
+  }
+
+  Future<void> _sfxButtonPressed(
+    MatchGameSfxButtonPressed event,
+    Emitter<MatchGameState> emit,
+  ) async {
+    await _audioService.playSfx(Audios.pop2Wav);
   }
 }
