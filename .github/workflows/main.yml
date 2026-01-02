@@ -25,17 +25,36 @@ jobs:
       - name: Flutter Version (Debug)
         run: flutter --version
 
+      - name: Setup NuGet
+        shell: powershell
+        run: |
+          Write-Host "Setting up NuGet..."
+          Invoke-WebRequest -Uri https://dist.nuget.org/win-x86-commandline/latest/nuget.exe -OutFile nuget.exe
+          $nugetPath = (Get-Location).Path
+          echo "$nugetPath" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          Write-Host "NuGet setup complete"
+          .\nuget.exe help
+
       - name: Flutter Pub Get
         run: flutter pub get
 
       - name: Generate freezed files
         run: flutter pub run build_runner build --delete-conflicting-outputs
 
+      - name: Clean Build
+        run: flutter clean
+
       - name: Build Windows App
         shell: powershell
         run: |
           Write-Host "Starting Flutter Windows build..."
           flutter build windows --release
+
+          # Verify build output
+          if (-not (Test-Path "build/windows/x64/runner/Release")) {
+            throw "Build output directory not found!"
+          }
+          Write-Host "Build completed successfully"
 
       - name: Upload Windows Build Artifact
         uses: actions/upload-artifact@v4
