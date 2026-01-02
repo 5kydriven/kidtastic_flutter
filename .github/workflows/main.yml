@@ -15,6 +15,20 @@ jobs:
       artifact_name: windows_build
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verify tag is on main or development
+        shell: bash
+        run: |
+          branches=$(git branch -r --contains ${{ github.ref_name }})
+          if ! echo "$branches" | grep -qE 'origin/(main|development)'; then
+            echo "Error: Tag must be on main or development branch"
+            echo "Branches containing this tag:"
+            echo "$branches"
+            exit 1
+          fi
+          echo "✓ Tag is on allowed branch"
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
