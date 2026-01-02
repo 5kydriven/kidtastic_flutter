@@ -44,7 +44,6 @@ class GameRepository {
         statusCode: 200,
       );
     } catch (e) {
-      print(e);
       return Result(
         statusCode: 400,
       );

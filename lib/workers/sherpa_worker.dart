@@ -1,4 +1,5 @@
 // sherpa_worker.dart
+import 'dart:developer';
 import 'dart:isolate';
 import 'dart:typed_data';
 import 'dart:math' as math;
@@ -96,7 +97,7 @@ void sherpaWorker(SendPort initSendPort) async {
 
           if (consecutiveQuietFrames >= quietFramesForSilence) {
             // notify caller that there's sustained silence
-            print('Detected sustained silence');
+            log('Detected sustained silence');
             replyPort.send({'type': 'silence'});
             consecutiveQuietFrames = 0;
           }

@@ -3,11 +3,15 @@ import 'package:kidtastic_flutter/models/models.dart';
 import 'package:kidtastic_flutter/repositories/repositories.dart';
 import 'package:kidtastic_flutter/utils/utils.dart';
 
+import '../../../constants/constants.dart';
+import '../../../service/services.dart';
 import 'bloc.dart';
 
 class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   final RegisterState initialState;
   final TeacherRepository _teacherRepository;
+  final AudioService _audioService = AudioService.instance;
+
   RegisterBloc({
     required this.initialState,
     required TeacherRepository teacherRepository,
@@ -20,6 +24,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     on<RegisterConfirmPasswordChanged>(_confirmPasswordChanged);
     on<RegisterButtonPressed>(_buttonPressed);
     on<RegisterObscurePasswordPressed>(_obscurePasswordPressed);
+    on<RegisterSfxButtonPressed>(_sfxButtonPressed);
   }
 
   Future<void> _screenCreated(
@@ -143,6 +148,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     RegisterButtonPressed event,
     Emitter<RegisterState> emit,
   ) async {
+    add(const RegisterSfxButtonPressed());
     emit(
       state.copyWith(
         registerRequestStatus: RequestStatus.inProgress,
@@ -199,10 +205,18 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     RegisterObscurePasswordPressed event,
     Emitter<RegisterState> emit,
   ) async {
+    add(const RegisterSfxButtonPressed());
     emit(
       state.copyWith.password(
         obscureText: !state.password.obscureText,
       ),
     );
+  }
+
+  Future<void> _sfxButtonPressed(
+    RegisterSfxButtonPressed event,
+    Emitter<RegisterState> emit,
+  ) async {
+    await _audioService.playSfx(Audios.pop2Wav);
   }
 }

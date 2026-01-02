@@ -118,6 +118,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     LoginObscurePasswordPressed event,
     Emitter<LoginState> emit,
   ) {
+    add(const LoginSfxButtonPressed());
     emit(
       state.copyWith.password(
         obscureText: !state.password.obscureText,
