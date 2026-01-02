@@ -103,6 +103,7 @@ class HomeBody extends StatelessWidget {
                                     Radius.circular(24),
                                   ),
                                   onTap: () {
+                                    bloc.add(const HomeSfxButtonPressed());
                                     if (game.route?.isNotEmpty ?? false) {
                                       switch (game.category) {
                                         case GameType.counting:

@@ -38,3 +38,31 @@ class PronunciationGameTextSpeech extends PronunciationGameEvent {
     required this.text,
   });
 }
+
+class PronunciationGameBgmToggled extends PronunciationGameEvent {
+  const PronunciationGameBgmToggled();
+}
+
+class PronunciationGameSfxToggled extends PronunciationGameEvent {
+  const PronunciationGameSfxToggled();
+}
+
+class PronunciationGameBgmVolumeChanged extends PronunciationGameEvent {
+  final double volume;
+
+  const PronunciationGameBgmVolumeChanged({
+    required this.volume,
+  });
+}
+
+class PronunciationGameSfxVolumeChanged extends PronunciationGameEvent {
+  final double volume;
+
+  const PronunciationGameSfxVolumeChanged({
+    required this.volume,
+  });
+}
+
+class PronunciationGameSfxButtonPressed extends PronunciationGameEvent {
+  const PronunciationGameSfxButtonPressed();
+}

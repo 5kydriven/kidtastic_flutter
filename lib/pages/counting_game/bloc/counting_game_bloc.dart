@@ -264,7 +264,7 @@ class CountingGameBloc extends Bloc<CountingGameEvent, CountingGameState> {
     CountingGameSfxToggled event,
     Emitter<CountingGameState> emit,
   ) async {
-    if (state.isBgmMuted) {
+    if (state.isSfxMuted) {
       await _audioService.unmuteSfx();
     } else {
       await _audioService.muteSfx();
