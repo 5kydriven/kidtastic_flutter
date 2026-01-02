@@ -1,13 +1,14 @@
 import 'dart:math';
 
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kidtastic_flutter/models/models.dart';
 import 'package:kidtastic_flutter/pages/counting_game/bloc/bloc.dart';
 import 'package:kidtastic_flutter/repositories/repositories.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../constants/constants.dart';
+import '../../../service/services.dart';
 
 class CountingGameBloc extends Bloc<CountingGameEvent, CountingGameState> {
   final CountingGameState initialState;
@@ -15,7 +16,7 @@ class CountingGameBloc extends Bloc<CountingGameEvent, CountingGameState> {
   final GameSessionRepository _gameSessionRepository;
   final SessionQuestionRepository _sessionQuestionRepository;
 
-  final AudioPlayer player = AudioPlayer();
+  final AudioService _audioService = AudioService.instance;
 
   CountingGameBloc({
     required this.initialState,
@@ -31,15 +32,31 @@ class CountingGameBloc extends Bloc<CountingGameEvent, CountingGameState> {
     on<CountingGameNextQuestion>(_nextQuestion);
     on<CountingGameGameEnd>(_gameEnd);
     on<CountingGamePositionsGenerated>(_positionsGenerated);
+    on<CountingGameBgmToggled>(_bgmToggled);
+    on<CountingGameSfxToggled>(_sfxToggled);
+    on<CountingGameBgmVolumeChanged>(_bgmVolumeChanged);
+    on<CountingGameSfxVolumeChanged>(_sfxVolumeChanged);
   }
 
   Future<void> _screenCreated(
     CountingGameScreenCreated event,
     Emitter<CountingGameState> emit,
   ) async {
+    final prefs = await SharedPreferences.getInstance();
+    final isBgmMuted = prefs.getBool(BoolPreference.keyIsBgmMuted) ?? false;
+    final isSfxMuted = prefs.getBool(BoolPreference.keyIsSfxMuted) ?? false;
+    final bgmVolume = prefs.getDouble(DoublePreference.keyBgmVolume) ?? 1.0;
+    final sfxVolume = prefs.getDouble(DoublePreference.keySfxVolume) ?? 1.0;
+
     emit(
       state.copyWith(
         screenRequestStatus: RequestStatus.inProgress,
+        gameSessionRequestStatus: RequestStatus.waiting,
+        isBgmMuted: isBgmMuted,
+        isSfxMuted: isSfxMuted,
+        bgmVolume: bgmVolume,
+        sfxVolume: sfxVolume,
+        hasEnded: false,
       ),
     );
 
@@ -102,11 +119,10 @@ class CountingGameBloc extends Bloc<CountingGameEvent, CountingGameState> {
     final isCorrect =
         state.question[state.currentIndex].correctAnswer == event.answer;
 
-    await player.setVolume(1.0);
     if (isCorrect) {
-      await player.play(AssetSource(Audios.correctRecord));
+      _audioService.playSfx(Audios.correctRecord);
     } else {
-      await player.play(AssetSource(Audios.wrongChime));
+      _audioService.playSfx(Audios.wrongChime);
     }
 
     final sessionQuestionResult = await _sessionQuestionRepository
@@ -126,7 +142,6 @@ class CountingGameBloc extends Bloc<CountingGameEvent, CountingGameState> {
             seconds: 1,
           ),
         );
-        player.stop();
         add(const CountingGameNextQuestion());
 
         emit(
@@ -225,9 +240,63 @@ class CountingGameBloc extends Bloc<CountingGameEvent, CountingGameState> {
     );
   }
 
-  @override
-  Future<void> close() async {
-    await player.dispose();
-    return super.close();
+  Future<void> _bgmToggled(
+    CountingGameBgmToggled event,
+    Emitter<CountingGameState> emit,
+  ) async {
+    if (state.isBgmMuted) {
+      await _audioService.unmuteBgm();
+    } else {
+      await _audioService.muteBgm();
+    }
+
+    emit(
+      state.copyWith(
+        isBgmMuted: !state.isBgmMuted,
+      ),
+    );
+  }
+
+  Future<void> _sfxToggled(
+    CountingGameSfxToggled event,
+    Emitter<CountingGameState> emit,
+  ) async {
+    if (state.isBgmMuted) {
+      await _audioService.unmuteSfx();
+    } else {
+      await _audioService.muteSfx();
+    }
+
+    emit(
+      state.copyWith(
+        isSfxMuted: !state.isSfxMuted,
+      ),
+    );
+  }
+
+  Future<void> _bgmVolumeChanged(
+    CountingGameBgmVolumeChanged event,
+    Emitter<CountingGameState> emit,
+  ) async {
+    await _audioService.setBgmVolume(event.volume);
+
+    emit(
+      state.copyWith(
+        bgmVolume: event.volume,
+      ),
+    );
+  }
+
+  Future<void> _sfxVolumeChanged(
+    CountingGameSfxVolumeChanged event,
+    Emitter<CountingGameState> emit,
+  ) async {
+    await _audioService.setSfxVolume(event.volume);
+
+    emit(
+      state.copyWith(
+        sfxVolume: event.volume,
+      ),
+    );
   }
 }

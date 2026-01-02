@@ -76,6 +76,38 @@ class _CountingGamePageState extends State<CountingGamePage> {
     }
   }
 
+  void _confirmExit(BuildContext context, CountingGameBloc bloc) {
+    final state = bloc.state;
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Exit Game'),
+          content: const Text(
+            'Are you sure you want to exit the game?',
+            textAlign: TextAlign.center,
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => context.pop(),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                if (state.currentIndex != 0) {
+                  bloc.add(const CountingGameGameEnd());
+                }
+                context.pop();
+                context.pop();
+              },
+              child: const Text('Exit'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -99,24 +131,51 @@ class _CountingGamePageState extends State<CountingGamePage> {
                 current.gameSessionRequestStatus &&
             current.gameSessionRequestStatus == RequestStatus.success,
 
-        child: GameScaffold(
-          imageAssets: Assets.mathBg,
-          appBar: CountingGameAppBar(),
-          child: Card(
-            elevation: 8,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(24),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: 20,
-                horizontal: 16,
+        child: BlocBuilder<CountingGameBloc, CountingGameState>(
+          builder: (context, state) {
+            final bloc = context.read<CountingGameBloc>();
+            final progress = state.question.isNotEmpty
+                ? ((state.currentIndex + 1) / state.question.length).clamp(
+                    0.0,
+                    1.0,
+                  )
+                : 0.0;
+
+            return GameScaffold(
+              imageAssets: Assets.mathBg,
+              header: GameHeaderConfig(
+                showBack: true,
+                showSettings: true,
+                onBack: () => _confirmExit(context, bloc),
+                onSettings: () => showDialog(
+                  context: context,
+                  builder: (_) => SizedBox(
+                    child: CountingGameSettingsDialog(
+                      context: context,
+                    ),
+                  ),
+                ),
+                center: GameProgressBar(
+                  value: progress,
+                ),
               ),
-              child: CountingGameBody(
-                confettiController: _confettiController,
+              child: Card(
+                elevation: 8,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(24),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 20,
+                    horizontal: 16,
+                  ),
+                  child: CountingGameBody(
+                    confettiController: _confettiController,
+                  ),
+                ),
               ),
-            ),
-          ),
+            );
+          },
         ),
       ),
     );
