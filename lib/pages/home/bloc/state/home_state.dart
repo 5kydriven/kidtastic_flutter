@@ -9,6 +9,10 @@ sealed class HomeState with _$HomeState {
     Student? student,
     @Default(0) int currentPage,
     @Default([]) List<Game> games,
+    @Default(0.0) double bgmVolume,
+    @Default(0.0) double sfxVolume,
+    @Default(false) bool isBgmMuted,
+    @Default(false) bool isSfxMuted,
     @Default(RequestStatus.waiting) RequestStatus screenRequestStatus,
   }) = _HomeState;
 }

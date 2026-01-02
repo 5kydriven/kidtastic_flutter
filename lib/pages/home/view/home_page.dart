@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:kidtastic_flutter/widgets/widgets.dart';
 
 import '../../../constants/constants.dart';
@@ -50,8 +51,27 @@ class _HomePageState extends State<HomePage> {
             previous.currentPage != current.currentPage,
         child: BlocBuilder<HomeBloc, HomeState>(
           builder: (context, state) {
+            final bloc = context.read<HomeBloc>();
             return GameScaffold(
-              appBar: HomeAppBar(),
+              header: GameHeaderConfig(
+                showBack: true,
+                showSettings: true,
+                onBack: () {
+                  context.pop();
+                  bloc.add(const HomeSfxButtonPressed());
+                },
+                onSettings: () {
+                  bloc.add(const HomeSfxButtonPressed());
+                  showDialog(
+                    context: context,
+                    builder: (_) => SizedBox(
+                      child: HomeSettingsDialog(
+                        context: context,
+                      ),
+                    ),
+                  );
+                },
+              ),
               imageAssets: Assets.homeBg,
               child: Card(
                 shape: RoundedRectangleBorder(
