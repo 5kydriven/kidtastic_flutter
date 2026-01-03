@@ -78,6 +78,7 @@ class _InitialScreenPageState extends State<InitialScreenPage> {
           builder: (context, state) {
             final bloc = context.read<InitialScreenBloc>();
             return GameScaffold(
+              constraintsBox: 800,
               imageAssets: Assets.homeBg,
               header: GameHeaderConfig(
                 showSettings: true,
