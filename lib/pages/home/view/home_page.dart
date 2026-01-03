@@ -53,6 +53,7 @@ class _HomePageState extends State<HomePage> {
           builder: (context, state) {
             final bloc = context.read<HomeBloc>();
             return GameScaffold(
+              constraintsBox: 800,
               header: GameHeaderConfig(
                 showBack: true,
                 showSettings: true,

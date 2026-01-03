@@ -93,4 +93,5 @@ class Assets {
   static const String logo = 'assets/icon/logo.png';
   static const String gear2 = 'assets/icon/3d_gear.png';
   static const String gear = 'assets/icon/gear.png';
+  static const String dashboardLogo = 'assets/icon/dashboard_logo.png';
 }

@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages, library_private_types_in_public_api, curly_braces_in_flow_control_structures
+
 import 'dart:async';
 import 'dart:io' show Platform;
 

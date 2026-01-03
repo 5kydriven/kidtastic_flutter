@@ -15,14 +15,14 @@ class GameScaffold extends StatelessWidget {
     required this.child,
     this.header,
     this.bottomBar,
-    this.constraintsBox = 1000,
+    this.constraintsBox = 1400,
   });
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
-    final widthFactor = size.width < 1000 ? 0.9 : 0.7;
+    final widthFactor = size.width < 1400 ? 0.9 : 0.7;
     final heightFactor = size.height < 700 ? 0.9 : 0.8;
 
     return SafeArea(
@@ -50,6 +50,8 @@ class GameScaffold extends StatelessWidget {
               padding: EdgeInsets.only(
                 top: header?.center != null ? 92 : 0,
                 bottom: 24,
+                // left: 72,
+                // right: 72,
               ),
               child: Center(
                 child: ConstrainedBox(
