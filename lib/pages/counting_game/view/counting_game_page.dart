@@ -149,6 +149,7 @@ class _CountingGamePageState extends State<CountingGamePage> {
                 : 0.0;
 
             return GameScaffold(
+              constraintsBox: 800,
               imageAssets: Assets.mathBg,
               header: GameHeaderConfig(
                 showBack: true,

@@ -167,6 +167,7 @@ class _PronunciationGamePageState extends State<PronunciationGamePage> {
                   )
                 : 0.0;
             return GameScaffold(
+              constraintsBox: 800,
               header: GameHeaderConfig(
                 showBack: true,
                 showSettings: true,

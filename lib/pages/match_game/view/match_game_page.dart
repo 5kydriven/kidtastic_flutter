@@ -163,6 +163,7 @@ class _MatchGamePageState extends State<MatchGamePage>
                   )
                 : 0.0;
             return GameScaffold(
+              constraintsBox: 800,
               header: GameHeaderConfig(
                 showBack: true,
                 showSettings: true,
