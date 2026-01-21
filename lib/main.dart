@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:kidtastic_flutter/daos/daos.dart';
 import 'package:kidtastic_flutter/database/seeder/seed.dart';
 import 'package:kidtastic_flutter/database/kidtastic_database.dart';
+import 'package:kidtastic_flutter/pages/color_game/color_game.dart';
 import 'package:kidtastic_flutter/pages/counting_game/counting_game.dart';
 import 'package:kidtastic_flutter/pages/dashboard/view/dashboard_page.dart';
 import 'package:path/path.dart' as p;
@@ -162,8 +163,8 @@ class _MyAppState extends State<MyApp> {
     super.initState();
 
     router = GoRouter(
-      // initialLocation: InitialScreenPage.route,
-      initialLocation: RegisterPage.route,
+      initialLocation: ColorGamePage.route,
+      // initialLocation: RegisterPage.route,
       routes: <RouteBase>[
         GoRoute(
           path: HomePage.route,
@@ -245,6 +246,12 @@ class _MyAppState extends State<MyApp> {
           path: DashboardPage.route,
           builder: (context, state) {
             return DashboardPage();
+          },
+        ),
+        GoRoute(
+          path: ColorGamePage.route,
+          builder: (context, state) {
+            return ColorGamePage();
           },
         ),
       ],
