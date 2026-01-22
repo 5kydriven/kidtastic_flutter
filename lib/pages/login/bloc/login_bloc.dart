@@ -61,6 +61,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         emit(
           state.copyWith(
             loginRequestStatus: RequestStatus.success,
+            username: state.username.copyWith(
+              value: '',
+            ),
+            password: state.password.copyWith(
+              value: '',
+            ),
           ),
         );
         break;

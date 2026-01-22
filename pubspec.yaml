@@ -60,6 +60,7 @@ flutter:
     - assets/backgrounds/
     - assets/icon/
     - assets/sorting/
+    - assets/admin/
 
   fonts:
     - family: Vag
