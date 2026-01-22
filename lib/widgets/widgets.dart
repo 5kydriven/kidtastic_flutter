@@ -1,6 +1,7 @@
 export 'game/game.dart';
 export 'control_buttons_widget.dart';
 export 'game_scaffold_one.dart';
+export 'hover_image_button.dart';
 export 'labeled_text_form_field.dart';
 export 'owl_guide_template.dart';
 export 'text_display_widget.dart';

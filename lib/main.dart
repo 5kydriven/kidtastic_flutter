@@ -163,8 +163,8 @@ class _MyAppState extends State<MyApp> {
     super.initState();
 
     router = GoRouter(
-      initialLocation: ColorGamePage.route,
-      // initialLocation: RegisterPage.route,
+      // initialLocation: ColorGamePage.route,
+      initialLocation: RegisterPage.route,
       routes: <RouteBase>[
         GoRoute(
           path: HomePage.route,
