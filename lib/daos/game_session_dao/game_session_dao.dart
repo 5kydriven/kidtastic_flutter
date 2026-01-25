@@ -29,4 +29,38 @@ class GameSessionDao extends DatabaseAccessor<KidtasticDatabase>
       gameSessionTable,
     )..where((student) => student.studentId.equals(studentId))).get();
   }
+
+  Future<List<GameSessionTableData>> getAllGameSessions() async {
+    return await select(gameSessionTable).get();
+  }
+
+  Future<List<GameSessionTableData>> getTodayGameSessions() {
+    final now = DateTime.now();
+    final startOfDay = DateTime(now.year, now.month, now.day);
+    final endOfDay = startOfDay.add(const Duration(days: 1));
+
+    return (select(gameSessionTable)..where(
+          (tbl) =>
+              tbl.startedAt.isBiggerOrEqualValue(startOfDay) &
+              tbl.startedAt.isSmallerThanValue(endOfDay),
+        ))
+        .get();
+  }
+
+  Future<DateTime?> getLastPlayedForStudent(int studentId) async {
+    final result =
+        await (selectOnly(gameSessionTable)
+              ..addColumns([gameSessionTable.endedAt])
+              ..where(gameSessionTable.studentId.equals(studentId))
+              ..orderBy([
+                OrderingTerm(
+                  expression: gameSessionTable.endedAt,
+                  mode: OrderingMode.desc,
+                ),
+              ])
+              ..limit(1))
+            .getSingleOrNull();
+
+    return result?.read(gameSessionTable.endedAt);
+  }
 }

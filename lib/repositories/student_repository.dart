@@ -20,6 +20,7 @@ class StudentRepository {
           name: student.name ?? '',
           firstName: student.firstName ?? '',
           lastName: student.lastName ?? '',
+          gender: student.gender ?? '',
           image: Value(student.image),
           isSynced: Value(false),
           createdAt: Value(DateTime.now()),

@@ -6,6 +6,7 @@ class StudentTable extends Table {
   TextColumn get name => text().withLength(min: 1, max: 255)();
   TextColumn get firstName => text().withLength(min: 1, max: 255)();
   TextColumn get lastName => text().withLength(min: 1, max: 255)();
+  TextColumn get gender => text().withLength(min: 1, max: 255)();
   BoolColumn get isSynced => boolean().withDefault(const Constant(false))();
   DateTimeColumn get syncedAt =>
       dateTime().clientDefault(() => DateTime.now())();
