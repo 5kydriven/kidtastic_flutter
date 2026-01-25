@@ -67,4 +67,48 @@ class GameSessionRepository {
       );
     }
   }
+
+  Future<Result<List<GameSession>>> getTodaySessions() async {
+    try {
+      final response = await _gameSessionDao.getTodayGameSessions();
+
+      final sessions = response.map((e) {
+        return GameSession(
+          id: e.id,
+          studentId: e.studentId,
+          gameId: e.gameId,
+          score: e.score,
+          startedAt: e.startedAt,
+          endedAt: e.endedAt,
+          createdAt: e.createdAt,
+        );
+      }).toList();
+
+      return Result(
+        data: sessions,
+        statusCode: 200,
+      );
+    } catch (e) {
+      return Result(
+        statusCode: 400,
+      );
+    }
+  }
+
+  Future<Result<DateTime?>> getLastPlayedForStudent({
+    required int studentId,
+  }) async {
+    try {
+      final response = await _gameSessionDao.getLastPlayedForStudent(studentId);
+
+      return Result(
+        data: response,
+        statusCode: 200,
+      );
+    } catch (e) {
+      return Result(
+        statusCode: 400,
+      );
+    }
+  }
 }

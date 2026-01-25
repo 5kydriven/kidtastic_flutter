@@ -23,22 +23,28 @@ class StudentInsightDao extends DatabaseAccessor<KidtasticDatabase>
 
     if (sessions.isEmpty) return;
 
+    const maxScorePerGame = 10;
+
     final totalSessions = sessions.length;
     final totalScore = sessions.fold<int>(0, (sum, s) => sum + (s.score ?? 0));
-    final avgScore = totalScore / totalSessions;
 
-    final strength = avgScore >= 80 ? 'Strong' : 'Average';
-    final weakness = avgScore < 50 ? 'Needs Improvement' : 'None';
+    final avgRawScore = totalScore / totalSessions;
+    final avgPercentage = (avgRawScore / maxScorePerGame) * 100;
+
+    final strength = avgPercentage >= 80
+        ? 'Strong'
+        : avgPercentage >= 50
+        ? 'Average'
+        : 'Needs Improvement';
 
     await into(studentInsightTable).insertOnConflictUpdate(
-      StudentInsightTableCompanion.insert(
-        studentId: studentId,
-        gameId: gameId,
-        averageScore: Value(avgScore),
+      StudentInsightTableCompanion(
+        studentId: Value(studentId),
+        gameId: Value(gameId),
+        averageScore: Value(avgPercentage),
         totalSessions: Value(totalSessions),
         lastPlayed: Value(DateTime.now()),
         strength: Value(strength),
-        weakness: Value(weakness),
       ),
     );
   }

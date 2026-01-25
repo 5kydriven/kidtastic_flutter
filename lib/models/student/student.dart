@@ -10,8 +10,10 @@ sealed class Student with _$Student {
     String? name,
     String? firstName,
     String? lastName,
+    String? gender,
     String? image,
     bool? isSynced,
+    DateTime? lastPlayedAt,
   }) = _Student;
 
   factory Student.fromJson(Map<String, dynamic> json) =>

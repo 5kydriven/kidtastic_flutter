@@ -110,4 +110,5 @@ class Assets {
   static const logoutButton = 'assets/admin/logout_button.png';
   static const settingsButton = 'assets/admin/settings_button.png';
   static const studentButton = 'assets/admin/student_button.png';
+  static const totalBox = 'assets/admin/total_box.png';
 }
