@@ -33,6 +33,7 @@ class InitialScreenBloc extends Bloc<InitialScreenEvent, InitialScreenState> {
     on<InitialScreenSfxToggled>(_sfxToggled);
     on<InitialScreenBgmVolumeChanged>(_bgmVolumeChanged);
     on<InitialScreenSfxVolumeChanged>(_sfxVolumeChanged);
+    on<InitialScreenGenderChanged>(_genderChanged);
   }
 
   Future<void> _screenCreated(
@@ -109,6 +110,7 @@ class InitialScreenBloc extends Bloc<InitialScreenEvent, InitialScreenState> {
         firstName: state.firstName.value,
         lastName: state.lastName.value,
         image: state.selectedAvatar,
+        gender: state.gender.value,
       ),
     );
 
@@ -120,6 +122,9 @@ class InitialScreenBloc extends Bloc<InitialScreenEvent, InitialScreenState> {
               value: '',
             ),
             lastName: TextFieldInput(
+              value: '',
+            ),
+            gender: TextFieldInput(
               value: '',
             ),
             studentRequestStatus: RequestStatus.success,
@@ -134,6 +139,9 @@ class InitialScreenBloc extends Bloc<InitialScreenEvent, InitialScreenState> {
               value: '',
             ),
             lastName: TextFieldInput(
+              value: '',
+            ),
+            gender: TextFieldInput(
               value: '',
             ),
             studentRequestStatus: RequestStatus.failure,
@@ -333,6 +341,26 @@ class InitialScreenBloc extends Bloc<InitialScreenEvent, InitialScreenState> {
     emit(
       state.copyWith(
         sfxVolume: event.volume,
+      ),
+    );
+  }
+
+  Future<void> _genderChanged(
+    InitialScreenGenderChanged event,
+    Emitter<InitialScreenState> emit,
+  ) async {
+    var errorType = ErrorType.empty;
+
+    if (event.value.isEmpty) {
+      errorType = ErrorType.empty;
+    } else {
+      errorType = ErrorType.none;
+    }
+
+    emit(
+      state.copyWith.gender(
+        value: event.value,
+        errorType: errorType,
       ),
     );
   }

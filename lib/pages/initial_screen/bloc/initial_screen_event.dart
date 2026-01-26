@@ -85,3 +85,11 @@ class InitialScreenSfxVolumeChanged extends InitialScreenEvent {
     required this.volume,
   });
 }
+
+class InitialScreenGenderChanged extends InitialScreenEvent {
+  final String value;
+
+  const InitialScreenGenderChanged({
+    required this.value,
+  });
+}
