@@ -20,5 +20,6 @@ sealed class InitialScreenState with _$InitialScreenState {
     @Default(RequestStatus.waiting) RequestStatus studentRequestStatus,
     @Default(TextFieldInput(value: '')) TextFieldInput firstName,
     @Default(TextFieldInput(value: '')) TextFieldInput lastName,
+    @Default(TextFieldInput(value: '')) TextFieldInput gender,
   }) = _InitialScreenState;
 }
