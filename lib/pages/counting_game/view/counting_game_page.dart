@@ -127,9 +127,9 @@ class _CountingGamePageState extends State<CountingGamePage> {
           context,
         ),
         sessionQuestionRepository:
-            RepositoryProvider.of<SessionQuestionRepository>(
-              context,
-            ),
+            RepositoryProvider.of<SessionQuestionRepository>(context),
+        studentInsightRepository:
+            RepositoryProvider.of<StudentInsightRepository>(context),
       )..add(const CountingGameScreenCreated()),
       child: BlocListener<CountingGameBloc, CountingGameState>(
         listener: _gameListener,

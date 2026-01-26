@@ -12,6 +12,7 @@ sealed class GameSession with _$GameSession {
     int? score,
     DateTime? startedAt,
     DateTime? endedAt,
+    DateTime? createdAt,
   }) = _GameSession;
 
   factory GameSession.fromJson(Map<String, dynamic> json) =>
