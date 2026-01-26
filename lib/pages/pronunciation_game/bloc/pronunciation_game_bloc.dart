@@ -24,6 +24,8 @@ class PronunciationGameBloc
   final GameSessionRepository _gameSessionRepository;
   final SessionQuestionRepository _sessionQuestionRepository;
   final PronunciationAttemptRepository _pronunciationAttemptRepository;
+  final StudentInsightRepository _studentInsightRepository;
+
   final AudioService _audioService = AudioService.instance;
 
   late final AudioRecorder _audioRecorder;
@@ -52,10 +54,12 @@ class PronunciationGameBloc
     required GameSessionRepository gameSessionRepository,
     required SessionQuestionRepository sessionQuestionRepository,
     required PronunciationAttemptRepository pronunciationAttemptRepository,
+    required StudentInsightRepository studentInsightRepository,
   }) : _gameQuestionRepository = gameQuestionRepository,
        _gameSessionRepository = gameSessionRepository,
        _sessionQuestionRepository = sessionQuestionRepository,
        _pronunciationAttemptRepository = pronunciationAttemptRepository,
+       _studentInsightRepository = studentInsightRepository,
        super(initialState) {
     on<PronunciationGameScreenCreated>(_screenCreated);
     on<PronunciationGameSessionFetched>(_sessionFetched);
@@ -242,18 +246,36 @@ class PronunciationGameBloc
       ),
     );
 
-    final result = await _gameSessionRepository.endSession(
+    final gameSessionResult = await _gameSessionRepository.endSession(
       sessionId: state.sessionId ?? 0,
       score: state.score,
     );
 
-    emit(
-      state.copyWith(
-        gameSessionRequestStatus: result.resultStatus == ResultStatus.success
-            ? RequestStatus.success
-            : RequestStatus.failure,
-      ),
-    );
+    switch (gameSessionResult.resultStatus) {
+      case ResultStatus.success:
+        final studentInsightResult = await _studentInsightRepository
+            .updateStudentInsight(
+              studentId: state.student?.id ?? 0,
+              gameId: state.game?.id ?? 0,
+            );
+
+        emit(
+          state.copyWith(
+            gameSessionRequestStatus:
+                studentInsightResult.resultStatus == ResultStatus.success
+                ? RequestStatus.success
+                : RequestStatus.failure,
+          ),
+        );
+        break;
+      default:
+        emit(
+          state.copyWith(
+            gameSessionRequestStatus: RequestStatus.failure,
+          ),
+        );
+        break;
+    }
   }
 
   Future<void> _recordingToggle(

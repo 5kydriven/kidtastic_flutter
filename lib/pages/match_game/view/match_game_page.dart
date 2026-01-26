@@ -146,6 +146,8 @@ class _MatchGamePageState extends State<MatchGamePage>
         ),
         sessionQuestionRepository:
             RepositoryProvider.of<SessionQuestionRepository>(context),
+        studentInsightRepository:
+            RepositoryProvider.of<StudentInsightRepository>(context),
       )..add(const MatchGameScreenCreated()),
       child: BlocListener<MatchGameBloc, MatchGameState>(
         listener: _gameListener,

@@ -15,6 +15,7 @@ class CountingGameBloc extends Bloc<CountingGameEvent, CountingGameState> {
   final GameQuestionRepository _gameQuestionRepository;
   final GameSessionRepository _gameSessionRepository;
   final SessionQuestionRepository _sessionQuestionRepository;
+  final StudentInsightRepository _studentInsightRepository;
 
   final AudioService _audioService = AudioService.instance;
 
@@ -23,9 +24,11 @@ class CountingGameBloc extends Bloc<CountingGameEvent, CountingGameState> {
     required GameQuestionRepository gameQuestionRepository,
     required GameSessionRepository gameSessionRepository,
     required SessionQuestionRepository sessionQuestionRepository,
+    required StudentInsightRepository studentInsightRepository,
   }) : _gameQuestionRepository = gameQuestionRepository,
        _gameSessionRepository = gameSessionRepository,
        _sessionQuestionRepository = sessionQuestionRepository,
+       _studentInsightRepository = studentInsightRepository,
        super(initialState) {
     on<CountingGameScreenCreated>(_screenCreated);
     on<CountingGameButtonPressed>(_buttonPressed);
@@ -121,6 +124,7 @@ class CountingGameBloc extends Bloc<CountingGameEvent, CountingGameState> {
         state.question[state.currentIndex].correctAnswer == event.answer;
 
     if (isCorrect) {
+      _audioService.playSfx(Audios.applause);
       _audioService.playSfx(Audios.correctRecord);
     } else {
       _audioService.playSfx(Audios.wrongChime);
@@ -140,9 +144,10 @@ class CountingGameBloc extends Bloc<CountingGameEvent, CountingGameState> {
       case ResultStatus.success:
         await Future.delayed(
           const Duration(
-            seconds: 1,
+            milliseconds: 3000,
           ),
         );
+        _audioService.stop();
         add(const CountingGameNextQuestion());
 
         emit(
@@ -196,16 +201,25 @@ class CountingGameBloc extends Bloc<CountingGameEvent, CountingGameState> {
       ),
     );
 
-    final result = await _gameSessionRepository.endSession(
+    final gameSessionResult = await _gameSessionRepository.endSession(
       sessionId: state.sessionId ?? 0,
       score: state.score,
     );
 
-    switch (result.resultStatus) {
+    switch (gameSessionResult.resultStatus) {
       case ResultStatus.success:
+        final studentInsightResult = await _studentInsightRepository
+            .updateStudentInsight(
+              studentId: state.student?.id ?? 0,
+              gameId: state.game?.id ?? 0,
+            );
+
         emit(
           state.copyWith(
-            gameSessionRequestStatus: RequestStatus.success,
+            gameSessionRequestStatus:
+                studentInsightResult.resultStatus == ResultStatus.success
+                ? RequestStatus.success
+                : RequestStatus.failure,
           ),
         );
         break;

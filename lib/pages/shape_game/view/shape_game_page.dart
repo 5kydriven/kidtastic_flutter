@@ -87,6 +87,8 @@ class _ShapeGamePageState extends State<ShapeGamePage> {
         ),
         sessionQuestionRepository:
             RepositoryProvider.of<SessionQuestionRepository>(context),
+        studentInsightRepository:
+            RepositoryProvider.of<StudentInsightRepository>(context),
       )..add(const ShapeGameScreenCreated()),
       child: BlocListener<ShapeGameBloc, ShapeGameState>(
         listener: _gameListener,
