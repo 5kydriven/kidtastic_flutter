@@ -6,6 +6,15 @@ import '../../../../models/models.dart';
 
 part 'counting_game_state.freezed.dart';
 
+enum CountingGameTutorialStep {
+  none,
+  welcome,
+  question,
+  contents,
+  buttons,
+  finished,
+}
+
 @freezed
 sealed class CountingGameState with _$CountingGameState {
   const factory CountingGameState({
@@ -24,5 +33,7 @@ sealed class CountingGameState with _$CountingGameState {
     @Default(RequestStatus.waiting) RequestStatus screenRequestStatus,
     @Default(RequestStatus.waiting) RequestStatus sessionQuestionRequestStatus,
     @Default(RequestStatus.waiting) RequestStatus gameSessionRequestStatus,
+    @Default(CountingGameTutorialStep.none)
+    CountingGameTutorialStep tutorialStep,
   }) = _CountingGameState;
 }
