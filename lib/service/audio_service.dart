@@ -163,6 +163,12 @@ class AudioService {
     await _prefs.setDouble(DoublePreference.keySfxVolume, _sfxVolume);
   }
 
+  Future<void> stop() async {
+    for (final player in _sfxPool) {
+      await player.stop();
+    }
+  }
+
   /* =======================
      Cleanup (Optional)
      ======================= */
