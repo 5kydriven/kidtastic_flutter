@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_confetti/flutter_confetti.dart';
 import 'package:kidtastic_flutter/models/result/result.dart';
+import 'package:kidtastic_flutter/pages/counting_game/view/view.dart';
 
 import '../bloc/bloc.dart';
 
@@ -74,6 +75,7 @@ class CountingGameBody extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
+                key: countingQuestionKey,
                 current.question ?? '',
                 style: TextStyle(
                   fontSize: 30,
@@ -84,6 +86,7 @@ class CountingGameBody extends StatelessWidget {
                 height: 16,
               ),
               Expanded(
+                key: countingContentsKey,
                 child: LayoutBuilder(
                   builder: (context, constraints) {
                     if (state.imagePositions.isEmpty) {
@@ -117,6 +120,7 @@ class CountingGameBody extends StatelessWidget {
                 height: 16,
               ),
               Row(
+                key: countingButtonsKey,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: choices.map((choice) {
                   return OutlinedButton(

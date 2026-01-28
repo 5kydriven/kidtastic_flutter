@@ -5,10 +5,16 @@ import 'package:go_router/go_router.dart';
 import 'package:kidtastic_flutter/models/models.dart';
 import 'package:kidtastic_flutter/pages/counting_game/view/view.dart';
 import 'package:kidtastic_flutter/widgets/widgets.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 import '../../../constants/constants.dart';
 import '../../../repositories/repositories.dart';
 import '../bloc/bloc.dart';
+
+GlobalKey countingWelcomeKey = GlobalKey();
+GlobalKey countingQuestionKey = GlobalKey();
+GlobalKey countingContentsKey = GlobalKey();
+GlobalKey countingButtonsKey = GlobalKey();
 
 class CountingGamePage extends StatefulWidget {
   static const route = '/counting_game';
@@ -25,18 +31,8 @@ class CountingGamePage extends StatefulWidget {
 
 class _CountingGamePageState extends State<CountingGamePage> {
   late final ConfettiController _confettiController;
-
-  @override
-  void initState() {
-    super.initState();
-    _confettiController = ConfettiController();
-  }
-
-  @override
-  void dispose() {
-    _confettiController.kill();
-    super.dispose();
-  }
+  TutorialCoachMark? tutorialCoachMark;
+  late CountingGameBloc _bloc;
 
   void _gameListener(
     BuildContext context,
@@ -115,29 +111,204 @@ class _CountingGamePageState extends State<CountingGamePage> {
     );
   }
 
+  List<TargetFocus> _targetsForStep(CountingGameTutorialStep step) {
+    final state = _bloc.state;
+
+    switch (step) {
+      case CountingGameTutorialStep.welcome:
+        return [
+          TargetFocus(
+            identify: 'countingWelcome',
+            keyTarget: countingWelcomeKey,
+            shape: ShapeLightFocus.RRect,
+            radius: 18,
+            enableOverlayTab: true,
+            contents: [
+              TargetContent(
+                align: ContentAlign.custom,
+                customPosition: CustomTargetContentPosition(
+                  top: MediaQuery.of(context).size.height * 0.5,
+                  left: MediaQuery.of(context).size.width * 0.05,
+                ),
+                builder: (_, __) {
+                  return const OwlGuideTemplate(
+                    message:
+                        'Hoot! Welcome to the Counting Game! Let’s go on a number adventure and see how many things we can find together!',
+                  );
+                },
+              ),
+            ],
+          ),
+        ];
+
+      case CountingGameTutorialStep.question:
+        return [
+          TargetFocus(
+            identify: 'countingQuestion',
+            keyTarget: countingQuestionKey,
+            shape: ShapeLightFocus.RRect,
+            radius: 18,
+            enableOverlayTab: true,
+            contents: [
+              TargetContent(
+                align: ContentAlign.custom,
+                customPosition: CustomTargetContentPosition(
+                  top: MediaQuery.of(context).size.height * 0.5,
+                  left: MediaQuery.of(context).size.width * 0.05,
+                ),
+                builder: (_, __) {
+                  return const OwlGuideTemplate(
+                    message: 'First, let’s use our eyes to read the question!',
+                  );
+                },
+              ),
+            ],
+          ),
+        ];
+
+      case CountingGameTutorialStep.contents:
+        return [
+          TargetFocus(
+            identify: 'countingContents',
+            keyTarget: countingContentsKey,
+            shape: ShapeLightFocus.RRect,
+            radius: 18,
+            enableOverlayTab: true,
+            contents: [
+              TargetContent(
+                align: ContentAlign.custom,
+                customPosition: CustomTargetContentPosition(
+                  top: MediaQuery.of(context).size.height * 0.5,
+                  left: MediaQuery.of(context).size.width * -0.05,
+                ),
+                builder: (_, __) {
+                  final question = state.question[state.currentIndex].question;
+
+                  final item = question
+                      ?.replaceAll(
+                        RegExp(r'How many ', caseSensitive: false),
+                        '',
+                      )
+                      .replaceAll(
+                        RegExp(r' are there\?', caseSensitive: false),
+                        '',
+                      )
+                      .trim();
+                  return OwlGuideTemplate(
+                    message: 'Now, count them up! How many $item do you see?',
+                  );
+                },
+              ),
+            ],
+          ),
+        ];
+
+      case CountingGameTutorialStep.buttons:
+        return [
+          TargetFocus(
+            identify: 'countingButtons',
+            keyTarget: countingButtonsKey,
+            shape: ShapeLightFocus.RRect,
+            radius: 18,
+            enableOverlayTab: true,
+            contents: [
+              TargetContent(
+                align: ContentAlign.custom,
+                customPosition: CustomTargetContentPosition(
+                  top: MediaQuery.of(context).size.height * 0.3,
+                  left: MediaQuery.of(context).size.width * 0.05,
+                ),
+                builder: (_, __) {
+                  return const OwlGuideTemplate(
+                    message:
+                        'Pick the button with the right number on it! You’re going to be a counting superstar. Good luck!',
+                  );
+                },
+              ),
+            ],
+          ),
+        ];
+
+      default:
+        return [];
+    }
+  }
+
+  void _tutorialStepListener(BuildContext context, CountingGameState state) {
+    tutorialCoachMark?.finish();
+    tutorialCoachMark = null;
+
+    if (state.tutorialStep == CountingGameTutorialStep.none ||
+        state.tutorialStep == CountingGameTutorialStep.finished) {
+      return;
+    }
+
+    tutorialCoachMark = TutorialCoachMark(
+      targets: _targetsForStep(state.tutorialStep),
+      colorShadow: Colors.black,
+      opacityShadow: 0.5,
+      paddingFocus: 0,
+      hideSkip: true,
+      onClickTarget: (_) => _bloc.add(const CountingGameTutorialNextPressed()),
+      onClickOverlay: (_) => _bloc.add(const CountingGameTutorialNextPressed()),
+    );
+
+    tutorialCoachMark?.show(context: context);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _confettiController = ConfettiController();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _bloc.add(const CountingGameTutorialStarted());
+    });
+  }
+
+  @override
+  void dispose() {
+    tutorialCoachMark?.finish();
+    _confettiController.kill();
+    super.dispose();
+  }
+
+  CountingGameBloc _createBloc(BuildContext context) {
+    _bloc = CountingGameBloc(
+      initialState: widget.initialState,
+      gameQuestionRepository: RepositoryProvider.of<GameQuestionRepository>(
+        context,
+      ),
+      gameSessionRepository: RepositoryProvider.of<GameSessionRepository>(
+        context,
+      ),
+      sessionQuestionRepository:
+          RepositoryProvider.of<SessionQuestionRepository>(context),
+      studentInsightRepository: RepositoryProvider.of<StudentInsightRepository>(
+        context,
+      ),
+    )..add(const CountingGameScreenCreated());
+    return _bloc;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => CountingGameBloc(
-        initialState: widget.initialState,
-        gameQuestionRepository: RepositoryProvider.of<GameQuestionRepository>(
-          context,
-        ),
-        gameSessionRepository: RepositoryProvider.of<GameSessionRepository>(
-          context,
-        ),
-        sessionQuestionRepository:
-            RepositoryProvider.of<SessionQuestionRepository>(context),
-        studentInsightRepository:
-            RepositoryProvider.of<StudentInsightRepository>(context),
-      )..add(const CountingGameScreenCreated()),
-      child: BlocListener<CountingGameBloc, CountingGameState>(
-        listener: _gameListener,
-        listenWhen: (previous, current) =>
-            previous.gameSessionRequestStatus !=
-                current.gameSessionRequestStatus &&
-            current.gameSessionRequestStatus == RequestStatus.success,
-
+    return BlocProvider<CountingGameBloc>(
+      create: _createBloc,
+      child: MultiBlocListener(
+        listeners: [
+          BlocListener<CountingGameBloc, CountingGameState>(
+            listener: _gameListener,
+            listenWhen: (previous, current) =>
+                previous.gameSessionRequestStatus !=
+                    current.gameSessionRequestStatus &&
+                current.gameSessionRequestStatus == RequestStatus.success,
+          ),
+          BlocListener<CountingGameBloc, CountingGameState>(
+            listener: _tutorialStepListener,
+            listenWhen: (previous, current) =>
+                previous.tutorialStep != current.tutorialStep,
+          ),
+        ],
         child: BlocBuilder<CountingGameBloc, CountingGameState>(
           builder: (context, state) {
             final bloc = context.read<CountingGameBloc>();
@@ -149,6 +320,7 @@ class _CountingGamePageState extends State<CountingGamePage> {
                 : 0.0;
 
             return GameScaffold(
+              key: countingWelcomeKey,
               constraintsBox: 800,
               imageAssets: Assets.mathBg,
               header: GameHeaderConfig(

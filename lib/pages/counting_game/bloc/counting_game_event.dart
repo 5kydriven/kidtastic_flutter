@@ -61,3 +61,15 @@ class CountingGameSfxVolumeChanged extends CountingGameEvent {
 class CountingGameSfxButtonPressed extends CountingGameEvent {
   const CountingGameSfxButtonPressed();
 }
+
+class CountingGameTutorialStarted extends CountingGameEvent {
+  const CountingGameTutorialStarted();
+}
+
+class CountingGameTutorialNextPressed extends CountingGameEvent {
+  const CountingGameTutorialNextPressed();
+}
+
+class CountingGameTutorialFinished extends CountingGameEvent {
+  const CountingGameTutorialFinished();
+}

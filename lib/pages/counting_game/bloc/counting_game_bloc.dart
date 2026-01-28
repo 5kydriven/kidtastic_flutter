@@ -40,6 +40,9 @@ class CountingGameBloc extends Bloc<CountingGameEvent, CountingGameState> {
     on<CountingGameBgmVolumeChanged>(_bgmVolumeChanged);
     on<CountingGameSfxVolumeChanged>(_sfxVolumeChanged);
     on<CountingGameSfxButtonPressed>(_sfxButtonPressed);
+    on<CountingGameTutorialStarted>(_tutorialStarted);
+    on<CountingGameTutorialNextPressed>(_tutorialNext);
+    on<CountingGameTutorialFinished>(_tutorialFinished);
   }
 
   Future<void> _screenCreated(
@@ -324,5 +327,46 @@ class CountingGameBloc extends Bloc<CountingGameEvent, CountingGameState> {
     Emitter<CountingGameState> emit,
   ) async {
     await _audioService.playSfx(Audios.pop2Wav);
+  }
+
+  void _tutorialStarted(
+    CountingGameTutorialStarted event,
+    Emitter<CountingGameState> emit,
+  ) {
+    emit(
+      state.copyWith(
+        tutorialStep: CountingGameTutorialStep.welcome,
+      ),
+    );
+  }
+
+  void _tutorialNext(
+    CountingGameTutorialNextPressed event,
+    Emitter<CountingGameState> emit,
+  ) {
+    final nextStep = switch (state.tutorialStep) {
+      CountingGameTutorialStep.welcome => CountingGameTutorialStep.question,
+      CountingGameTutorialStep.question => CountingGameTutorialStep.contents,
+      CountingGameTutorialStep.contents => CountingGameTutorialStep.buttons,
+      CountingGameTutorialStep.buttons => CountingGameTutorialStep.finished,
+      _ => CountingGameTutorialStep.finished,
+    };
+
+    emit(
+      state.copyWith(
+        tutorialStep: nextStep,
+      ),
+    );
+  }
+
+  void _tutorialFinished(
+    CountingGameTutorialFinished event,
+    Emitter<CountingGameState> emit,
+  ) {
+    emit(
+      state.copyWith(
+        tutorialStep: CountingGameTutorialStep.none,
+      ),
+    );
   }
 }
