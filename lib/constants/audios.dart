@@ -1,7 +1,7 @@
 class Audios {
   static const String applause = 'audios/applause.mp3';
   static const String buzzerWrong = 'audios/buzzer-wrong.mp3';
-  static const String correctRecord = 'audios/correct.mp3';
+  static const String correctRecord = 'audios/yay.mp3';
   static const String crowdCheer = 'audios/crowd-cheer.mp3';
   static const String letsGo = 'audios/lets-go.mp3';
   static const String startRecord = 'audios/start_record.mp3';
