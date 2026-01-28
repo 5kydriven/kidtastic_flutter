@@ -3,6 +3,13 @@ import 'package:kidtastic_flutter/models/models.dart';
 
 part 'home_state.freezed.dart';
 
+enum HomeTutorialStep {
+  none,
+  welcome,
+  games,
+  finished,
+}
+
 @freezed
 sealed class HomeState with _$HomeState {
   const factory HomeState({
@@ -14,5 +21,6 @@ sealed class HomeState with _$HomeState {
     @Default(false) bool isBgmMuted,
     @Default(false) bool isSfxMuted,
     @Default(RequestStatus.waiting) RequestStatus screenRequestStatus,
+    @Default(HomeTutorialStep.none) HomeTutorialStep tutorialStep,
   }) = _HomeState;
 }

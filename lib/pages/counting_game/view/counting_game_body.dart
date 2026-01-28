@@ -32,7 +32,7 @@ class CountingGameBody extends StatelessWidget {
         ),
         backgroundColor: isCorrect ? Colors.green : Colors.red,
         duration: const Duration(
-          seconds: 1,
+          milliseconds: 2500,
         ),
       ),
     );
