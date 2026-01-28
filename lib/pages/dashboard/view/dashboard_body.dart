@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:kidtastic_flutter/pages/student/view/student_page.dart';
 
 import '../../../constants/constants.dart';
 import '../../../widgets/widgets.dart';
@@ -16,6 +17,7 @@ class DashboardBody extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(32),
           ),
+          color: const Color.fromARGB(255, 255, 238, 213),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -25,6 +27,7 @@ class DashboardBody extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   HoverImageButton(
+                    onTap: () => context.push(StudentPage.route),
                     child: Image.asset(
                       Assets.studentButton,
                       width: 232,
@@ -68,7 +71,6 @@ class DashboardBody extends StatelessWidget {
             ],
           ),
         ),
-
         Positioned(
           top: -83,
           left: 70,
