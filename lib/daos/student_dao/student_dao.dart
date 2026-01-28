@@ -15,7 +15,10 @@ class StudentDao extends DatabaseAccessor<KidtasticDatabase>
   }
 
   Future<List<StudentTableData>> getAllStudents() async {
-    return await select(studentTable).get();
+    return await (select(studentTable)..orderBy([
+          (tbl) => OrderingTerm.asc(tbl.name),
+        ]))
+        .get();
   }
 
   Future<int> destroyStudent(int id) async {

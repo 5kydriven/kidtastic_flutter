@@ -11,6 +11,7 @@ class ShapeGameBloc extends Bloc<ShapeGameEvent, ShapeGameState> {
   final GameQuestionRepository _gameQuestionRepository;
   final GameSessionRepository _gameSessionRepository;
   final SessionQuestionRepository _sessionQuestionRepository;
+  final StudentInsightRepository _studentInsightRepository;
 
   final AudioPlayer player = AudioPlayer();
 
@@ -19,9 +20,11 @@ class ShapeGameBloc extends Bloc<ShapeGameEvent, ShapeGameState> {
     required GameQuestionRepository gameQuestionRepository,
     required GameSessionRepository gameSessionRepository,
     required SessionQuestionRepository sessionQuestionRepository,
+    required StudentInsightRepository studentInsightRepository,
   }) : _gameQuestionRepository = gameQuestionRepository,
        _gameSessionRepository = gameSessionRepository,
        _sessionQuestionRepository = sessionQuestionRepository,
+       _studentInsightRepository = studentInsightRepository,
        super(initialState) {
     on<ShapeGameScreenCreated>(_screenCreated);
     on<ShapeGameButtonPressed>(_buttonPressed);
@@ -177,9 +180,18 @@ class ShapeGameBloc extends Bloc<ShapeGameEvent, ShapeGameState> {
 
     switch (result.resultStatus) {
       case ResultStatus.success:
+        final studentInsightResult = await _studentInsightRepository
+            .updateStudentInsight(
+              studentId: state.student?.id ?? 0,
+              gameId: state.game?.id ?? 0,
+            );
+
         emit(
           state.copyWith(
-            gameSessionRequestStatus: RequestStatus.success,
+            gameSessionRequestStatus:
+                studentInsightResult.resultStatus == ResultStatus.success
+                ? RequestStatus.success
+                : RequestStatus.failure,
           ),
         );
         break;

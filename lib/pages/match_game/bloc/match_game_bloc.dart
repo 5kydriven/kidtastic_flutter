@@ -12,6 +12,8 @@ class MatchGameBloc extends Bloc<MatchGameEvent, MatchGameState> {
   final GameQuestionRepository _gameQuestionRepository;
   final GameSessionRepository _gameSessionRepository;
   final SessionQuestionRepository _sessionQuestionRepository;
+  final StudentInsightRepository _studentInsightRepository;
+
   final AudioService _audioService = AudioService.instance;
 
   MatchGameBloc({
@@ -19,9 +21,11 @@ class MatchGameBloc extends Bloc<MatchGameEvent, MatchGameState> {
     required GameQuestionRepository gameQuestionRepository,
     required GameSessionRepository gameSessionRepository,
     required SessionQuestionRepository sessionQuestionRepository,
+    required StudentInsightRepository studentInsightRepository,
   }) : _gameQuestionRepository = gameQuestionRepository,
        _gameSessionRepository = gameSessionRepository,
        _sessionQuestionRepository = sessionQuestionRepository,
+       _studentInsightRepository = studentInsightRepository,
        super(initialState) {
     on<MatchGameScreenCreated>(_screenCreated);
     on<MatchGameItemDropped>(_itemDropped);
@@ -197,9 +201,18 @@ class MatchGameBloc extends Bloc<MatchGameEvent, MatchGameState> {
 
     switch (result.resultStatus) {
       case ResultStatus.success:
+        final studentInsightResult = await _studentInsightRepository
+            .updateStudentInsight(
+              studentId: state.student?.id ?? 0,
+              gameId: state.game?.id ?? 0,
+            );
+
         emit(
           state.copyWith(
-            gameSessionRequestStatus: RequestStatus.success,
+            gameSessionRequestStatus:
+                studentInsightResult.resultStatus == ResultStatus.success
+                ? RequestStatus.success
+                : RequestStatus.failure,
           ),
         );
         break;

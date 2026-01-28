@@ -139,6 +139,8 @@ class _PronunciationGamePageState extends State<PronunciationGamePage> {
             RepositoryProvider.of<SessionQuestionRepository>(context),
         pronunciationAttemptRepository:
             RepositoryProvider.of<PronunciationAttemptRepository>(context),
+        studentInsightRepository:
+            RepositoryProvider.of<StudentInsightRepository>(context),
       )..add(const PronunciationGameScreenCreated()),
       child: MultiBlocListener(
         listeners: [
@@ -167,6 +169,7 @@ class _PronunciationGamePageState extends State<PronunciationGamePage> {
                   )
                 : 0.0;
             return GameScaffold(
+              constraintsBox: 800,
               header: GameHeaderConfig(
                 showBack: true,
                 showSettings: true,

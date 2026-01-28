@@ -165,6 +165,18 @@ class _InitialScreenAddStudentDialogState
     }
   }
 
+  String? _genderErrorText({
+    required BuildContext context,
+    required InitialScreenState state,
+  }) {
+    switch (state.gender.errorType) {
+      case ErrorType.empty:
+        return 'Field cannot be empty';
+      default:
+        return null;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider<InitialScreenBloc>.value(
@@ -226,73 +238,96 @@ class _InitialScreenAddStudentDialogState
                         const SizedBox(
                           height: 16,
                         ),
-                        CompositedTransformTarget(
-                          link: _layerLink,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            spacing: 24,
-                            children: [
-                              Container(
-                                width: 84,
-                                height: 84,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                    color: Colors.white,
-                                    width: 3,
-                                  ),
-                                  image: DecorationImage(
-                                    image: AssetImage(state.selectedAvatar),
-                                    fit: BoxFit.cover,
+                        Expanded(
+                          child: SingleChildScrollView(
+                            physics: const BouncingScrollPhysics(),
+                            child: Column(
+                              children: [
+                                CompositedTransformTarget(
+                                  link: _layerLink,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    spacing: 24,
+                                    children: [
+                                      Container(
+                                        width: 84,
+                                        height: 84,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          image: DecorationImage(
+                                            image: AssetImage(
+                                              state.selectedAvatar,
+                                            ),
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                      FilledButton(
+                                        onPressed: () =>
+                                            _toggleAvatarMenu(context),
+                                        child: const Text('Choose Avatar'),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                              ),
-                              FilledButton(
-                                style: FilledButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12),
+                                const SizedBox(height: 16),
+
+                                LabeledTextFormField(
+                                  label: 'First Name',
+                                  isRequired: true,
+                                  onChanged: (value) => bloc.add(
+                                    InitialScreenFirstNameChanged(value: value),
+                                  ),
+                                  errorMessage: _firstNameErrorText(
+                                    context: context,
+                                    state: state,
                                   ),
                                 ),
-                                onPressed: () => _toggleAvatarMenu(context),
-                                child: const Text('Choose Avatar'),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        LabeledTextFormField(
-                          label: 'First Name',
-                          isRequired: true,
-                          onChanged: (value) => bloc.add(
-                            InitialScreenFirstNameChanged(
-                              value: value,
+                                const SizedBox(height: 8),
+
+                                LabeledTextFormField(
+                                  label: 'Last Name',
+                                  isRequired: true,
+                                  onChanged: (value) => bloc.add(
+                                    InitialScreenLastNameChanged(value: value),
+                                  ),
+                                  errorMessage: _lastNameErrorText(
+                                    context: context,
+                                    state: state,
+                                  ),
+                                ),
+                                const SizedBox(height: 24),
+
+                                DropdownButtonFormField(
+                                  items: const [
+                                    DropdownMenuItem(
+                                      value: 'male',
+                                      child: Text('Male'),
+                                    ),
+                                    DropdownMenuItem(
+                                      value: 'female',
+                                      child: Text('Female'),
+                                    ),
+                                  ],
+                                  onChanged: (value) => bloc.add(
+                                    InitialScreenGenderChanged(
+                                      value: value ?? '',
+                                    ),
+                                  ),
+                                  decoration: InputDecoration(
+                                    errorText: _genderErrorText(
+                                      context: context,
+                                      state: state,
+                                    ),
+                                  ),
+                                ),
+
+                                const SizedBox(
+                                  height: 24,
+                                ),
+                              ],
                             ),
                           ),
-                          errorMessage: _firstNameErrorText(
-                            context: context,
-                            state: state,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 8,
-                        ),
-                        LabeledTextFormField(
-                          label: 'Last Name',
-                          isRequired: true,
-                          onChanged: (value) => bloc.add(
-                            InitialScreenLastNameChanged(
-                              value: value,
-                            ),
-                          ),
-                          errorMessage: _lastNameErrorText(
-                            context: context,
-                            state: state,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 24,
                         ),
                         SizedBox(
                           width: 300,

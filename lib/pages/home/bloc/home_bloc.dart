@@ -24,6 +24,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<HomeBgmVolumeChanged>(_bgmVolumeChanged);
     on<HomeSfxVolumeChanged>(_sfxVolumeChanged);
     on<HomeSfxButtonPressed>(_sfxButtonPressed);
+    on<HomeTutorialStarted>(_tutorialStarted);
+    on<HomeTutorialNextPressed>(_tutorialNext);
+    on<HomeTutorialFinished>(_tutorialFinished);
   }
 
   Future<void> _screenCreated(
@@ -160,5 +163,44 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     Emitter<HomeState> emit,
   ) async {
     await _audioService.playSfx(Audios.pop2Wav);
+  }
+
+  void _tutorialStarted(
+    HomeTutorialStarted event,
+    Emitter<HomeState> emit,
+  ) {
+    emit(
+      state.copyWith(
+        tutorialStep: HomeTutorialStep.welcome,
+      ),
+    );
+  }
+
+  void _tutorialNext(
+    HomeTutorialNextPressed event,
+    Emitter<HomeState> emit,
+  ) {
+    final nextStep = switch (state.tutorialStep) {
+      HomeTutorialStep.welcome => HomeTutorialStep.games,
+      HomeTutorialStep.games => HomeTutorialStep.finished,
+      _ => HomeTutorialStep.finished,
+    };
+
+    emit(
+      state.copyWith(
+        tutorialStep: nextStep,
+      ),
+    );
+  }
+
+  void _tutorialFinished(
+    HomeTutorialFinished event,
+    Emitter<HomeState> emit,
+  ) {
+    emit(
+      state.copyWith(
+        tutorialStep: HomeTutorialStep.none,
+      ),
+    );
   }
 }

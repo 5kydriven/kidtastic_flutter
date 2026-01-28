@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kidtastic_flutter/pages/counting_game/counting_game.dart';
+import 'package:kidtastic_flutter/pages/home/view/view.dart';
 import 'package:kidtastic_flutter/pages/pronunciation_game/pronunciation_game.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -87,6 +88,7 @@ class HomeBody extends StatelessWidget {
                               horizontal: 8.0,
                             ),
                             child: GridView.builder(
+                              key: homeGamesKey,
                               gridDelegate:
                                   const SliverGridDelegateWithFixedCrossAxisCount(
                                     crossAxisCount: 3,

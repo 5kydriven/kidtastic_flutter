@@ -6,8 +6,10 @@ import 'package:go_router/go_router.dart';
 import 'package:kidtastic_flutter/daos/daos.dart';
 import 'package:kidtastic_flutter/database/seeder/seed.dart';
 import 'package:kidtastic_flutter/database/kidtastic_database.dart';
+import 'package:kidtastic_flutter/pages/color_game/color_game.dart';
 import 'package:kidtastic_flutter/pages/counting_game/counting_game.dart';
 import 'package:kidtastic_flutter/pages/dashboard/view/dashboard_page.dart';
+import 'package:kidtastic_flutter/pages/student/student.dart';
 import 'package:path/path.dart' as p;
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:window_manager/window_manager.dart';
@@ -162,7 +164,7 @@ class _MyAppState extends State<MyApp> {
     super.initState();
 
     router = GoRouter(
-      // initialLocation: InitialScreenPage.route,
+      // initialLocation: ColorGamePage.route,
       initialLocation: RegisterPage.route,
       routes: <RouteBase>[
         GoRoute(
@@ -245,6 +247,18 @@ class _MyAppState extends State<MyApp> {
           path: DashboardPage.route,
           builder: (context, state) {
             return DashboardPage();
+          },
+        ),
+        GoRoute(
+          path: ColorGamePage.route,
+          builder: (context, state) {
+            return ColorGamePage();
+          },
+        ),
+        GoRoute(
+          path: StudentPage.route,
+          builder: (context, state) {
+            return StudentPage();
           },
         ),
       ],
@@ -453,6 +467,12 @@ class _MyAppState extends State<MyApp> {
             trackHeight: 8,
             thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 0),
             overlayShape: SliderComponentShape.noOverlay,
+          ),
+          cardTheme: CardThemeData(
+            elevation: 8,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(24),
+            ),
           ),
         ),
       ),

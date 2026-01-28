@@ -15,6 +15,7 @@ class CountingGameBloc extends Bloc<CountingGameEvent, CountingGameState> {
   final GameQuestionRepository _gameQuestionRepository;
   final GameSessionRepository _gameSessionRepository;
   final SessionQuestionRepository _sessionQuestionRepository;
+  final StudentInsightRepository _studentInsightRepository;
 
   final AudioService _audioService = AudioService.instance;
 
@@ -23,9 +24,11 @@ class CountingGameBloc extends Bloc<CountingGameEvent, CountingGameState> {
     required GameQuestionRepository gameQuestionRepository,
     required GameSessionRepository gameSessionRepository,
     required SessionQuestionRepository sessionQuestionRepository,
+    required StudentInsightRepository studentInsightRepository,
   }) : _gameQuestionRepository = gameQuestionRepository,
        _gameSessionRepository = gameSessionRepository,
        _sessionQuestionRepository = sessionQuestionRepository,
+       _studentInsightRepository = studentInsightRepository,
        super(initialState) {
     on<CountingGameScreenCreated>(_screenCreated);
     on<CountingGameButtonPressed>(_buttonPressed);
@@ -37,6 +40,9 @@ class CountingGameBloc extends Bloc<CountingGameEvent, CountingGameState> {
     on<CountingGameBgmVolumeChanged>(_bgmVolumeChanged);
     on<CountingGameSfxVolumeChanged>(_sfxVolumeChanged);
     on<CountingGameSfxButtonPressed>(_sfxButtonPressed);
+    on<CountingGameTutorialStarted>(_tutorialStarted);
+    on<CountingGameTutorialNextPressed>(_tutorialNext);
+    on<CountingGameTutorialFinished>(_tutorialFinished);
   }
 
   Future<void> _screenCreated(
@@ -121,6 +127,7 @@ class CountingGameBloc extends Bloc<CountingGameEvent, CountingGameState> {
         state.question[state.currentIndex].correctAnswer == event.answer;
 
     if (isCorrect) {
+      _audioService.playSfx(Audios.applause);
       _audioService.playSfx(Audios.correctRecord);
     } else {
       _audioService.playSfx(Audios.wrongChime);
@@ -140,9 +147,10 @@ class CountingGameBloc extends Bloc<CountingGameEvent, CountingGameState> {
       case ResultStatus.success:
         await Future.delayed(
           const Duration(
-            seconds: 1,
+            milliseconds: 3000,
           ),
         );
+        _audioService.stop();
         add(const CountingGameNextQuestion());
 
         emit(
@@ -196,16 +204,25 @@ class CountingGameBloc extends Bloc<CountingGameEvent, CountingGameState> {
       ),
     );
 
-    final result = await _gameSessionRepository.endSession(
+    final gameSessionResult = await _gameSessionRepository.endSession(
       sessionId: state.sessionId ?? 0,
       score: state.score,
     );
 
-    switch (result.resultStatus) {
+    switch (gameSessionResult.resultStatus) {
       case ResultStatus.success:
+        final studentInsightResult = await _studentInsightRepository
+            .updateStudentInsight(
+              studentId: state.student?.id ?? 0,
+              gameId: state.game?.id ?? 0,
+            );
+
         emit(
           state.copyWith(
-            gameSessionRequestStatus: RequestStatus.success,
+            gameSessionRequestStatus:
+                studentInsightResult.resultStatus == ResultStatus.success
+                ? RequestStatus.success
+                : RequestStatus.failure,
           ),
         );
         break;
@@ -310,5 +327,46 @@ class CountingGameBloc extends Bloc<CountingGameEvent, CountingGameState> {
     Emitter<CountingGameState> emit,
   ) async {
     await _audioService.playSfx(Audios.pop2Wav);
+  }
+
+  void _tutorialStarted(
+    CountingGameTutorialStarted event,
+    Emitter<CountingGameState> emit,
+  ) {
+    emit(
+      state.copyWith(
+        tutorialStep: CountingGameTutorialStep.welcome,
+      ),
+    );
+  }
+
+  void _tutorialNext(
+    CountingGameTutorialNextPressed event,
+    Emitter<CountingGameState> emit,
+  ) {
+    final nextStep = switch (state.tutorialStep) {
+      CountingGameTutorialStep.welcome => CountingGameTutorialStep.question,
+      CountingGameTutorialStep.question => CountingGameTutorialStep.contents,
+      CountingGameTutorialStep.contents => CountingGameTutorialStep.buttons,
+      CountingGameTutorialStep.buttons => CountingGameTutorialStep.finished,
+      _ => CountingGameTutorialStep.finished,
+    };
+
+    emit(
+      state.copyWith(
+        tutorialStep: nextStep,
+      ),
+    );
+  }
+
+  void _tutorialFinished(
+    CountingGameTutorialFinished event,
+    Emitter<CountingGameState> emit,
+  ) {
+    emit(
+      state.copyWith(
+        tutorialStep: CountingGameTutorialStep.none,
+      ),
+    );
   }
 }

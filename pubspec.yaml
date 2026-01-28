@@ -1,7 +1,7 @@
 name: kidtastic_flutter
 description: 'A new Flutter project.'
 publish_to: 'none'
-version: 1.0.0+1
+version: 1.2.0+2
 
 environment:
   sdk: ^3.9.0
@@ -30,7 +30,8 @@ dependencies:
   equatable: ^2.0.7
   flutter_confetti: ^0.5.1
   bcrypt: ^1.1.3
-  # flutter_tts: ^4.2.3
+  tutorial_coach_mark: ^1.3.3
+  animated_text_kit: ^4.3.0
 
   flutter_tts:
     path: packages/flutter_tts
@@ -58,6 +59,8 @@ flutter:
     - assets/shapes/
     - assets/backgrounds/
     - assets/icon/
+    - assets/sorting/
+    - assets/admin/
 
   fonts:
     - family: Vag

@@ -41,3 +41,15 @@ class HomeSfxVolumeChanged extends HomeEvent {
 class HomeSfxButtonPressed extends HomeEvent {
   const HomeSfxButtonPressed();
 }
+
+class HomeTutorialStarted extends HomeEvent {
+  const HomeTutorialStarted();
+}
+
+class HomeTutorialNextPressed extends HomeEvent {
+  const HomeTutorialNextPressed();
+}
+
+class HomeTutorialFinished extends HomeEvent {
+  const HomeTutorialFinished();
+}

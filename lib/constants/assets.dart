@@ -93,4 +93,22 @@ class Assets {
   static const String logo = 'assets/icon/logo.png';
   static const String gear2 = 'assets/icon/3d_gear.png';
   static const String gear = 'assets/icon/gear.png';
+  static const String dashboardLogo = 'assets/icon/dashboard_logo.png';
+
+  // **Sorting Game**
+  static const colorBg = 'assets/sorting/color_bg.png';
+  static const owlBubbleText = 'assets/sorting/owl_bubble_text.png';
+  static const owl = 'assets/sorting/owl.png';
+  static const bubbleText = 'assets/sorting/bubble_text.png';
+
+  // **Admin**
+  static const activitiesButton = 'assets/admin/activities_button.png';
+  static const adminBg = 'assets/admin/admin_bg.png';
+  static const adminOwl = 'assets/admin/admin_owl.png';
+  static const analyticsButton = 'assets/admin/analytics_button.png';
+  static const dashboard = 'assets/admin/dashboard.png';
+  static const logoutButton = 'assets/admin/logout_button.png';
+  static const settingsButton = 'assets/admin/settings_button.png';
+  static const studentButton = 'assets/admin/student_button.png';
+  static const totalBox = 'assets/admin/total_box.png';
 }
