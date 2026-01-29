@@ -4,6 +4,15 @@ import '../../../../models/models.dart';
 
 part 'pronunciation_game_state.freezed.dart';
 
+enum PronunciationGameTutorialStep {
+  none,
+  welcome,
+  question,
+  contents,
+  buttons,
+  finished,
+}
+
 @freezed
 sealed class PronunciationGameState with _$PronunciationGameState {
   const factory PronunciationGameState({
@@ -32,5 +41,7 @@ sealed class PronunciationGameState with _$PronunciationGameState {
     @Default(RequestStatus.waiting) RequestStatus gameSessionRequestStatus,
     @Default(RequestStatus.waiting) RequestStatus screenRequestStatus,
     @Default(RequestStatus.waiting) RequestStatus pronunciationRequestStatus,
+    @Default(PronunciationGameTutorialStep.none)
+    PronunciationGameTutorialStep tutorialStep,
   }) = _PronunciationGameState;
 }

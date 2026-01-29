@@ -66,3 +66,15 @@ class PronunciationGameSfxVolumeChanged extends PronunciationGameEvent {
 class PronunciationGameSfxButtonPressed extends PronunciationGameEvent {
   const PronunciationGameSfxButtonPressed();
 }
+
+class PronunciationGameTutorialStarted extends PronunciationGameEvent {
+  const PronunciationGameTutorialStarted();
+}
+
+class PronunciationGameTutorialNextPressed extends PronunciationGameEvent {
+  const PronunciationGameTutorialNextPressed();
+}
+
+class PronunciationGameTutorialFinished extends PronunciationGameEvent {
+  const PronunciationGameTutorialFinished();
+}

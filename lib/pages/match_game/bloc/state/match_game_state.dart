@@ -4,6 +4,15 @@ import '../../../../models/models.dart';
 
 part 'match_game_state.freezed.dart';
 
+enum MatchGameTutorialStep {
+  none,
+  welcome,
+  question,
+  contents,
+  buttons,
+  finished,
+}
+
 @freezed
 sealed class MatchGameState with _$MatchGameState {
   const factory MatchGameState({
@@ -22,5 +31,6 @@ sealed class MatchGameState with _$MatchGameState {
     @Default(RequestStatus.waiting) RequestStatus screenRequestStatus,
     @Default(RequestStatus.waiting) RequestStatus sessionQuestionRequestStatus,
     @Default(RequestStatus.waiting) RequestStatus gameSessionRequestStatus,
+    @Default(MatchGameTutorialStep.none) MatchGameTutorialStep tutorialStep,
   }) = _MatchGameState;
 }

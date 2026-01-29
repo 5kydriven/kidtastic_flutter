@@ -36,6 +36,9 @@ class MatchGameBloc extends Bloc<MatchGameEvent, MatchGameState> {
     on<MatchGameBgmVolumeChanged>(_bgmVolumeChanged);
     on<MatchGameSfxVolumeChanged>(_sfxVolumeChanged);
     on<MatchGameSfxButtonPressed>(_sfxButtonPressed);
+    on<MatchGameTutorialStarted>(_tutorialStarted);
+    on<MatchGameTutorialNextPressed>(_tutorialNext);
+    on<MatchGameTutorialFinished>(_tutorialFinished);
   }
 
   Future<void> _screenCreated(
@@ -295,5 +298,46 @@ class MatchGameBloc extends Bloc<MatchGameEvent, MatchGameState> {
     Emitter<MatchGameState> emit,
   ) async {
     await _audioService.playSfx(Audios.pop2Wav);
+  }
+
+  void _tutorialStarted(
+    MatchGameTutorialStarted event,
+    Emitter<MatchGameState> emit,
+  ) {
+    emit(
+      state.copyWith(
+        tutorialStep: MatchGameTutorialStep.welcome,
+      ),
+    );
+  }
+
+  void _tutorialNext(
+    MatchGameTutorialNextPressed event,
+    Emitter<MatchGameState> emit,
+  ) {
+    final nextStep = switch (state.tutorialStep) {
+      MatchGameTutorialStep.welcome => MatchGameTutorialStep.question,
+      MatchGameTutorialStep.question => MatchGameTutorialStep.contents,
+      MatchGameTutorialStep.contents => MatchGameTutorialStep.buttons,
+      MatchGameTutorialStep.buttons => MatchGameTutorialStep.finished,
+      _ => MatchGameTutorialStep.finished,
+    };
+
+    emit(
+      state.copyWith(
+        tutorialStep: nextStep,
+      ),
+    );
+  }
+
+  void _tutorialFinished(
+    MatchGameTutorialFinished event,
+    Emitter<MatchGameState> emit,
+  ) {
+    emit(
+      state.copyWith(
+        tutorialStep: MatchGameTutorialStep.none,
+      ),
+    );
   }
 }

@@ -59,3 +59,15 @@ class MatchGameSfxVolumeChanged extends MatchGameEvent {
 class MatchGameSfxButtonPressed extends MatchGameEvent {
   const MatchGameSfxButtonPressed();
 }
+
+class MatchGameTutorialStarted extends MatchGameEvent {
+  const MatchGameTutorialStarted();
+}
+
+class MatchGameTutorialNextPressed extends MatchGameEvent {
+  const MatchGameTutorialNextPressed();
+}
+
+class MatchGameTutorialFinished extends MatchGameEvent {
+  const MatchGameTutorialFinished();
+}

@@ -74,6 +74,9 @@ class PronunciationGameBloc
     on<PronunciationGameBgmVolumeChanged>(_bgmVolumeChanged);
     on<PronunciationGameSfxVolumeChanged>(_sfxVolumeChanged);
     on<PronunciationGameSfxButtonPressed>(_sfxButtonPressed);
+    on<PronunciationGameTutorialStarted>(_tutorialStarted);
+    on<PronunciationGameTutorialNextPressed>(_tutorialNext);
+    on<PronunciationGameTutorialFinished>(_tutorialFinished);
   }
 
   Future<void> _screenCreated(
@@ -588,6 +591,51 @@ class PronunciationGameBloc
     Emitter<PronunciationGameState> emit,
   ) async {
     await _audioService.playSfx(Audios.pop2Wav);
+  }
+
+  void _tutorialStarted(
+    PronunciationGameTutorialStarted event,
+    Emitter<PronunciationGameState> emit,
+  ) {
+    emit(
+      state.copyWith(
+        tutorialStep: PronunciationGameTutorialStep.welcome,
+      ),
+    );
+  }
+
+  void _tutorialNext(
+    PronunciationGameTutorialNextPressed event,
+    Emitter<PronunciationGameState> emit,
+  ) {
+    final nextStep = switch (state.tutorialStep) {
+      PronunciationGameTutorialStep.welcome =>
+        PronunciationGameTutorialStep.question,
+      PronunciationGameTutorialStep.question =>
+        PronunciationGameTutorialStep.contents,
+      PronunciationGameTutorialStep.contents =>
+        PronunciationGameTutorialStep.buttons,
+      PronunciationGameTutorialStep.buttons =>
+        PronunciationGameTutorialStep.finished,
+      _ => PronunciationGameTutorialStep.finished,
+    };
+
+    emit(
+      state.copyWith(
+        tutorialStep: nextStep,
+      ),
+    );
+  }
+
+  void _tutorialFinished(
+    PronunciationGameTutorialFinished event,
+    Emitter<PronunciationGameState> emit,
+  ) {
+    emit(
+      state.copyWith(
+        tutorialStep: PronunciationGameTutorialStep.none,
+      ),
+    );
   }
 
   /* =======================
