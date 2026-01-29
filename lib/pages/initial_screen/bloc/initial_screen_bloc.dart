@@ -88,7 +88,9 @@ class InitialScreenBloc extends Bloc<InitialScreenEvent, InitialScreenState> {
     add(const InitialScreenSfxButtonPressed());
 
     final hasError =
-        state.firstName.value.isEmpty || state.lastName.value.isEmpty;
+        state.firstName.value.isEmpty ||
+        state.lastName.value.isEmpty ||
+        state.gender.value.isEmpty;
 
     emit(
       state.copyWith(
@@ -97,6 +99,9 @@ class InitialScreenBloc extends Bloc<InitialScreenEvent, InitialScreenState> {
         ),
         lastName: state.lastName.copyWith(
           errorType: validateRequired(state.lastName.value),
+        ),
+        gender: state.gender.copyWith(
+          errorType: validateRequired(state.gender.value),
         ),
         studentRequestStatus: RequestStatus.failure,
       ),
@@ -269,6 +274,9 @@ class InitialScreenBloc extends Bloc<InitialScreenEvent, InitialScreenState> {
           errorType: ErrorType.none,
         ),
         lastName: state.lastName.copyWith(
+          errorType: ErrorType.none,
+        ),
+        gender: state.gender.copyWith(
           errorType: ErrorType.none,
         ),
       ),
