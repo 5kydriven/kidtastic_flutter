@@ -1,25 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:kidtastic_flutter/widgets/widgets.dart';
-import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
+import 'package:kidtastic_flutter/models/models.dart';
+import 'package:kidtastic_flutter/pages/home/bloc/bloc.dart';
+import 'package:kidtastic_flutter/pages/login/view/login_page.dart';
+import 'package:kidtastic_flutter/repositories/repositories.dart';
 
 import '../../../constants/constants.dart';
-import '../../../repositories/repositories.dart';
-import '../bloc/bloc.dart';
+import '../../../widgets/widgets.dart';
 import 'view.dart';
-
-GlobalKey homeBodyKey = GlobalKey();
-GlobalKey homeGamesKey = GlobalKey();
 
 class HomePage extends StatefulWidget {
   static const route = '/home';
-  final HomeState initialState;
 
-  const HomePage({
-    super.key,
-    required this.initialState,
-  });
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -27,126 +21,46 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final PageController _pageController = PageController();
-  TutorialCoachMark? tutorialCoachMark;
-  late HomeBloc _bloc;
 
-  void _pageListener(BuildContext context, HomeState state) {
+  void _pageListener(
+    BuildContext context,
+    HomeState state,
+  ) {
     _pageController.animateToPage(
       state.currentPage,
-      duration: const Duration(milliseconds: 350),
+      duration: const Duration(
+        milliseconds: 350,
+      ),
       curve: Curves.easeInOut,
     );
   }
 
-  List<TargetFocus> _targetsForStep(HomeTutorialStep step) {
-    final state = _bloc.state;
-
-    switch (step) {
-      case HomeTutorialStep.welcome:
-        return [
-          TargetFocus(
-            identify: 'welcome',
-            keyTarget: homeBodyKey,
-            shape: ShapeLightFocus.RRect,
-            radius: 18,
-            enableOverlayTab: true,
-            contents: [
-              TargetContent(
-                align: ContentAlign.custom,
-                customPosition: CustomTargetContentPosition(
-                  top: MediaQuery.of(context).size.height * 0.5,
-                  left: MediaQuery.of(context).size.width * 0.05,
-                ),
-                builder: (_, __) {
-                  return OwlGuideTemplate(
-                    message:
-                        'Hello ${state.student?.name}, welcome to Kidtastic!',
-                  );
-                },
-              ),
-            ],
-          ),
-        ];
-
-      case HomeTutorialStep.games:
-        return [
-          TargetFocus(
-            identify: 'games',
-            keyTarget: homeGamesKey,
-            shape: ShapeLightFocus.RRect,
-            radius: 18,
-            enableOverlayTab: true,
-            contents: [
-              TargetContent(
-                align: ContentAlign.custom,
-                customPosition: CustomTargetContentPosition(
-                  top: MediaQuery.of(context).size.height * 0.5,
-                  left: MediaQuery.of(context).size.width * 0.05,
-                ),
-                builder: (_, __) {
-                  return OwlGuideTemplate(
-                    message: 'This is where you can play games!',
-                  );
-                },
-              ),
-            ],
-          ),
-        ];
-
+  void _addStudentDialogListner(
+    BuildContext context,
+    HomeState state,
+  ) {
+    switch (state.studentRequestStatus) {
+      case RequestStatus.success:
+        if (Navigator.canPop(context)) {
+          context.pop();
+        }
       default:
-        return [];
     }
-  }
-
-  void _tutorialStepListener(BuildContext context, HomeState state) {
-    tutorialCoachMark?.finish();
-    tutorialCoachMark = null;
-
-    if (state.tutorialStep == HomeTutorialStep.none ||
-        state.tutorialStep == HomeTutorialStep.finished) {
-      return;
-    }
-
-    tutorialCoachMark = TutorialCoachMark(
-      targets: _targetsForStep(state.tutorialStep),
-      colorShadow: Colors.black,
-      opacityShadow: 0.5,
-      paddingFocus: 0,
-      hideSkip: true,
-      onClickTarget: (_) => _bloc.add(const HomeTutorialNextPressed()),
-      onClickOverlay: (_) => _bloc.add(const HomeTutorialNextPressed()),
-    );
-
-    tutorialCoachMark?.show(context: context);
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _bloc.add(const HomeTutorialStarted());
-    });
   }
 
   @override
   void dispose() {
-    tutorialCoachMark?.finish();
     _pageController.dispose();
     super.dispose();
   }
 
-  HomeBloc _createBloc(BuildContext context) {
-    _bloc = HomeBloc(
-      initialState: widget.initialState,
-      gameRepository: RepositoryProvider.of<GameRepository>(context),
-    )..add(const HomeScreenCreated());
-    return _bloc;
-  }
-
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<HomeBloc>(
-      create: _createBloc,
+    return BlocProvider(
+      create: (context) => HomeBloc(
+        initialState: HomeState(),
+        studentRepository: RepositoryProvider.of<StudentRepository>(context),
+      )..add(const HomeScreenCreated()),
       child: MultiBlocListener(
         listeners: [
           BlocListener<HomeBloc, HomeState>(
@@ -155,9 +69,9 @@ class _HomePageState extends State<HomePage> {
                 previous.currentPage != current.currentPage,
           ),
           BlocListener<HomeBloc, HomeState>(
-            listener: _tutorialStepListener,
+            listener: _addStudentDialogListner,
             listenWhen: (previous, current) =>
-                previous.tutorialStep != current.tutorialStep,
+                previous.studentRequestStatus != current.studentRequestStatus,
           ),
         ],
         child: BlocBuilder<HomeBloc, HomeState>(
@@ -165,13 +79,9 @@ class _HomePageState extends State<HomePage> {
             final bloc = context.read<HomeBloc>();
             return GameScaffold(
               constraintsBox: 800,
+              imageAssets: Assets.homeBg,
               header: GameHeaderConfig(
-                showBack: true,
                 showSettings: true,
-                onBack: () {
-                  context.pop();
-                  bloc.add(const HomeSfxButtonPressed());
-                },
                 onSettings: () {
                   bloc.add(const HomeSfxButtonPressed());
                   showDialog(
@@ -184,14 +94,34 @@ class _HomePageState extends State<HomePage> {
                   );
                 },
               ),
-              imageAssets: Assets.homeBg,
-              child: Card(
-                key: homeBodyKey,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(32),
+              bottomBar: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 40,
+                  vertical: 16,
                 ),
-                child: HomeBody(
-                  pageController: _pageController,
+                child: FilledButton(
+                  style: FilledButton.styleFrom(
+                    backgroundColor: Color(0xffFFC30E),
+                  ),
+                  onPressed: () {
+                    bloc.add(const HomeSfxButtonPressed());
+                    context.push(LoginPage.route);
+                  },
+                  child: Text('Teacher'),
+                ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 32,
+                ),
+                child: Card(
+                  elevation: 8,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(32),
+                  ),
+                  child: HomeBody(
+                    pageController: _pageController,
+                  ),
                 ),
               ),
             );

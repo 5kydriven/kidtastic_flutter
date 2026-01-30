@@ -1,55 +1,75 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:kidtastic_flutter/pages/counting_game/counting_game.dart';
-import 'package:kidtastic_flutter/pages/home/view/view.dart';
-import 'package:kidtastic_flutter/pages/pronunciation_game/pronunciation_game.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-import '../../../constants/constants.dart';
-import '../../match_game/match_game.dart';
+import '../../../models/models.dart';
+import '../../game_list/game_list.dart';
 import '../bloc/bloc.dart';
+import '../widgets/widgets.dart';
+import 'view.dart';
 
 class HomeBody extends StatelessWidget {
   final PageController pageController;
+
   const HomeBody({
     super.key,
     required this.pageController,
   });
 
+  void _handleStudentCard(BuildContext context, Student student) {
+    final bloc = context.read<HomeBloc>();
+    bloc.add(const HomeSfxButtonPressed());
+    context.push(
+      GameListPage.route,
+      extra: GameListState(
+        student: student,
+      ),
+    );
+  }
+
+  void _handleAddStudentDialog(BuildContext context) {
+    final bloc = context.read<HomeBloc>();
+    bloc.add(const HomeSfxButtonPressed());
+    showDialog(
+      context: context,
+      builder: (context) => HomeAddStudentDialog(
+        homeBloc: bloc,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<HomeBloc, HomeState>(
       builder: (context, state) {
-        final games = state.games;
-        final int itemsPerPage = 6;
-        final totalPages = (games.isEmpty)
-            ? 1
-            : (games.length / itemsPerPage).ceil();
         final bloc = context.read<HomeBloc>();
+
+        final students = state.students;
+        final int itemsPerPage = 8;
+        final totalItems = students.length + 1;
+        final totalPages = (totalItems / itemsPerPage).ceil();
 
         return Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'Hello ${state.student?.firstName?.toUpperCase() ?? ''}!',
+              "Who's using Kidtastic?",
               style: TextStyle(
-                fontSize: MediaQuery.of(context).size.width * 0.05,
+                fontSize: 28,
                 fontWeight: FontWeight.bold,
-                color: Color(0xffA66609),
               ),
-              textAlign: TextAlign.center,
             ),
-            const Text(
-              'Choose an activity to learn and play.',
-              textAlign: TextAlign.center,
+            Text(
+              'Choose your profile or add your own.',
               style: TextStyle(
-                fontSize: 20,
-                color: Color(0xffA66609),
+                fontSize: 16,
+                color: Colors.black54,
               ),
+              textAlign: TextAlign.center,
             ),
             const SizedBox(
-              height: 20,
+              height: 36,
             ),
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -60,11 +80,13 @@ class HomeBody extends StatelessWidget {
                   child: state.currentPage > 0
                       ? IconButton(
                           icon: const Icon(Icons.arrow_back_ios),
-                          onPressed: () =>
-                              bloc.add(const HomePrevButtonPressed()),
+                          onPressed: () => bloc.add(
+                            const HomePrevButtonPressed(),
+                          ),
                         )
                       : null,
                 ),
+
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   spacing: 24,
@@ -78,140 +100,94 @@ class HomeBody extends StatelessWidget {
                         itemCount: totalPages,
                         itemBuilder: (context, pageIndex) {
                           final start = pageIndex * itemsPerPage;
-                          final end = (start + itemsPerPage > games.length)
-                              ? games.length
+                          final end = (start + itemsPerPage > students.length)
+                              ? students.length
                               : start + itemsPerPage;
-                          final pageItems = games.sublist(start, end);
+
+                          final pageItems = students.sublist(start, end);
+
+                          final showAddButton = pageIndex == totalPages - 1;
 
                           return Padding(
                             padding: const EdgeInsets.symmetric(
                               horizontal: 8.0,
                             ),
-                            child: GridView.builder(
-                              key: homeGamesKey,
-                              gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 3,
-                                    mainAxisSpacing: 12,
-                                    crossAxisSpacing: 12,
-                                    childAspectRatio: 1,
+                            child: ScrollConfiguration(
+                              behavior: ScrollConfiguration.of(context)
+                                  .copyWith(
+                                    scrollbars: false,
                                   ),
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: pageItems.length,
-                              itemBuilder: (context, index) {
-                                final game = pageItems[index];
-                                return InkWell(
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(24),
-                                  ),
-                                  onTap: () {
-                                    bloc.add(const HomeSfxButtonPressed());
-                                    if (game.route?.isNotEmpty ?? false) {
-                                      switch (game.category) {
-                                        case GameType.counting:
-                                          context.push(
-                                            CountingGamePage.route,
-                                            extra: CountingGameState(
-                                              game: game,
-                                              student: state.student,
-                                            ),
-                                          );
-                                          break;
-                                        case GameType.pronunciation:
-                                          context.push(
-                                            PronunciationGamePage.route,
-                                            extra: PronunciationGameState(
-                                              game: game,
-                                              student: state.student,
-                                            ),
-                                          );
-                                        case GameType.shape:
-                                          context.push(
-                                            MatchGamePage.route,
-                                            extra: MatchGameState(
-                                              game: game,
-                                              student: state.student,
-                                            ),
-                                          );
-                                        case GameType.matching:
-                                          context.push(
-                                            MatchGamePage.route,
-                                            extra: MatchGameState(
-                                              game: game,
-                                              student: state.student,
-                                            ),
-                                          );
-                                        default:
-                                          context.push(
-                                            game.route ?? '',
-                                            extra: game,
-                                          );
-
-                                          break;
-                                      }
-                                    } else {
-                                      ScaffoldMessenger.of(
-                                        context,
-                                      ).showSnackBar(
-                                        const SnackBar(
-                                          content: Text(
-                                            'This game has no route set.',
-                                          ),
+                              child: GridView.builder(
+                                gridDelegate:
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 4,
+                                  mainAxisSpacing: 12,
+                                  crossAxisSpacing: 12,
+                                  childAspectRatio: 1 / 1.4,
+                                ),
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: showAddButton
+                                    ? pageItems.length + 1
+                                    : pageItems.length,
+                                itemBuilder: (context, index) {
+                                  if (index < pageItems.length) {
+                                    final student = pageItems[index];
+                                    return StudentCard(
+                                      name: student.firstName ?? '',
+                                      image: student.image ?? '',
+                                      onTap: () =>
+                                          _handleStudentCard(context, student),
+                                      onPressed: () => bloc.add(
+                                        HomeDeleteStudentPressed(
+                                          id: student.id ?? 0,
                                         ),
-                                      );
-                                    }
-                                  },
-                                  child: Card(
-                                    elevation: 8,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(24),
-                                      side: const BorderSide(
-                                        color: Color(0xffFFAE00),
-                                        width: 2,
                                       ),
+                                    );
+                                  }
+
+                                  return Card(
+                                    elevation: 4,
+                                    shape: RoundedRectangleBorder(
+                                      side: const BorderSide(
+                                        color: Colors.grey,
+                                      ),
+                                      borderRadius: BorderRadius.circular(24),
                                     ),
-                                    child: Stack(
-                                      fit: StackFit.expand,
-                                      children: [
-                                        Align(
-                                          alignment: Alignment.center,
-                                          child: Image.asset(
-                                            game.imageAsset ?? '',
-                                            width: 80,
-                                            height: 80,
-                                            errorBuilder:
-                                                (context, error, stack) =>
-                                                    const Icon(
-                                                      Icons.image_not_supported,
-                                                    ),
-                                          ),
-                                        ),
-                                        Align(
-                                          alignment: Alignment.bottomCenter,
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(
-                                              bottom: 12,
+                                    child: InkWell(
+                                      borderRadius: BorderRadius.circular(24),
+                                      onTap: () =>
+                                          _handleAddStudentDialog(context),
+                                      child: const Center(
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Icon(
+                                              Icons.add,
+                                              size: 48,
+                                              color: Colors.grey,
                                             ),
-                                            child: Text(
-                                              game.name ?? '',
-                                              textAlign: TextAlign.center,
-                                              style: const TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w500,
+                                            SizedBox(
+                                              height: 12,
+                                            ),
+                                            Text(
+                                              'Add Student',
+                                              style: TextStyle(
+                                                fontSize: 18,
                                               ),
                                             ),
-                                          ),
+                                          ],
                                         ),
-                                      ],
+                                      ),
                                     ),
-                                  ),
-                                );
-                              },
+                                  );
+                                },
+                              ),
                             ),
                           );
                         },
                       ),
                     ),
+
                     SmoothPageIndicator(
                       controller: pageController,
                       count: totalPages,
@@ -225,12 +201,15 @@ class HomeBody extends StatelessWidget {
                     ),
                   ],
                 ),
+
                 SizedBox(
                   width: 48,
                   child: state.currentPage < totalPages - 1
                       ? IconButton(
                           icon: const Icon(Icons.arrow_forward_ios),
-                          onPressed: () => bloc.add(HomeNextButtonPressed()),
+                          onPressed: () => bloc.add(
+                            const HomeNextButtonPressed(),
+                          ),
                         )
                       : null,
                 ),
