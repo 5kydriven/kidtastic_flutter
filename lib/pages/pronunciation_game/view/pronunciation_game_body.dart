@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../bloc/bloc.dart';
+import 'view.dart';
 
 class PronunciationGameBody extends StatelessWidget {
   const PronunciationGameBody({super.key});
@@ -65,6 +66,7 @@ class PronunciationGameBody extends StatelessWidget {
             ),
 
             Expanded(
+              key: pronunciationContentsKey,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -121,6 +123,7 @@ class PronunciationGameBody extends StatelessWidget {
             ),
 
             Row(
+              key: pronunciationButtonsKey,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton.icon(
