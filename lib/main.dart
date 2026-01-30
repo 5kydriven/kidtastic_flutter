@@ -15,8 +15,8 @@ import 'package:responsive_framework/responsive_framework.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'constants/constants.dart';
+import 'pages/game_list/game_list.dart';
 import 'pages/home/home.dart';
-import 'pages/initial_screen/initial_screen.dart';
 import 'pages/login/login.dart';
 import 'pages/match_game/match_game.dart';
 import 'pages/math_game/math_game.dart';
@@ -24,6 +24,7 @@ import 'pages/number_game/number_game.dart';
 import 'pages/pronunciation_game/pronunciation_game.dart';
 import 'pages/register/register.dart';
 import 'pages/shape_game/shape_game.dart';
+import 'pages/splash_screen/splash_screen.dart';
 import 'repositories/repositories.dart';
 import 'service/services.dart';
 
@@ -164,21 +165,20 @@ class _MyAppState extends State<MyApp> {
     super.initState();
 
     router = GoRouter(
-      // initialLocation: ColorGamePage.route,
-      initialLocation: RegisterPage.route,
+      initialLocation: SplashScreenPage.route,
       routes: <RouteBase>[
         GoRoute(
           path: HomePage.route,
           builder: (context, state) {
-            return HomePage(
-              initialState: state.extra as HomeState,
-            );
+            return const HomePage();
           },
         ),
         GoRoute(
-          path: InitialScreenPage.route,
+          path: GameListPage.route,
           builder: (context, state) {
-            return InitialScreenPage();
+            return GameListPage(
+              initialState: state.extra as GameListState,
+            );
           },
         ),
         GoRoute(

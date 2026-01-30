@@ -49,7 +49,8 @@ class HomeSettingsDialog extends StatelessWidget {
                     title: Text('Background Music'),
                     trailing: Switch(
                       value: !state.isBgmMuted,
-                      onChanged: (value) => bloc.add(const HomeBgmToggled()),
+                      onChanged: (value) =>
+                          bloc.add(const HomeBgmToggled()),
                     ),
                   ),
                   ListTile(
@@ -80,7 +81,8 @@ class HomeSettingsDialog extends StatelessWidget {
                     title: Text('Sound Effects'),
                     trailing: Switch(
                       value: !state.isSfxMuted,
-                      onChanged: (value) => bloc.add(const HomeSfxToggled()),
+                      onChanged: (value) =>
+                          bloc.add(const HomeSfxToggled()),
                     ),
                   ),
                   ListTile(
