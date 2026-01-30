@@ -24,7 +24,7 @@ import 'pages/number_game/number_game.dart';
 import 'pages/pronunciation_game/pronunciation_game.dart';
 import 'pages/register/register.dart';
 import 'pages/shape_game/shape_game.dart';
-import 'pages/splash_screen/splash_screen.dart';
+import 'pages/initial_screen/initial_screen.dart';
 import 'repositories/repositories.dart';
 import 'service/services.dart';
 
@@ -165,8 +165,14 @@ class _MyAppState extends State<MyApp> {
     super.initState();
 
     router = GoRouter(
-      initialLocation: SplashScreenPage.route,
+      initialLocation: InitialScreenPage.route,
       routes: <RouteBase>[
+        GoRoute(
+          path: InitialScreenPage.route,
+          builder: (context, state) {
+            return const InitialScreenPage();
+          },
+        ),
         GoRoute(
           path: HomePage.route,
           builder: (context, state) {

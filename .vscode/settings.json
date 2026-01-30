@@ -3,5 +3,6 @@
 	"dart.lineLength": 80,
 	"editor.codeActionsOnSave": {
 		"source.fixAll": "always"
-	}
+	},
+	"cmake.sourceDirectory": "C:/Users/KODA-JA/Documents/kidtastic_flutter/build/windows/x64/_deps/nuget-subbuild"
 }
