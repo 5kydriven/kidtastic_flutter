@@ -7,6 +7,7 @@ import 'package:kidtastic_flutter/extensions/string_extension.dart';
 
 import '../../../models/models.dart';
 import '../bloc/bloc.dart';
+import 'view.dart';
 
 class MatchGameBody extends StatelessWidget {
   final AnimationController animationController;
@@ -116,6 +117,7 @@ class MatchGameBody extends StatelessWidget {
                         const SizedBox(height: 20),
 
                         Text(
+                          key: matchQuestionKey,
                           current.question?.capitalize() ?? '',
                           style: const TextStyle(
                             color: Color(0xffBC3740),
@@ -125,6 +127,7 @@ class MatchGameBody extends StatelessWidget {
                         ),
 
                         Expanded(
+                          key: matchContentsKey,
                           child: DragTarget<Question>(
                             onAcceptWithDetails: (details) =>
                                 _checkAnswer(context, details.data),
@@ -173,6 +176,7 @@ class MatchGameBody extends StatelessWidget {
 
             // ================= RIGHT DRAG ITEMS =================
             Expanded(
+              key: matchButtonsKey,
               child: SizedBox(
                 height: size.height * 0.8,
                 child: Card(

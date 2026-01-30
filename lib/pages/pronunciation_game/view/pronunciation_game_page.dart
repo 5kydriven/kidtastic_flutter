@@ -12,7 +12,6 @@ import '../bloc/bloc.dart';
 import 'view.dart';
 
 GlobalKey pronunciationWelcomeKey = GlobalKey();
-GlobalKey pronunciationQuestionKey = GlobalKey();
 GlobalKey pronunciationContentsKey = GlobalKey();
 GlobalKey pronunciationButtonsKey = GlobalKey();
 
@@ -121,8 +120,6 @@ class _PronunciationGamePageState extends State<PronunciationGamePage> {
   }
 
   List<TargetFocus> _targetsForStep(PronunciationGameTutorialStep step) {
-    final state = _bloc.state;
-
     switch (step) {
       case PronunciationGameTutorialStep.welcome:
         return [
@@ -142,32 +139,7 @@ class _PronunciationGamePageState extends State<PronunciationGamePage> {
                 builder: (_, __) {
                   return const OwlGuideTemplate(
                     message:
-                        'Hoot! Welcome to the pronunciation Game! Let’s go on a number adventure and see how many things we can find together!',
-                  );
-                },
-              ),
-            ],
-          ),
-        ];
-
-      case PronunciationGameTutorialStep.question:
-        return [
-          TargetFocus(
-            identify: 'pronunciationQuestion',
-            keyTarget: pronunciationQuestionKey,
-            shape: ShapeLightFocus.RRect,
-            radius: 18,
-            enableOverlayTab: true,
-            contents: [
-              TargetContent(
-                align: ContentAlign.custom,
-                customPosition: CustomTargetContentPosition(
-                  top: MediaQuery.of(context).size.height * 0.5,
-                  left: MediaQuery.of(context).size.width * 0.05,
-                ),
-                builder: (_, __) {
-                  return const OwlGuideTemplate(
-                    message: 'First, let’s use our eyes to read the question!',
+                        'Hoot! Welcome to the Speaking Game! Let’s learn how to say new words together!',
                   );
                 },
               ),
@@ -191,20 +163,9 @@ class _PronunciationGamePageState extends State<PronunciationGamePage> {
                   left: MediaQuery.of(context).size.width * -0.05,
                 ),
                 builder: (_, __) {
-                  final question = state.question[state.currentIndex].question;
-
-                  final item = question
-                      ?.replaceAll(
-                        RegExp(r'How many ', caseSensitive: false),
-                        '',
-                      )
-                      .replaceAll(
-                        RegExp(r' are there\?', caseSensitive: false),
-                        '',
-                      )
-                      .trim();
-                  return OwlGuideTemplate(
-                    message: 'Now, count them up! How many $item do you see?',
+                  return const OwlGuideTemplate(
+                    message:
+                        'Look at the picture! Can you say the word out loud?',
                   );
                 },
               ),
@@ -230,7 +191,7 @@ class _PronunciationGamePageState extends State<PronunciationGamePage> {
                 builder: (_, __) {
                   return const OwlGuideTemplate(
                     message:
-                        'Pick the button with the right number on it! You’re going to be a pronunciation superstar. Good luck!',
+                        'Tap the speaker to hear the word, then tap the mic to say it yourself!',
                   );
                 },
               ),
@@ -342,6 +303,7 @@ class _PronunciationGamePageState extends State<PronunciationGamePage> {
                   )
                 : 0.0;
             return GameScaffold(
+              key: pronunciationWelcomeKey,
               constraintsBox: 800,
               header: GameHeaderConfig(
                 showBack: true,
