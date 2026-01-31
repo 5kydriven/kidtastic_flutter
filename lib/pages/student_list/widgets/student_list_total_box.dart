@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class TotalBox extends StatelessWidget {
+class StudentListTotalBox extends StatelessWidget {
   final String label;
   final String total;
 
-  const TotalBox({
+  const StudentListTotalBox({
     super.key,
     required this.label,
     required this.total,

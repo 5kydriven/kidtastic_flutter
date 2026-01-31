@@ -9,7 +9,7 @@ import 'package:kidtastic_flutter/database/kidtastic_database.dart';
 import 'package:kidtastic_flutter/pages/color_game/color_game.dart';
 import 'package:kidtastic_flutter/pages/counting_game/counting_game.dart';
 import 'package:kidtastic_flutter/pages/dashboard/view/dashboard_page.dart';
-import 'package:kidtastic_flutter/pages/student/student.dart';
+import 'package:kidtastic_flutter/pages/student_list/student_list.dart';
 import 'package:path/path.dart' as p;
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:window_manager/window_manager.dart';
@@ -262,9 +262,9 @@ class _MyAppState extends State<MyApp> {
           },
         ),
         GoRoute(
-          path: StudentPage.route,
+          path: StudentListPage.route,
           builder: (context, state) {
-            return StudentPage();
+            return StudentListPage();
           },
         ),
       ],

@@ -4,24 +4,24 @@ import '../../../models/models.dart';
 import '../../../repositories/repositories.dart';
 import 'bloc.dart';
 
-class StudentBloc extends Bloc<StudentEvent, StudentState> {
+class StudentListBloc extends Bloc<StudentListEvent, StudentListState> {
   final StudentRepository _studentRepository;
   final GameSessionRepository _gameSessionRepository;
 
-  StudentBloc({
-    required StudentState initialState,
+  StudentListBloc({
+    required StudentListState initialState,
     required StudentRepository studentRepository,
     required GameSessionRepository gameSessionRepository,
   }) : _studentRepository = studentRepository,
        _gameSessionRepository = gameSessionRepository,
        super(initialState) {
-    on<StudentScreenCreated>(_screenCreated);
-    on<StudentGameSessionFetched>(_gameSessionFetched);
+    on<StudentListScreenCreated>(_screenCreated);
+    on<StudentListGameSessionFetched>(_gameSessionFetched);
   }
 
   Future<void> _screenCreated(
-    StudentScreenCreated event,
-    Emitter<StudentState> emit,
+    StudentListScreenCreated event,
+    Emitter<StudentListState> emit,
   ) async {
     emit(
       state.copyWith(
@@ -62,7 +62,7 @@ class StudentBloc extends Bloc<StudentEvent, StudentState> {
           ),
         );
 
-        add(const StudentGameSessionFetched());
+        add(const StudentListGameSessionFetched());
         break;
 
       default:
@@ -76,8 +76,8 @@ class StudentBloc extends Bloc<StudentEvent, StudentState> {
   }
 
   Future<void> _gameSessionFetched(
-    StudentGameSessionFetched event,
-    Emitter<StudentState> emit,
+    StudentListGameSessionFetched event,
+    Emitter<StudentListState> emit,
   ) async {
     emit(
       state.copyWith(
