@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../constants/constants.dart';
+import '../../student_profile/student_profile.dart';
 import '../bloc/bloc.dart';
 import '../widgets/widgets.dart';
 
@@ -193,7 +195,7 @@ class StudentListBody extends StatelessWidget {
                                     ),
                                     _headerCell(
                                       context: context,
-                                      label: 'Grade',
+                                      label: 'Gender',
                                       flex: 2,
                                     ),
                                     _headerCell(
@@ -238,12 +240,17 @@ class StudentListBody extends StatelessWidget {
                                         context: context,
                                         avatar: student.image ?? '',
                                         name: student.name ?? '',
-                                        grade: 'Grade ${index % 6 + 1}',
+                                        grade: student.gender ?? '',
                                         status:
                                             'Last played ${_formatLastPlayed(
                                               student.lastPlayedAt,
                                             )}',
-                                        onTap: () {},
+                                        onTap: () => context.push(
+                                          StudentProfilePage.route,
+                                          extra: StudentProfileState(
+                                            student: student,
+                                          ),
+                                        ),
                                       );
                                     },
                                   ),
