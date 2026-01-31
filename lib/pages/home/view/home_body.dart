@@ -120,11 +120,11 @@ class HomeBody extends StatelessWidget {
                               child: GridView.builder(
                                 gridDelegate:
                                     const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 4,
-                                  mainAxisSpacing: 12,
-                                  crossAxisSpacing: 12,
-                                  childAspectRatio: 1 / 1.4,
-                                ),
+                                      crossAxisCount: 4,
+                                      mainAxisSpacing: 12,
+                                      crossAxisSpacing: 12,
+                                      childAspectRatio: 1 / 1.4,
+                                    ),
                                 physics: const NeverScrollableScrollPhysics(),
                                 itemCount: showAddButton
                                     ? pageItems.length + 1
@@ -170,7 +170,7 @@ class HomeBody extends StatelessWidget {
                                               height: 12,
                                             ),
                                             Text(
-                                              'Add Student',
+                                              'Add Profile',
                                               style: TextStyle(
                                                 fontSize: 18,
                                               ),

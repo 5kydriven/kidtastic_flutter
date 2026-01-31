@@ -165,7 +165,7 @@ class _MyAppState extends State<MyApp> {
     super.initState();
 
     router = GoRouter(
-      initialLocation: InitialScreenPage.route,
+      initialLocation: HomePage.route,
       routes: <RouteBase>[
         GoRoute(
           path: InitialScreenPage.route,

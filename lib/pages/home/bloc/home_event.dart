@@ -1,4 +1,4 @@
-abstract class HomeEvent {
+sealed class HomeEvent {
   const HomeEvent();
 }
 
