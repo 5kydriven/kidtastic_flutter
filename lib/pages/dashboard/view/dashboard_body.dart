@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:kidtastic_flutter/pages/student/view/student_page.dart';
+import 'package:kidtastic_flutter/pages/student_list/view/student_list_page.dart';
 
 import '../../../constants/constants.dart';
 import '../../../widgets/widgets.dart';
@@ -27,7 +27,7 @@ class DashboardBody extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   HoverImageButton(
-                    onTap: () => context.push(StudentPage.route),
+                    onTap: () => context.push(StudentListPage.route),
                     child: Image.asset(
                       Assets.studentButton,
                       width: 232,

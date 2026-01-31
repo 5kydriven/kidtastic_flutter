@@ -5,23 +5,23 @@ import 'package:kidtastic_flutter/widgets/game/game.dart';
 
 import '../../../constants/constants.dart';
 import '../../../repositories/repositories.dart';
-import '../student.dart';
+import '../student_list.dart';
 
-class StudentPage extends StatelessWidget {
-  static const String route = '/student';
+class StudentListPage extends StatelessWidget {
+  static const String route = '/student_list';
 
-  const StudentPage({super.key});
+  const StudentListPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => StudentBloc(
-        initialState: StudentState(),
+      create: (context) => StudentListBloc(
+        initialState: StudentListState(),
         studentRepository: RepositoryProvider.of<StudentRepository>(context),
         gameSessionRepository: RepositoryProvider.of<GameSessionRepository>(
           context,
         ),
-      )..add(const StudentScreenCreated()),
+      )..add(const StudentListScreenCreated()),
       child: GameScaffold(
         header: GameHeaderConfig(
           onBack: () => context.pop(),
@@ -33,7 +33,7 @@ class StudentPage extends StatelessWidget {
           bottom: 52,
         ),
         imageAssets: Assets.adminBg,
-        child: StudentBody(),
+        child: StudentListBody(),
       ),
     );
   }

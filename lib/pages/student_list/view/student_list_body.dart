@@ -5,8 +5,8 @@ import '../../../constants/constants.dart';
 import '../bloc/bloc.dart';
 import '../widgets/widgets.dart';
 
-class StudentBody extends StatelessWidget {
-  const StudentBody({super.key});
+class StudentListBody extends StatelessWidget {
+  const StudentListBody({super.key});
 
   Widget _headerCell({
     required BuildContext context,
@@ -126,7 +126,7 @@ class StudentBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<StudentBloc, StudentState>(
+    return BlocBuilder<StudentListBloc, StudentListState>(
       builder: (context, state) {
         final totalMale = state.students
             .where((e) => e.gender?.toLowerCase() == 'male')
@@ -262,19 +262,19 @@ class StudentBody extends StatelessWidget {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                TotalBox(
+                                StudentListTotalBox(
                                   label: 'Total Students',
                                   total: state.students.length.toString(),
                                 ),
-                                TotalBox(
+                                StudentListTotalBox(
                                   label: 'Played Today',
                                   total: totalSessions.toString(),
                                 ),
-                                TotalBox(
+                                StudentListTotalBox(
                                   label: 'Male',
                                   total: totalMale.toString(),
                                 ),
-                                TotalBox(
+                                StudentListTotalBox(
                                   label: 'Female',
                                   total: totalFemale.toString(),
                                 ),
