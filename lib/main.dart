@@ -25,6 +25,7 @@ import 'pages/pronunciation_game/pronunciation_game.dart';
 import 'pages/register/register.dart';
 import 'pages/shape_game/shape_game.dart';
 import 'pages/initial_screen/initial_screen.dart';
+import 'pages/student_profile/student_profile.dart';
 import 'repositories/repositories.dart';
 import 'service/services.dart';
 
@@ -265,6 +266,14 @@ class _MyAppState extends State<MyApp> {
           path: StudentListPage.route,
           builder: (context, state) {
             return StudentListPage();
+          },
+        ),
+        GoRoute(
+          path: StudentProfilePage.route,
+          builder: (context, state) {
+            return StudentProfilePage(
+              initialState: state.extra as StudentProfileState,
+            );
           },
         ),
       ],

@@ -231,11 +231,17 @@ class _PronunciationGamePageState extends State<PronunciationGamePage> {
     tutorialCoachMark?.show(context: context);
   }
 
+  void _modelListner(BuildContext context, PronunciationGameState state) {
+    _bloc.add(const PronunciationGameTutorialStarted());
+  }
+
   @override
   void initState() {
     _confettiController = ConfettiController();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _bloc.add(const PronunciationGameTutorialStarted());
+      if (_bloc.state.isModelReady) {
+        _bloc.add(const PronunciationGameTutorialStarted());
+      }
     });
     super.initState();
   }
@@ -291,6 +297,11 @@ class _PronunciationGamePageState extends State<PronunciationGamePage> {
             listener: _tutorialStepListener,
             listenWhen: (previous, current) =>
                 previous.tutorialStep != current.tutorialStep,
+          ),
+          BlocListener<PronunciationGameBloc, PronunciationGameState>(
+            listener: _modelListner,
+            listenWhen: (previous, current) =>
+                previous.isModelReady != current.isModelReady,
           ),
         ],
         child: BlocBuilder<PronunciationGameBloc, PronunciationGameState>(

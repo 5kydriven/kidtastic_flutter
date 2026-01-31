@@ -610,8 +610,6 @@ class PronunciationGameBloc
   ) {
     final nextStep = switch (state.tutorialStep) {
       PronunciationGameTutorialStep.welcome =>
-        PronunciationGameTutorialStep.question,
-      PronunciationGameTutorialStep.question =>
         PronunciationGameTutorialStep.contents,
       PronunciationGameTutorialStep.contents =>
         PronunciationGameTutorialStep.buttons,
