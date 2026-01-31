@@ -1,0 +1,107 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36" version="29.3.4">
+  <diagram name="Page-1" id="FAptOxuzu5zp7nM8bgbS">
+    <mxGraphModel dx="1463" dy="1606" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="SKym70ZKPMRiYCAquhG5-42" edge="1" parent="1" source="SKym70ZKPMRiYCAquhG5-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="SKym70ZKPMRiYCAquhG5-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="SKym70ZKPMRiYCAquhG5-1" parent="1" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.start_2;whiteSpace=wrap;" value="Start" vertex="1">
+          <mxGeometry height="100" width="100" x="570" y="877" as="geometry" />
+        </mxCell>
+        <mxCell id="SKym70ZKPMRiYCAquhG5-43" edge="1" parent="1" source="SKym70ZKPMRiYCAquhG5-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" target="SKym70ZKPMRiYCAquhG5-7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="SKym70ZKPMRiYCAquhG5-6" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="List of students" vertex="1">
+          <mxGeometry height="60" width="120" x="560" y="1037" as="geometry" />
+        </mxCell>
+        <mxCell id="SKym70ZKPMRiYCAquhG5-12" edge="1" parent="1" source="SKym70ZKPMRiYCAquhG5-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="SKym70ZKPMRiYCAquhG5-8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="SKym70ZKPMRiYCAquhG5-7" parent="1" style="shape=parallelogram;html=1;strokeWidth=2;perimeter=parallelogramPerimeter;whiteSpace=wrap;rounded=1;arcSize=12;size=0.23;" value="Add Profile" vertex="1">
+          <mxGeometry height="60" width="100" x="570" y="1167" as="geometry" />
+        </mxCell>
+        <mxCell id="SKym70ZKPMRiYCAquhG5-40" edge="1" parent="1" source="SKym70ZKPMRiYCAquhG5-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="SKym70ZKPMRiYCAquhG5-39">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="SKym70ZKPMRiYCAquhG5-8" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="List of games" vertex="1">
+          <mxGeometry height="60" width="120" x="560" y="1307" as="geometry" />
+        </mxCell>
+        <mxCell id="SKym70ZKPMRiYCAquhG5-16" parent="1" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.start_2;whiteSpace=wrap;" value="End" vertex="1">
+          <mxGeometry height="100" width="100" x="570" y="1587" as="geometry" />
+        </mxCell>
+        <mxCell id="SKym70ZKPMRiYCAquhG5-24" edge="1" parent="1" source="SKym70ZKPMRiYCAquhG5-18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="SKym70ZKPMRiYCAquhG5-20">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="SKym70ZKPMRiYCAquhG5-18" parent="1" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.start_2;whiteSpace=wrap;" value="Start" vertex="1">
+          <mxGeometry height="100" width="100" x="260" y="870" as="geometry" />
+        </mxCell>
+        <mxCell id="SKym70ZKPMRiYCAquhG5-25" edge="1" parent="1" source="SKym70ZKPMRiYCAquhG5-20" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="SKym70ZKPMRiYCAquhG5-21">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="SKym70ZKPMRiYCAquhG5-20" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Register" vertex="1">
+          <mxGeometry height="60" width="120" x="250" y="1030" as="geometry" />
+        </mxCell>
+        <mxCell id="SKym70ZKPMRiYCAquhG5-21" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="login" vertex="1">
+          <mxGeometry height="60" width="120" x="250" y="1150" as="geometry" />
+        </mxCell>
+        <mxCell id="SKym70ZKPMRiYCAquhG5-27" edge="1" parent="1" source="SKym70ZKPMRiYCAquhG5-22" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;" target="SKym70ZKPMRiYCAquhG5-23">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="SKym70ZKPMRiYCAquhG5-30" connectable="0" parent="SKym70ZKPMRiYCAquhG5-27" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="YES" vertex="1">
+          <mxGeometry relative="1" x="-0.3477" y="-2" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="SKym70ZKPMRiYCAquhG5-28" edge="1" parent="1" source="SKym70ZKPMRiYCAquhG5-22" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="SKym70ZKPMRiYCAquhG5-20">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="SKym70ZKPMRiYCAquhG5-29" connectable="0" parent="SKym70ZKPMRiYCAquhG5-28" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="NO" vertex="1">
+          <mxGeometry relative="1" x="0.1454" y="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="SKym70ZKPMRiYCAquhG5-22" parent="1" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.decision;whiteSpace=wrap;" value="is admin?" vertex="1">
+          <mxGeometry height="100" width="100" x="260" y="1270" as="geometry" />
+        </mxCell>
+        <mxCell id="SKym70ZKPMRiYCAquhG5-35" edge="1" parent="1" source="SKym70ZKPMRiYCAquhG5-23" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="SKym70ZKPMRiYCAquhG5-32">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="SKym70ZKPMRiYCAquhG5-23" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Dashboard" vertex="1">
+          <mxGeometry height="60" width="120" x="250" y="1420" as="geometry" />
+        </mxCell>
+        <mxCell id="SKym70ZKPMRiYCAquhG5-26" edge="1" parent="1" source="SKym70ZKPMRiYCAquhG5-21" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" target="SKym70ZKPMRiYCAquhG5-22">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="SKym70ZKPMRiYCAquhG5-36" edge="1" parent="1" source="SKym70ZKPMRiYCAquhG5-32" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="SKym70ZKPMRiYCAquhG5-33">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="SKym70ZKPMRiYCAquhG5-32" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="List of Students" vertex="1">
+          <mxGeometry height="60" width="120" x="250" y="1530" as="geometry" />
+        </mxCell>
+        <mxCell id="SKym70ZKPMRiYCAquhG5-37" edge="1" parent="1" source="SKym70ZKPMRiYCAquhG5-33" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="SKym70ZKPMRiYCAquhG5-34">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="SKym70ZKPMRiYCAquhG5-33" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="List of actitvities" vertex="1">
+          <mxGeometry height="60" width="120" x="250" y="1640" as="geometry" />
+        </mxCell>
+        <mxCell id="SKym70ZKPMRiYCAquhG5-34" parent="1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" value="End" vertex="1">
+          <mxGeometry height="80" width="80" x="270" y="1750" as="geometry" />
+        </mxCell>
+        <mxCell id="SKym70ZKPMRiYCAquhG5-38" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Teacher Flow" vertex="1">
+          <mxGeometry height="30" width="190" x="220" y="800" as="geometry" />
+        </mxCell>
+        <mxCell id="SKym70ZKPMRiYCAquhG5-39" parent="1" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" value="Play Games" vertex="1">
+          <mxGeometry height="60" width="120" x="560" y="1447" as="geometry" />
+        </mxCell>
+        <mxCell id="SKym70ZKPMRiYCAquhG5-41" edge="1" parent="1" source="SKym70ZKPMRiYCAquhG5-39" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" target="SKym70ZKPMRiYCAquhG5-16">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="SKym70ZKPMRiYCAquhG5-44" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Student Flow" vertex="1">
+          <mxGeometry height="30" width="150" x="545" y="797" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
