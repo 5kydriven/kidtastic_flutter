@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:kidtastic_flutter/extensions/datetime_extension.dart';
 
 import '../../../constants/constants.dart';
+import '../../../models/models.dart';
 import '../../student_profile/student_profile.dart';
 import '../bloc/bloc.dart';
 import '../widgets/widgets.dart';
@@ -28,84 +29,89 @@ class StudentListBody extends StatelessWidget {
     );
   }
 
-  Widget _tableRow({
+  Widget _studentRow({
     required BuildContext context,
-    required String name,
-    required String grade,
-    required String status,
-    required String avatar,
-    required VoidCallback onTap,
+    required Student student,
   }) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      margin: EdgeInsets.only(
-        right: 20,
-        left: 8,
-      ),
+    const borderRadius = BorderRadius.all(Radius.circular(12));
+
+    return Material(
+      color: Colors.white, // default background
+      borderRadius: borderRadius,
       child: InkWell(
-        onTap: onTap,
-        hoverColor: Colors.transparent,
-        borderRadius: BorderRadius.circular(16),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            vertical: 12,
-            horizontal: 12,
-          ),
+        borderRadius: borderRadius,
+        hoverColor: const Color(0xFFFFE0B2), // light orange hover
+        splashColor: const Color(0xFFFFCC80),
+        highlightColor: const Color(0xFFFFE0B2),
+        onTap: () => context.push(
+          StudentProfilePage.route,
+          extra: StudentProfileState(student: student),
+        ),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
           child: Row(
             children: [
-              Container(
-                height: 32,
-                width: 32,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(52),
-                  border: BoxBorder.all(
-                    color: Colors.deepOrangeAccent,
-                    width: 2,
+              /// NAME
+              Expanded(
+                flex: 3,
+                child: Row(
+                  children: [
+                    Container(
+                      height: 32,
+                      width: 32,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: Colors.deepOrangeAccent,
+                          width: 2,
+                        ),
+                      ),
+                      child: CircleAvatar(
+                        backgroundImage: AssetImage(student.image ?? ''),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        student.name ?? '',
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF5D4037),
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              /// GENDER
+              Expanded(
+                flex: 2,
+                child: Text(
+                  student.gender ?? '',
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: Colors.grey,
                   ),
                 ),
-                child: CircleAvatar(
-                  radius: 24,
-                  backgroundImage: AssetImage(avatar),
+              ),
+
+              /// STATUS
+              Expanded(
+                flex: 2,
+                child: Text(
+                  'Last played ${student.lastPlayedAt.toLastPlayedString()}',
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: Colors.grey,
+                  ),
                 ),
-              ),
-              const SizedBox(
-                width: 8,
-              ),
-              _bodyCell(
-                context: context,
-                text: name,
-                flex: 3,
-              ),
-              _bodyCell(
-                context: context,
-                text: grade,
-                flex: 2,
-              ),
-              _bodyCell(
-                context: context,
-                text: status,
-                flex: 2,
               ),
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _bodyCell({
-    required BuildContext context,
-    required String text,
-    int flex = 1,
-  }) {
-    return Expanded(
-      flex: flex,
-      child: Text(
-        text,
-        overflow: TextOverflow.ellipsis,
       ),
     );
   }
@@ -172,10 +178,20 @@ class StudentListBody extends StatelessWidget {
                                 ),
                                 child: Row(
                                   children: [
-                                    _headerCell(
-                                      context: context,
-                                      label: 'Name',
+                                    Expanded(
                                       flex: 3,
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                          left: 12.0,
+                                        ),
+                                        child: Text(
+                                          'Name',
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                      ),
                                     ),
                                     _headerCell(
                                       context: context,
@@ -216,22 +232,18 @@ class StudentListBody extends StatelessWidget {
                                 child: Expanded(
                                   child: ListView.separated(
                                     itemCount: state.students.length,
-                                    separatorBuilder: (_, __) =>
-                                        const SizedBox(height: 4),
+                                    separatorBuilder: (_, __) => const SizedBox(
+                                      height: 4,
+                                    ),
                                     itemBuilder: (context, index) {
                                       final student = state.students[index];
-                                      return _tableRow(
-                                        context: context,
-                                        avatar: student.image ?? '',
-                                        name: student.name ?? '',
-                                        grade: student.gender ?? '',
-                                        status:
-                                            'Last played ${student.lastPlayedAt.toLastPlayedString()}',
-                                        onTap: () => context.push(
-                                          StudentProfilePage.route,
-                                          extra: StudentProfileState(
-                                            student: student,
-                                          ),
+                                      return Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 12,
+                                        ),
+                                        child: _studentRow(
+                                          context: context,
+                                          student: student,
                                         ),
                                       );
                                     },
