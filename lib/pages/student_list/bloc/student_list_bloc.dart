@@ -51,6 +51,7 @@ class StudentListBloc extends Bloc<StudentListEvent, StudentListState> {
               image: e.image,
               isSynced: e.isSynced,
               lastPlayedAt: lastPlayedAt.data,
+              createdAt: e.createdAt,
             );
           }),
         );
