@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kidtastic_flutter/constants/assets.dart';
 import 'package:kidtastic_flutter/pages/dashboard/view/dashboard_page.dart';
+import 'package:kidtastic_flutter/pages/home/view/home_page.dart';
 import 'package:kidtastic_flutter/pages/login/view/view.dart';
 
 import '../../../models/models.dart';
@@ -46,7 +47,7 @@ class LoginPage extends StatelessWidget {
               header: GameHeaderConfig(
                 showBack: true,
                 onBack: () {
-                  context.pop();
+                  context.go(HomePage.route);
                   bloc.add(const LoginSfxButtonPressed());
                 },
               ),

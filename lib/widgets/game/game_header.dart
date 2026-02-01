@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kidtastic_flutter/widgets/hover_image_button.dart';
 import '../../constants/constants.dart';
 import 'game_header_config.dart';
 
@@ -29,7 +30,7 @@ class GameHeader extends StatelessWidget {
             SizedBox(
               width: 100,
               child: config.showBack
-                  ? InkWell(
+                  ? HoverImageButton(
                       onTap: config.onBack,
                       child: Image.asset(Assets.arrowLeft),
                     )
@@ -45,10 +46,10 @@ class GameHeader extends StatelessWidget {
             SizedBox(
               width: 100,
               child: config.showSettings
-                  ? InkWell(
+                  ? HoverImageButton(
                       onTap: config.onSettings,
                       child: Image.asset(
-                        Assets.gear2,
+                        Assets.settingsIcon,
                         width: 68,
                         height: 68,
                       ),

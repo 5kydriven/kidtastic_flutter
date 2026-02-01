@@ -3,12 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kidtastic_flutter/models/models.dart';
 import 'package:kidtastic_flutter/pages/home/bloc/bloc.dart';
+import 'package:kidtastic_flutter/pages/home/home.dart';
 import 'package:kidtastic_flutter/pages/login/view/login_page.dart';
 import 'package:kidtastic_flutter/repositories/repositories.dart';
 
 import '../../../constants/constants.dart';
 import '../../../widgets/widgets.dart';
-import 'view.dart';
 
 class HomePage extends StatefulWidget {
   static const route = '/home';
@@ -79,7 +79,11 @@ class _HomePageState extends State<HomePage> {
             final bloc = context.read<HomeBloc>();
             return GameScaffold(
               constraintsBox: 800,
-              imageAssets: Assets.homeBg,
+              imageAssets: Assets.adminBg,
+              contentPadding: EdgeInsetsGeometry.only(
+                top: 100,
+                bottom: 78,
+              ),
               header: GameHeaderConfig(
                 showSettings: true,
                 onSettings: () {
@@ -95,33 +99,24 @@ class _HomePageState extends State<HomePage> {
                 },
               ),
               bottomBar: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 40,
-                  vertical: 16,
+                padding: const EdgeInsets.only(
+                  left: 28,
+                  bottom: 16,
                 ),
-                child: FilledButton(
-                  style: FilledButton.styleFrom(
-                    backgroundColor: Color(0xffFFC30E),
+                child: HoverImageButton(
+                  child: Image.asset(
+                    Assets.teacherModeButton,
+                    height: 52,
                   ),
-                  onPressed: () {
+                  onTap: () {
                     bloc.add(const HomeSfxButtonPressed());
                     context.push(LoginPage.route);
                   },
-                  child: Text('Teacher'),
                 ),
               ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 32,
-                ),
-                child: Card(
-                  elevation: 8,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(32),
-                  ),
-                  child: HomeBody(
-                    pageController: _pageController,
-                  ),
+              child: BodyContainer(
+                child: HomeBody(
+                  pageController: _pageController,
                 ),
               ),
             );
