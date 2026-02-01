@@ -24,6 +24,10 @@ class StudentCard extends StatelessWidget {
       elevation: 4,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(24),
+        side: BorderSide(
+          color: Color(0xffDE7E00),
+          width: 4,
+        ),
       ),
       child: InkWell(
         borderRadius: BorderRadius.circular(24),
@@ -36,8 +40,7 @@ class StudentCard extends StatelessWidget {
               Align(
                 alignment: Alignment.topRight,
                 child: PopupMenuButton<String>(
-                  onOpened: () =>
-                      bloc.add(const HomeSfxButtonPressed()),
+                  onOpened: () => bloc.add(const HomeSfxButtonPressed()),
                   icon: const Icon(Icons.more_vert),
                   onSelected: (value) {
                     if (value == 'edit') {
