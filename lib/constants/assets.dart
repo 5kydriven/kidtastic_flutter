@@ -112,4 +112,10 @@ class Assets {
   static const settingsButton = 'assets/admin/settings_button.png';
   static const studentButton = 'assets/admin/student_button.png';
   static const totalBox = 'assets/admin/total_box.png';
+
+  // **Games**
+  static const shapesBtn = 'assets/games/shapesBtn.png';
+  static const numbersBtn = 'assets/games/numbersBtn.png';
+  static const colorsBtn = 'assets/games/colorsBtn.png';
+  static const gamesBtn = 'assets/games/gamesBtn.png';
 }

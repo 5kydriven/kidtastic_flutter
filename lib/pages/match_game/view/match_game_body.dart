@@ -112,12 +112,12 @@ class MatchGameBody extends StatelessWidget {
                   ),
                   child: Center(
                     child: Column(
+                      key: matchQuestionKey,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         const SizedBox(height: 20),
 
                         Text(
-                          key: matchQuestionKey,
                           current.question?.capitalize() ?? '',
                           style: const TextStyle(
                             color: Color(0xffBC3740),
@@ -127,7 +127,6 @@ class MatchGameBody extends StatelessWidget {
                         ),
 
                         Expanded(
-                          key: matchContentsKey,
                           child: DragTarget<Question>(
                             onAcceptWithDetails: (details) =>
                                 _checkAnswer(context, details.data),

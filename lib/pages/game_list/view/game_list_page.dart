@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:kidtastic_flutter/widgets/widgets.dart';
+import 'package:kidtastic_flutter/pages/game_list/widgets/widgets.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 import '../../../constants/constants.dart';
 import '../../../repositories/repositories.dart';
+import '../../../widgets/widgets.dart';
 import '../bloc/bloc.dart';
 import 'view.dart';
 
@@ -184,12 +185,14 @@ class _GameListPageState extends State<GameListPage> {
                   );
                 },
               ),
-              imageAssets: Assets.homeBg,
-              child: Card(
+              imageAssets: Assets.adminBg,
+              contentPadding: EdgeInsets.only(
+                top: 100,
+                bottom: 78,
+              ),
+              child: BodyContainer(
                 key: gameListBodyKey,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(32),
-                ),
+                text: state.student?.firstName?.toUpperCase() ?? '',
                 child: GameListBody(
                   pageController: _pageController,
                 ),
