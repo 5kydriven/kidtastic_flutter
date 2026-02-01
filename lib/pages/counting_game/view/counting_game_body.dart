@@ -100,6 +100,7 @@ class CountingGameBody extends StatelessWidget {
                     }
 
                     return Stack(
+                      clipBehavior: Clip.none,
                       children: [
                         for (final pos in state.imagePositions)
                           Positioned(
@@ -107,8 +108,8 @@ class CountingGameBody extends StatelessWidget {
                             top: pos.dy,
                             child: Image.asset(
                               state.question[state.currentIndex].image ?? '',
-                              width: 80,
-                              height: 80,
+                              width: 150,
+                              height: 150,
                             ),
                           ),
                       ],

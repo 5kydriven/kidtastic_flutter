@@ -13,7 +13,6 @@ import 'view.dart';
 
 GlobalKey matchWelcomeKey = GlobalKey();
 GlobalKey matchQuestionKey = GlobalKey();
-GlobalKey matchContentsKey = GlobalKey();
 GlobalKey matchButtonsKey = GlobalKey();
 
 class MatchGamePage extends StatefulWidget {
@@ -112,8 +111,6 @@ class _MatchGamePageState extends State<MatchGamePage>
   }
 
   List<TargetFocus> _targetsForStep(MatchGameTutorialStep step) {
-    final state = _bloc.state;
-
     switch (step) {
       case MatchGameTutorialStep.welcome:
         return [
@@ -133,7 +130,7 @@ class _MatchGamePageState extends State<MatchGamePage>
                 builder: (_, __) {
                   return const OwlGuideTemplate(
                     message:
-                        'Hoot! Welcome to the Match Game! Let’s go on a number adventure and see how many things we can find together!',
+                        'Hoot! Welcome to the Match Game! Let’s go on a fun matching adventure and see how many shapes we can match!',
                   );
                 },
               ),
@@ -158,44 +155,7 @@ class _MatchGamePageState extends State<MatchGamePage>
                 ),
                 builder: (_, __) {
                   return const OwlGuideTemplate(
-                    message: 'First, let’s use our eyes to read the question!',
-                  );
-                },
-              ),
-            ],
-          ),
-        ];
-
-      case MatchGameTutorialStep.contents:
-        return [
-          TargetFocus(
-            identify: 'matchContents',
-            keyTarget: matchContentsKey,
-            shape: ShapeLightFocus.RRect,
-            radius: 18,
-            enableOverlayTab: true,
-            contents: [
-              TargetContent(
-                align: ContentAlign.custom,
-                customPosition: CustomTargetContentPosition(
-                  top: MediaQuery.of(context).size.height * 0.5,
-                  left: MediaQuery.of(context).size.width * -0.05,
-                ),
-                builder: (_, __) {
-                  final question = state.question[state.currentIndex].question;
-
-                  final item = question
-                      ?.replaceAll(
-                        RegExp(r'How many ', caseSensitive: false),
-                        '',
-                      )
-                      .replaceAll(
-                        RegExp(r' are there\?', caseSensitive: false),
-                        '',
-                      )
-                      .trim();
-                  return OwlGuideTemplate(
-                    message: 'Now, count them up! How many $item do you see?',
+                    message: 'Here’s the shape we need to match!',
                   );
                 },
               ),
@@ -221,7 +181,7 @@ class _MatchGamePageState extends State<MatchGamePage>
                 builder: (_, __) {
                   return const OwlGuideTemplate(
                     message:
-                        'Pick the button with the right number on it! You’re going to be a match superstar. Good luck!',
+                        'Click and drag the shapes on the right to the matching shape on the left. That’s all you need to do! Good luck!',
                   );
                 },
               ),
