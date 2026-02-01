@@ -317,8 +317,7 @@ class MatchGameBloc extends Bloc<MatchGameEvent, MatchGameState> {
   ) {
     final nextStep = switch (state.tutorialStep) {
       MatchGameTutorialStep.welcome => MatchGameTutorialStep.question,
-      MatchGameTutorialStep.question => MatchGameTutorialStep.contents,
-      MatchGameTutorialStep.contents => MatchGameTutorialStep.buttons,
+      MatchGameTutorialStep.question => MatchGameTutorialStep.buttons,
       MatchGameTutorialStep.buttons => MatchGameTutorialStep.finished,
       _ => MatchGameTutorialStep.finished,
     };
