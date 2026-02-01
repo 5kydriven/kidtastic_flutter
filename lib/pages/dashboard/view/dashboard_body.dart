@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:kidtastic_flutter/pages/login/view/login_page.dart';
 import 'package:kidtastic_flutter/pages/student_list/view/student_list_page.dart';
 
 import '../../../constants/constants.dart';
@@ -60,7 +61,7 @@ class DashboardBody extends StatelessWidget {
                     ),
                   ),
                   HoverImageButton(
-                    onTap: () => context.pop(),
+                    onTap: () => context.go(LoginPage.route),
                     child: Image.asset(
                       Assets.logoutButton,
                       width: 200,

@@ -18,7 +18,7 @@ class LoginPage extends StatelessWidget {
   void _loginListener(BuildContext context, LoginState state) {
     switch (state.loginRequestStatus) {
       case RequestStatus.success:
-        context.push(DashboardPage.route);
+        context.go(DashboardPage.route);
         break;
       case RequestStatus.failure:
       default:
