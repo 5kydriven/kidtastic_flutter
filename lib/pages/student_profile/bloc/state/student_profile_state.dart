@@ -9,5 +9,9 @@ sealed class StudentProfileState with _$StudentProfileState {
   const factory StudentProfileState({
     @Default(RequestStatus.waiting) RequestStatus requestStatus,
     Student? student,
+    @Default(0.0) double bgmVolume,
+    @Default(0.0) double sfxVolume,
+    @Default(false) bool isBgmMuted,
+    @Default(false) bool isSfxMuted,
   }) = _StudentProfileState;
 }

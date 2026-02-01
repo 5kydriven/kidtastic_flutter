@@ -25,48 +25,57 @@ class StudentProfilePage extends StatelessWidget {
       create: (context) => StudentProfileBloc(
         initialState: initialState,
       ),
-      child: GameScaffold(
-        contentPadding: EdgeInsets.only(
-          top: 100,
-          bottom: 52,
-        ),
-        imageAssets: Assets.adminBg,
-        header: GameHeaderConfig(
-          showBack: true,
-          onBack: () => context.pop(),
-        ),
-        child: BodyContainer(
-          child: Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(32),
+      child: BlocBuilder<StudentProfileBloc, StudentProfileState>(
+        builder: (context, state) {
+          final bloc = context.read<StudentProfileBloc>();
+
+          return GameScaffold(
+            contentPadding: EdgeInsets.only(
+              top: 100,
+              bottom: 52,
             ),
-            color: const Color.fromARGB(255, 255, 238, 213),
-            child: Padding(
-              padding: const EdgeInsets.only(
-                top: 32,
-                left: 24,
-                right: 24,
-                bottom: 24,
-              ),
-              child: const SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    StudentProfileHeader(),
-                    SizedBox(
-                      height: 32,
+            imageAssets: Assets.adminBg,
+            header: GameHeaderConfig(
+              showBack: true,
+              onBack: () {
+                bloc.add(const StudentProfileSfxButtonPressed());
+                context.pop();
+              },
+            ),
+            child: BodyContainer(
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(32),
+                ),
+                color: const Color.fromARGB(255, 255, 238, 213),
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    top: 32,
+                    left: 24,
+                    right: 24,
+                    bottom: 24,
+                  ),
+                  child: const SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        StudentProfileHeader(),
+                        SizedBox(
+                          height: 32,
+                        ),
+                        StudentProfileRecentActivities(),
+                        SizedBox(
+                          height: 24,
+                        ),
+                        StudentProfilePerformanceSummary(),
+                      ],
                     ),
-                    StudentProfileRecentActivities(),
-                    SizedBox(
-                      height: 24,
-                    ),
-                    StudentProfilePerformanceSummary(),
-                  ],
+                  ),
                 ),
               ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }
