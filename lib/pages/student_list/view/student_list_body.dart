@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:kidtastic_flutter/extensions/datetime_extension.dart';
 
 import '../../../constants/constants.dart';
 import '../../student_profile/student_profile.dart';
@@ -107,23 +108,6 @@ class StudentListBody extends StatelessWidget {
         overflow: TextOverflow.ellipsis,
       ),
     );
-  }
-
-  String _formatLastPlayed(DateTime? lastPlayedAt) {
-    if (lastPlayedAt == null) return 'Never played';
-
-    final now = DateTime.now();
-    final difference = now.difference(lastPlayedAt);
-
-    if (difference.inSeconds < 60) {
-      return '${difference.inSeconds}s ago';
-    } else if (difference.inMinutes < 60) {
-      return '${difference.inMinutes}m ago';
-    } else if (difference.inHours < 24) {
-      return '${difference.inHours}h ago';
-    } else {
-      return '${difference.inDays}d ago';
-    }
   }
 
   @override
@@ -242,9 +226,7 @@ class StudentListBody extends StatelessWidget {
                                         name: student.name ?? '',
                                         grade: student.gender ?? '',
                                         status:
-                                            'Last played ${_formatLastPlayed(
-                                              student.lastPlayedAt,
-                                            )}',
+                                            'Last played ${student.lastPlayedAt.toLastPlayedString()}',
                                         onTap: () => context.push(
                                           StudentProfilePage.route,
                                           extra: StudentProfileState(

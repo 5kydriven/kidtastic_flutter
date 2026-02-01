@@ -14,6 +14,7 @@ sealed class Student with _$Student {
     String? image,
     bool? isSynced,
     DateTime? lastPlayedAt,
+    int? createdAt,
   }) = _Student;
 
   factory Student.fromJson(Map<String, dynamic> json) =>
