@@ -22,18 +22,38 @@ class StudentListPage extends StatelessWidget {
           context,
         ),
       )..add(const StudentListScreenCreated()),
-      child: GameScaffold(
-        header: GameHeaderConfig(
-          onBack: () => context.pop(),
-          showBack: true,
-          showSettings: true,
-        ),
-        contentPadding: EdgeInsetsGeometry.only(
-          top: 100,
-          bottom: 52,
-        ),
-        imageAssets: Assets.adminBg,
-        child: StudentListBody(),
+      child: BlocBuilder<StudentListBloc, StudentListState>(
+        builder: (context, state) {
+          final bloc = context.read<StudentListBloc>();
+
+          return GameScaffold(
+            header: GameHeaderConfig(
+              onBack: () {
+                bloc.add(const StudentListSfxButtonPressed());
+                context.pop();
+              },
+              showBack: true,
+              showSettings: true,
+              onSettings: () {
+                bloc.add(const StudentListSfxButtonPressed());
+                showDialog(
+                  context: context,
+                  builder: (_) => SizedBox(
+                    child: StudentListSettingsDialog(
+                      context: context,
+                    ),
+                  ),
+                );
+              },
+            ),
+            contentPadding: EdgeInsetsGeometry.only(
+              top: 100,
+              bottom: 52,
+            ),
+            imageAssets: Assets.adminBg,
+            child: StudentListBody(),
+          );
+        },
       ),
     );
   }

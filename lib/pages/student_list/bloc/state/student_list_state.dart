@@ -11,5 +11,9 @@ sealed class StudentListState with _$StudentListState {
     @Default(RequestStatus.waiting) RequestStatus gameSessionRequestStatus,
     @Default([]) List<Student> students,
     @Default([]) List<GameSession> gameSessions,
+    @Default(0.5) double bgmVolume,
+    @Default(0.5) double sfxVolume,
+    @Default(false) bool isBgmMuted,
+    @Default(false) bool isSfxMuted,
   }) = _StudentListState;
 }

@@ -34,6 +34,7 @@ class StudentListBody extends StatelessWidget {
     required Student student,
   }) {
     const borderRadius = BorderRadius.all(Radius.circular(12));
+    final bloc = context.read<StudentListBloc>();
 
     return Material(
       color: Colors.white, // default background
@@ -43,10 +44,13 @@ class StudentListBody extends StatelessWidget {
         hoverColor: const Color(0xFFFFE0B2), // light orange hover
         splashColor: const Color(0xFFFFCC80),
         highlightColor: const Color(0xFFFFE0B2),
-        onTap: () => context.push(
-          StudentProfilePage.route,
-          extra: StudentProfileState(student: student),
-        ),
+        onTap: () {
+          bloc.add(const StudentListSfxButtonPressed());
+          context.push(
+            StudentProfilePage.route,
+            extra: StudentProfileState(student: student),
+          );
+        },
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
           child: Row(

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:drift/drift.dart';
 import 'package:kidtastic_flutter/daos/daos.dart';
 import 'package:kidtastic_flutter/database/kidtastic_database.dart';
@@ -42,15 +40,12 @@ class StudentRepository {
   Future<Result<List<Student>>> getStudents() async {
     try {
       final students = await _studentDao.getAllStudents();
-      log(
-        'here: ${students.map((e) => Student.fromJson(e.toJson())).toList()}',
-      );
+
       return Result(
         statusCode: 200,
         data: students.map((e) => Student.fromJson(e.toJson())).toList(),
       );
     } catch (e) {
-      print('here $e');
       return Result(
         data: [],
         statusCode: 400,
