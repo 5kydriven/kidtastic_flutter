@@ -49,8 +49,5 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
-.opencode
-install.sh
-
 linux/flutter/ephemeral
 macos/Flutter/ephemeral
