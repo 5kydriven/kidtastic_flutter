@@ -200,6 +200,7 @@ class MatchGameBloc extends Bloc<MatchGameEvent, MatchGameState> {
     final result = await _gameSessionRepository.endSession(
       sessionId: state.sessionId ?? 0,
       score: state.score,
+      totalQuestions: state.question.length,
     );
 
     switch (result.resultStatus) {

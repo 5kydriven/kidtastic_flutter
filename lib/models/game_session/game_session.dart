@@ -10,6 +10,7 @@ sealed class GameSession with _$GameSession {
     int? studentId,
     int? gameId,
     int? score,
+    int? totalQuestions,
     DateTime? startedAt,
     DateTime? endedAt,
     DateTime? createdAt,

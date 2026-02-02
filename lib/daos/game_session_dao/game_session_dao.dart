@@ -13,12 +13,13 @@ class GameSessionDao extends DatabaseAccessor<KidtasticDatabase>
     return await into(gameSessionTable).insert(session);
   }
 
-  Future<void> endSession(int sessionId, int score) async {
+  Future<void> endSession(int sessionId, int score, int totalQuestions) async {
     await (update(
       gameSessionTable,
     )..where((student) => student.id.equals(sessionId))).write(
       GameSessionTableCompanion(
         score: Value(score),
+        totalQuestions: Value(totalQuestions),
         endedAt: Value(DateTime.now()),
       ),
     );

@@ -108,8 +108,8 @@ class CountingGameBody extends StatelessWidget {
                             top: pos.dy,
                             child: Image.asset(
                               state.question[state.currentIndex].image ?? '',
-                              width: 150,
-                              height: 150,
+                              width: 120,
+                              height: 120,
                             ),
                           ),
                       ],
@@ -127,6 +127,7 @@ class CountingGameBody extends StatelessWidget {
                   return OutlinedButton(
                     onPressed: () => _checkAnswer(context, choice),
                     style: OutlinedButton.styleFrom(
+                      backgroundColor: Colors.white,
                       side: const BorderSide(
                         color: Colors.black,
                         width: 4,

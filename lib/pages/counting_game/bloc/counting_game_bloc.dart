@@ -207,6 +207,7 @@ class CountingGameBloc extends Bloc<CountingGameEvent, CountingGameState> {
     final gameSessionResult = await _gameSessionRepository.endSession(
       sessionId: state.sessionId ?? 0,
       score: state.score,
+      totalQuestions: state.question.length,
     );
 
     switch (gameSessionResult.resultStatus) {

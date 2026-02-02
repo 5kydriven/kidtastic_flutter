@@ -23,13 +23,20 @@ class StudentInsightDao extends DatabaseAccessor<KidtasticDatabase>
 
     if (sessions.isEmpty) return;
 
-    const maxScorePerGame = 10;
-
     final totalSessions = sessions.length;
-    final totalScore = sessions.fold<int>(0, (sum, s) => sum + (s.score ?? 0));
 
-    final avgRawScore = totalScore / totalSessions;
-    final avgPercentage = (avgRawScore / maxScorePerGame) * 100;
+    // Calculate percentage for each session using its totalQuestions
+    double totalPercentage = 0;
+    for (final session in sessions) {
+      final score = session.score ?? 0;
+      final totalQuestions = session.totalQuestions ?? 10; // Default to 10 if null
+      final percentage = totalQuestions > 0
+          ? (score / totalQuestions) * 100
+          : 0;
+      totalPercentage += percentage;
+    }
+
+    final avgPercentage = totalPercentage / totalSessions;
 
     final strength = avgPercentage >= 80
         ? 'Strong'
