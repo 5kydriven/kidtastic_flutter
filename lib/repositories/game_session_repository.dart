@@ -37,9 +37,10 @@ class GameSessionRepository {
   Future<Result> endSession({
     required int sessionId,
     required int score,
+    required int totalQuestions,
   }) async {
     try {
-      await _gameSessionDao.endSession(sessionId, score);
+      await _gameSessionDao.endSession(sessionId, score, totalQuestions);
 
       return Result(
         statusCode: 200,

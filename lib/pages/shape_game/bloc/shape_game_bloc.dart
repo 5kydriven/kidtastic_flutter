@@ -176,6 +176,7 @@ class ShapeGameBloc extends Bloc<ShapeGameEvent, ShapeGameState> {
     final result = await _gameSessionRepository.endSession(
       sessionId: state.sessionId ?? 0,
       score: state.score,
+      totalQuestions: 10,
     );
 
     switch (result.resultStatus) {
