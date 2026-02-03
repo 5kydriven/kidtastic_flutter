@@ -34,7 +34,19 @@ class StudentInsightRepository {
       );
 
       return Result(
-        data: response.map((e) => StudentInsight.fromJson(e.toJson())).toList(),
+        data: response
+            .map(
+              (e) => StudentInsight(
+                studentId: e.studentId,
+                gameId: e.gameId,
+                averageScore: e.averageScore,
+                totalSessions: e.totalSessions,
+                lastPlayed: e.lastPlayed,
+                strength: e.strength,
+                weakness: e.weakness,
+              ),
+            )
+            .toList(),
         statusCode: 200,
       );
     } catch (e) {
