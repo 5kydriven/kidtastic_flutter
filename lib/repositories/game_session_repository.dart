@@ -38,9 +38,15 @@ class GameSessionRepository {
     required int sessionId,
     required int score,
     required int totalQuestions,
+    required int durationSeconds,
   }) async {
     try {
-      await _gameSessionDao.endSession(sessionId, score, totalQuestions);
+      await _gameSessionDao.endSession(
+        sessionId,
+        score,
+        totalQuestions,
+        durationSeconds,
+      );
 
       return Result(
         statusCode: 200,
@@ -59,7 +65,20 @@ class GameSessionRepository {
       final response = await _gameSessionDao.getSessionsByStudent(studentId);
 
       return Result(
-        data: response.map((e) => GameSession.fromJson(e.toJson())).toList(),
+        data: response
+            .map(
+              (e) => GameSession(
+                id: e.id,
+                studentId: e.studentId,
+                gameId: e.gameId,
+                score: e.score,
+                totalQuestions: e.totalQuestions,
+                durationSeconds: e.durationSeconds,
+                startedAt: e.startedAt,
+                endedAt: e.endedAt,
+              ),
+            )
+            .toList(),
         statusCode: 200,
       );
     } catch (e) {

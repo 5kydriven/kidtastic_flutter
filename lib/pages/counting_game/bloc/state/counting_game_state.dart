@@ -23,6 +23,7 @@ sealed class CountingGameState with _$CountingGameState {
     @Default([]) List<Question> question,
     @Default(0) int currentIndex,
     int? sessionId,
+    DateTime? sessionStartTime,
     @Default(0) int score,
     @Default(false) hasEnded,
     @Default([]) List<Offset> imagePositions,

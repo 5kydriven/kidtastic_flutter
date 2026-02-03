@@ -7,6 +7,7 @@ class GameSessionTable extends Table {
   IntColumn get gameId => integer().references(GameTable, #id)();
   IntColumn get score => integer().nullable()();
   IntColumn get totalQuestions => integer().nullable()();
+  IntColumn get durationSeconds => integer().nullable()();
   DateTimeColumn get startedAt =>
       dateTime().clientDefault(() => DateTime.now())();
   DateTimeColumn get endedAt => dateTime().nullable()();

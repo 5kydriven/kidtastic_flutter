@@ -82,9 +82,11 @@ class CountingGameBloc extends Bloc<CountingGameEvent, CountingGameState> {
 
         switch (gameQuestionResult.resultStatus) {
           case ResultStatus.success:
+            final sessionStartTime = DateTime.now();
             emit(
               state.copyWith(
                 sessionId: gameSessionResult.data ?? 0,
+                sessionStartTime: sessionStartTime,
                 question: gameQuestionResult.data ?? [],
                 score: 0,
                 currentIndex: 0,
@@ -204,10 +206,16 @@ class CountingGameBloc extends Bloc<CountingGameEvent, CountingGameState> {
       ),
     );
 
+    // Calculate session duration
+    final durationSeconds = state.sessionStartTime != null
+        ? DateTime.now().difference(state.sessionStartTime!).inSeconds
+        : 0;
+
     final gameSessionResult = await _gameSessionRepository.endSession(
       sessionId: state.sessionId ?? 0,
       score: state.score,
       totalQuestions: state.question.length,
+      durationSeconds: durationSeconds,
     );
 
     switch (gameSessionResult.resultStatus) {
