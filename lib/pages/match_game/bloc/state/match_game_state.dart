@@ -21,6 +21,7 @@ sealed class MatchGameState with _$MatchGameState {
     @Default([]) List<Question> question,
     @Default(0) int currentIndex,
     int? sessionId,
+    DateTime? sessionStartTime,
     @Default(0) int score,
     @Default(false) bool hasEnded,
     Question? droppedItem,

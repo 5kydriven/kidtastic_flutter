@@ -167,43 +167,44 @@ class ShapeGameBloc extends Bloc<ShapeGameEvent, ShapeGameState> {
     ShapeGameGameEnd event,
     Emitter<ShapeGameState> emit,
   ) async {
-    emit(
-      state.copyWith(
-        gameSessionRequestStatus: RequestStatus.inProgress,
-      ),
-    );
+    // emit(
+    //   state.copyWith(
+    //     gameSessionRequestStatus: RequestStatus.inProgress,
+    //   ),
+    // );
 
-    final result = await _gameSessionRepository.endSession(
-      sessionId: state.sessionId ?? 0,
-      score: state.score,
-      totalQuestions: 10,
-    );
+    // final result = await _gameSessionRepository.endSession(
+    //   sessionId: state.sessionId ?? 0,
+    //   score: state.score,
+    //   totalQuestions: 10,
+    // );
 
-    switch (result.resultStatus) {
-      case ResultStatus.success:
-        final studentInsightResult = await _studentInsightRepository
-            .updateStudentInsight(
-              studentId: state.student?.id ?? 0,
-              gameId: state.game?.id ?? 0,
-            );
+    // switch (result.resultStatus) {
+    //   case ResultStatus.success:
+    //     final studentInsightResult = await _studentInsightRepository
+    //         .updateStudentInsight(
+    //           studentId: state.student?.id ?? 0,
+    //           gameId: state.game?.id ?? 0,
+    //         );
 
-        emit(
-          state.copyWith(
-            gameSessionRequestStatus:
-                studentInsightResult.resultStatus == ResultStatus.success
-                ? RequestStatus.success
-                : RequestStatus.failure,
-          ),
-        );
-        break;
-      default:
-        emit(
-          state.copyWith(
-            gameSessionRequestStatus: RequestStatus.failure,
-          ),
-        );
-        break;
-    }
+    //     emit(
+    //       state.copyWith(
+    //         gameSessionRequestStatus:
+    //             studentInsightResult.resultStatus == ResultStatus.success
+    //             ? RequestStatus.success
+    //             : RequestStatus.failure,
+    //       ),
+    //     );
+    //     break;
+    //   default:
+    //     emit(
+    //       state.copyWith(
+    //         gameSessionRequestStatus: RequestStatus.failure,
+    //       ),
+    //     );
+    //     break;
+    // }
+  
   }
 
   @override

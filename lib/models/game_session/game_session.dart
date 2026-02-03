@@ -11,6 +11,7 @@ sealed class GameSession with _$GameSession {
     int? gameId,
     int? score,
     int? totalQuestions,
+    int? durationSeconds,
     DateTime? startedAt,
     DateTime? endedAt,
     DateTime? createdAt,

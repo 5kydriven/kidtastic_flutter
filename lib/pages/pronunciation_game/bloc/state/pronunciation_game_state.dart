@@ -21,6 +21,7 @@ sealed class PronunciationGameState with _$PronunciationGameState {
     @Default([]) List<Question> question,
     @Default(0) int currentIndex,
     int? sessionId,
+    DateTime? sessionStartTime,
     @Default(0) int score,
     @Default('') String recognizedText,
     @Default(false) bool isCorrect,

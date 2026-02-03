@@ -2,15 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kidtastic_flutter/pages/student_profile/widgets/widgets.dart';
+import 'package:kidtastic_flutter/repositories/repositories.dart';
 
 import '../../../constants/constants.dart';
 import '../../../widgets/widgets.dart';
-import '../bloc/bloc.dart';
-import 'student_profile_header.dart';
-import 'student_profile_recent_activities.dart';
-import 'student_profile_performance_summary.dart';
+import '../student_profile.dart';
 
-class StudentProfilePage extends StatelessWidget {
+class StudentProfilePage extends StatefulWidget {
   static const String route = '/student-profile';
   final StudentProfileState initialState;
 
@@ -20,11 +18,21 @@ class StudentProfilePage extends StatelessWidget {
   });
 
   @override
+  State<StudentProfilePage> createState() => _StudentProfilePageState();
+}
+
+class _StudentProfilePageState extends State<StudentProfilePage> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => StudentProfileBloc(
-        initialState: initialState,
-      ),
+        initialState: widget.initialState,
+        gameSessionRepository: context.read<GameSessionRepository>(),
+        studentInsightRepository: context.read<StudentInsightRepository>(),
+        gameRepository: context.read<GameRepository>(),
+      )..add(const StudentProfileScreenCreated()),
       child: BlocBuilder<StudentProfileBloc, StudentProfileState>(
         builder: (context, state) {
           final bloc = context.read<StudentProfileBloc>();
@@ -44,32 +52,66 @@ class StudentProfilePage extends StatelessWidget {
             ),
             child: BodyContainer(
               child: Card(
+                clipBehavior: Clip.hardEdge,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(32),
                 ),
                 color: const Color.fromARGB(255, 255, 238, 213),
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                    top: 32,
-                    left: 24,
-                    right: 24,
-                    bottom: 24,
-                  ),
-                  child: const SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        StudentProfileHeader(),
-                        SizedBox(
-                          height: 32,
+                child: Scrollbar(
+                  controller: _scrollController,
+                  thumbVisibility: true,
+                  thickness: 8,
+                  radius: const Radius.circular(8),
+                  child: CustomScrollView(
+                    controller: _scrollController,
+                    slivers: [
+                      SliverPadding(
+                        padding: const EdgeInsetsGeometry.all(24),
+                        sliver: SliverToBoxAdapter(
+                          child: StudentProfileHeader(),
                         ),
-                        StudentProfileRecentActivities(),
-                        SizedBox(
-                          height: 24,
+                      ),
+                      SliverPadding(
+                        padding: const EdgeInsetsGeometry.only(
+                          left: 24,
+                          right: 24,
+                          bottom: 16,
                         ),
-                        StudentProfilePerformanceSummary(),
-                      ],
-                    ),
+                        sliver: SliverToBoxAdapter(
+                          child: StudentProfileStatistic(),
+                        ),
+                      ),
+                      SliverPadding(
+                        padding: const EdgeInsetsGeometry.only(
+                          left: 24,
+                          right: 24,
+                          bottom: 16,
+                        ),
+                        sliver: SliverToBoxAdapter(
+                          child: StudentProfileSkills(),
+                        ),
+                      ),
+                      SliverPadding(
+                        padding: const EdgeInsetsGeometry.only(
+                          left: 24,
+                          right: 24,
+                          bottom: 16,
+                        ),
+                        sliver: SliverToBoxAdapter(
+                          child: StudentProfileRecent(),
+                        ),
+                      ),
+                      SliverPadding(
+                        padding: const EdgeInsetsGeometry.only(
+                          left: 24,
+                          right: 24,
+                          bottom: 24,
+                        ),
+                        sliver: SliverToBoxAdapter(
+                          child: StudentProfileImprovement(),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
