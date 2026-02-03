@@ -17,7 +17,7 @@ class SkillBreakdownChart extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -51,7 +51,7 @@ class SkillBreakdownChart extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: skills.asMap().entries.map((entry) {
-                    final index = entry.key;
+                    // final index = entry.key;
                     final skill = entry.value;
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 12),
@@ -116,7 +116,7 @@ class SkillBreakdownChart extends StatelessWidget {
     }
 
     final List<Widget> rings = [];
-    double startAngle = 0;
+    // double startAngle = 0;
 
     // Sort skills by percentage (descending) for better visualization
     final sortedSkills = List<SkillData>.from(skills)
