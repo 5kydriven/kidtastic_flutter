@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:kidtastic_flutter/extensions/datetime_extension.dart';
+import 'package:kidtastic_flutter/extensions/extentions.dart';
 
 import '../../../constants/constants.dart';
 import '../../../models/models.dart';
@@ -77,7 +77,7 @@ class StudentListBody extends StatelessWidget {
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
-                        student.name ?? '',
+                        student.name?.capitalize() ?? '',
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -94,7 +94,7 @@ class StudentListBody extends StatelessWidget {
               Expanded(
                 flex: 2,
                 child: Text(
-                  student.gender ?? '',
+                  student.gender?.capitalize() ?? '',
                   style: const TextStyle(
                     fontSize: 14,
                     color: Colors.grey,

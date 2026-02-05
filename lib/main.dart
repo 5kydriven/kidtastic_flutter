@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:kidtastic_flutter/daos/daos.dart';
 import 'package:kidtastic_flutter/database/seeder/seed.dart';
 import 'package:kidtastic_flutter/database/kidtastic_database.dart';
+import 'package:kidtastic_flutter/pages/analytics/view/analytics_page.dart';
 import 'package:kidtastic_flutter/pages/color_game/color_game.dart';
 import 'package:kidtastic_flutter/pages/counting_game/counting_game.dart';
 import 'package:kidtastic_flutter/pages/dashboard/view/dashboard_page.dart';
@@ -191,13 +192,13 @@ class _MyAppState extends State<MyApp> {
         GoRoute(
           path: NumberGamePage.route,
           builder: (context, state) {
-            return NumberGamePage();
+            return const NumberGamePage();
           },
         ),
         GoRoute(
           path: MathGamePage.route,
           builder: (context, state) {
-            return MathGamePage();
+            return const MathGamePage();
           },
         ),
         GoRoute(
@@ -235,37 +236,37 @@ class _MyAppState extends State<MyApp> {
         GoRoute(
           path: RegisterPage.route,
           builder: (context, state) {
-            return RegisterPage();
+            return const RegisterPage();
           },
         ),
         GoRoute(
           path: LoginPage.route,
           builder: (context, state) {
-            return LoginPage();
+            return const LoginPage();
           },
         ),
         GoRoute(
           path: RegisterPage.route,
           builder: (context, state) {
-            return RegisterPage();
+            return const RegisterPage();
           },
         ),
         GoRoute(
           path: DashboardPage.route,
           builder: (context, state) {
-            return DashboardPage();
+            return const DashboardPage();
           },
         ),
         GoRoute(
           path: ColorGamePage.route,
           builder: (context, state) {
-            return ColorGamePage();
+            return const ColorGamePage();
           },
         ),
         GoRoute(
           path: StudentListPage.route,
           builder: (context, state) {
-            return StudentListPage();
+            return const StudentListPage();
           },
         ),
         GoRoute(
@@ -274,6 +275,12 @@ class _MyAppState extends State<MyApp> {
             return StudentProfilePage(
               initialState: state.extra as StudentProfileState,
             );
+          },
+        ),
+        GoRoute(
+          path: AnalyticsPage.route,
+          builder: (context, state) {
+            return const AnalyticsPage();
           },
         ),
       ],

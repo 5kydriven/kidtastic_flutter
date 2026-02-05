@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:kidtastic_flutter/pages/analytics/view/analytics_page.dart';
 import 'package:kidtastic_flutter/pages/dashboard/dashboard.dart';
 import 'package:kidtastic_flutter/pages/login/view/login_page.dart';
 import 'package:kidtastic_flutter/pages/student_list/view/student_list_page.dart';
@@ -52,6 +53,10 @@ class DashboardBody extends StatelessWidget {
                         ),
                       ),
                       HoverImageButton(
+                        onTap: () {
+                          bloc.add(const DashboardSfxButtonPressed());
+                          context.push(AnalyticsPage.route);
+                        },
                         child: Image.asset(
                           Assets.analyticsButton,
                           width: 232,
