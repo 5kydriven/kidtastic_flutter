@@ -100,6 +100,11 @@ Future<void> main() async {
         pronunciationAttemptRepository: PronunciationAttemptRepository(
           pronunciationAttemptDao: PronunciationAttemptDao(db),
         ),
+        analyticsRepository: AnalyticsRepository(
+          studentDao: StudentDao(db),
+          gameSessionDao: GameSessionDao(db),
+          gameDao: GameDao(db),
+        ),
       ),
     );
     await seeder.seed();
@@ -142,6 +147,7 @@ class MyApp extends StatefulWidget {
   final StudentInsightRepository studentInsightRepository;
   final TeacherRepository teacherRepository;
   final PronunciationAttemptRepository pronunciationAttemptRepository;
+  final AnalyticsRepository analyticsRepository;
 
   const MyApp({
     super.key,
@@ -153,6 +159,7 @@ class MyApp extends StatefulWidget {
     required this.studentInsightRepository,
     required this.teacherRepository,
     required this.pronunciationAttemptRepository,
+    required this.analyticsRepository,
   });
 
   @override
@@ -314,6 +321,9 @@ class _MyAppState extends State<MyApp> {
         ),
         RepositoryProvider.value(
           value: widget.pronunciationAttemptRepository,
+        ),
+        RepositoryProvider.value(
+          value: widget.analyticsRepository,
         ),
       ],
       child: MaterialApp.router(
