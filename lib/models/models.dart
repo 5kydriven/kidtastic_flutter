@@ -1,13 +1,16 @@
+export 'daily_activity/daily_activity.dart';
 export 'fruit/fruit.dart';
 export 'game/game.dart';
 export 'game_session/game_session.dart';
 export 'paginated/paginated.dart';
 export 'pronunciation_attempt/pronunciation_attempt.dart';
 export 'question/question.dart';
+export 'recent_session/recent_session.dart';
 export 'result/result.dart';
 export 'session_question/session_question.dart';
 export 'student/student.dart';
 export 'student_insight/student_insight.dart';
+export 'student_ranking/student_ranking.dart';
 export 'teacher/teacher.dart';
 export 'text_field_input/text_field_input.dart';
 export 'voices/voices.dart';

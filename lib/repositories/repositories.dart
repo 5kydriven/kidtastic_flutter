@@ -1,3 +1,4 @@
+export 'analytics_repository.dart';
 export 'game_question_repository.dart';
 export 'game_repository.dart';
 export 'game_session_repository.dart';
