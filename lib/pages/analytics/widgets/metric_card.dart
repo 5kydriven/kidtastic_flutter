@@ -27,7 +27,7 @@ class MetricCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-                color: Colors.black.withValues(alpha: 0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -38,43 +38,51 @@ class MetricCard extends StatelessWidget {
         children: [
           Icon(
             icon,
-            size: 28,
+            size: 52,
             color: color,
           ),
-          const SizedBox(height: 8),
+          const SizedBox(
+            height: 8,
+          ),
           Text(
             value,
             style: TextStyle(
-              fontSize: 22,
+              fontSize: 24,
               fontWeight: FontWeight.bold,
               color: color,
             ),
           ),
-          const SizedBox(height: 4),
+          const SizedBox(
+            height: 4,
+          ),
           Text(
             label,
             style: TextStyle(
-              fontSize: 11,
+              fontSize: 16,
               color: Colors.grey[600],
               fontWeight: FontWeight.w500,
             ),
             textAlign: TextAlign.center,
           ),
           if (change != null) ...[
-            const SizedBox(height: 4),
+            const SizedBox(
+              height: 4,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(
                   isPositive ? Icons.arrow_upward : Icons.arrow_downward,
-                  size: 10,
+                  size: 12,
                   color: isPositive ? Colors.green : Colors.red,
                 ),
-                const SizedBox(width: 2),
+                const SizedBox(
+                  width: 2,
+                ),
                 Text(
                   change!,
                   style: TextStyle(
-                    fontSize: 10,
+                    fontSize: 12,
                     color: isPositive ? Colors.green : Colors.red,
                     fontWeight: FontWeight.w500,
                   ),
