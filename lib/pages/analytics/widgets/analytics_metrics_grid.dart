@@ -36,13 +36,15 @@ class AnalyticsMetricsGrid extends StatelessWidget {
           crossAxisCount: MediaQuery.of(context).size.width > 600 ? 4 : 2,
           mainAxisSpacing: 12,
           crossAxisSpacing: 12,
-          childAspectRatio: 0.85,
+          childAspectRatio: 1,
           children: [
             MetricCard(
               icon: Icons.people_rounded,
               label: 'Students',
               value: _formatNumber(state.totalStudents),
-              change: state.studentsChange > 0 ? '+${state.studentsChange} today' : null,
+              change: state.studentsChange > 0
+                  ? '+${state.studentsChange} today'
+                  : null,
               isPositive: true,
               color: Colors.blue,
             ),
@@ -50,7 +52,9 @@ class AnalyticsMetricsGrid extends StatelessWidget {
               icon: Icons.sports_esports_rounded,
               label: 'Sessions',
               value: _formatNumber(state.totalSessions),
-              change: state.sessionsChange > 0 ? '+${state.sessionsChange} today' : null,
+              change: state.sessionsChange > 0
+                  ? '+${state.sessionsChange} today'
+                  : null,
               isPositive: true,
               color: Colors.orange,
             ),
@@ -58,7 +62,9 @@ class AnalyticsMetricsGrid extends StatelessWidget {
               icon: Icons.schedule_rounded,
               label: 'Time Played',
               value: _formatDuration(state.totalMinutesPlayed),
-              change: state.minutesChange > 0 ? '+${_formatDuration(state.minutesChange)}' : null,
+              change: state.minutesChange > 0
+                  ? '+${_formatDuration(state.minutesChange)}'
+                  : null,
               isPositive: true,
               color: Colors.green,
             ),

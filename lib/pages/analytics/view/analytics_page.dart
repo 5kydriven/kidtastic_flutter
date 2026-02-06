@@ -7,7 +7,7 @@ import 'package:kidtastic_flutter/pages/analytics/bloc/bloc.dart';
 import 'package:kidtastic_flutter/repositories/analytics_repository.dart';
 import 'package:kidtastic_flutter/widgets/game/game.dart';
 
-import 'widgets/widgets.dart';
+import '../widgets/widgets.dart';
 
 class AnalyticsPage extends StatelessWidget {
   static const route = '/analytics';
