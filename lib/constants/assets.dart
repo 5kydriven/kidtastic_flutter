@@ -112,6 +112,7 @@ class Assets {
   static const settingsButton = 'assets/admin/settings_button.png';
   static const studentButton = 'assets/admin/student_button.png';
   static const totalBox = 'assets/admin/total_box.png';
+  static const settingsButtonV2 = 'assets/admin/settings_button_v2.png';
 
   // **Games**
   static const shapesBtn = 'assets/games/shapesBtn.png';

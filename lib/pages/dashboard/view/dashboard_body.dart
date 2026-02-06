@@ -37,6 +37,17 @@ class DashboardBody extends StatelessWidget {
                       HoverImageButton(
                         onTap: () {
                           bloc.add(const DashboardSfxButtonPressed());
+                          context.push(AnalyticsPage.route);
+                        },
+                        child: Image.asset(
+                          Assets.analyticsButton,
+                          width: 232,
+                          height: 232,
+                        ),
+                      ),
+                      HoverImageButton(
+                        onTap: () {
+                          bloc.add(const DashboardSfxButtonPressed());
                           context.push(StudentListPage.route);
                         },
                         child: Image.asset(
@@ -47,45 +58,34 @@ class DashboardBody extends StatelessWidget {
                       ),
                       HoverImageButton(
                         child: Image.asset(
-                          Assets.activitiesButton,
-                          width: 232,
-                          height: 232,
-                        ),
-                      ),
-                      HoverImageButton(
-                        onTap: () {
-                          bloc.add(const DashboardSfxButtonPressed());
-                          context.push(AnalyticsPage.route);
-                        },
-                        child: Image.asset(
-                          Assets.analyticsButton,
+                          Assets.settingsButtonV2,
                           width: 232,
                           height: 232,
                         ),
                       ),
                     ],
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      HoverImageButton(
-                        child: Image.asset(
-                          Assets.settingsButton,
-                          width: 200,
-                        ),
-                      ),
-                      HoverImageButton(
-                        onTap: () {
-                          bloc.add(const DashboardSfxButtonPressed());
-                          context.go(LoginPage.route);
-                        },
-                        child: Image.asset(
-                          Assets.logoutButton,
-                          width: 200,
-                        ),
-                      ),
-                    ],
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.center,
+                  //   children: [
+                  //     HoverImageButton(
+                  //       child: Image.asset(
+                  //         Assets.settingsButton,
+                  //         width: 200,
+                  //       ),
+                  //     ),
+                  HoverImageButton(
+                    onTap: () {
+                      bloc.add(const DashboardSfxButtonPressed());
+                      context.go(LoginPage.route);
+                    },
+                    child: Image.asset(
+                      Assets.logoutButton,
+                      width: 200,
+                    ),
                   ),
+                  //   ],
+                  // ),
                 ],
               ),
             ),
