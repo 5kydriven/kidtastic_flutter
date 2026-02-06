@@ -16,6 +16,7 @@ import 'package:responsive_framework/responsive_framework.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'constants/constants.dart';
+import 'pages/bubble_game/view/view.dart';
 import 'pages/game_list/game_list.dart';
 import 'pages/home/home.dart';
 import 'pages/login/login.dart';
@@ -288,6 +289,12 @@ class _MyAppState extends State<MyApp> {
           path: AnalyticsPage.route,
           builder: (context, state) {
             return const AnalyticsPage();
+          },
+        ),
+        GoRoute(
+          path: BubbleGamePage.route,
+          builder: (context, state) {
+            return const BubbleGamePage();
           },
         ),
       ],
