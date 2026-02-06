@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kidtastic_flutter/pages/analytics/bloc/bloc.dart';
 
-class TopGamesChart extends StatelessWidget {
-  const TopGamesChart({super.key});
+import '../bloc/bloc.dart';
+
+class AnalyticsTopPerforming extends StatelessWidget {
+  const AnalyticsTopPerforming({super.key});
 
   Color _getGameColor(String gameName) {
     switch (gameName.toLowerCase()) {
@@ -49,7 +50,7 @@ class TopGamesChart extends StatelessWidget {
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.05),
+                color: Colors.black.withValues(alpha: 0.05),
                 blurRadius: 8,
                 offset: const Offset(0, 2),
               ),

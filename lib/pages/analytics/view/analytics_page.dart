@@ -4,15 +4,21 @@ import 'package:go_router/go_router.dart';
 import 'package:kidtastic_flutter/constants/constants.dart';
 import 'package:kidtastic_flutter/models/models.dart';
 import 'package:kidtastic_flutter/pages/analytics/bloc/bloc.dart';
+import 'package:kidtastic_flutter/pages/analytics/view/view.dart';
 import 'package:kidtastic_flutter/repositories/analytics_repository.dart';
 import 'package:kidtastic_flutter/widgets/game/game.dart';
 
-import '../widgets/widgets.dart';
-
-class AnalyticsPage extends StatelessWidget {
+class AnalyticsPage extends StatefulWidget {
   static const route = '/analytics';
 
   const AnalyticsPage({super.key});
+
+  @override
+  State<AnalyticsPage> createState() => _AnalyticsPageState();
+}
+
+class _AnalyticsPageState extends State<AnalyticsPage> {
+  final ScrollController _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -23,150 +29,159 @@ class AnalyticsPage extends StatelessWidget {
           context,
         ),
       )..add(const LoadAnalyticsOverview()),
-      child: const _AnalyticsPageView(),
-    );
-  }
-}
-
-class _AnalyticsPageView extends StatelessWidget {
-  const _AnalyticsPageView();
-
-  @override
-  Widget build(BuildContext context) {
-    return GameScaffold(
-      contentPadding: const EdgeInsets.only(
-        top: 100,
-        bottom: 52,
-      ),
-      header: GameHeaderConfig(
-        showBack: true,
-        onBack: () => context.pop(),
-      ),
-      imageAssets: Assets.adminBg,
-      child: Container(
-        decoration: BoxDecoration(
-          color: const Color.fromARGB(255, 10, 98, 13),
-          borderRadius: const BorderRadius.all(
-            Radius.circular(32),
-          ),
+      child: GameScaffold(
+        contentPadding: const EdgeInsets.only(
+          top: 100,
+          bottom: 52,
         ),
-        padding: const EdgeInsets.all(12),
-        child: Stack(
-          clipBehavior: Clip.none,
-          children: [
-            Card(
-              clipBehavior: Clip.hardEdge,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(32),
-              ),
-              color: const Color.fromARGB(255, 255, 238, 213),
-              child: BlocBuilder<AnalyticsBloc, AnalyticsState>(
-                builder: (context, state) {
-                  if (state.screenRequestStatus == RequestStatus.inProgress) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
+        header: GameHeaderConfig(
+          showBack: true,
+          onBack: () => context.pop(),
+        ),
+        imageAssets: Assets.adminBg,
+        child: Container(
+          decoration: BoxDecoration(
+            color: const Color.fromARGB(255, 10, 98, 13),
+            borderRadius: const BorderRadius.all(
+              Radius.circular(32),
+            ),
+          ),
+          padding: const EdgeInsets.all(12),
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Card(
+                clipBehavior: Clip.hardEdge,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(32),
+                ),
+                color: const Color.fromARGB(255, 255, 238, 213),
+                child: BlocBuilder<AnalyticsBloc, AnalyticsState>(
+                  builder: (context, state) {
+                    if (state.screenRequestStatus == RequestStatus.inProgress) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
 
-                  if (state.screenRequestStatus == RequestStatus.failure) {
-                    return Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.error_outline,
-                            size: 64,
-                            color: Colors.red[300],
-                          ),
-                          const SizedBox(height: 16),
-                          Text(
-                            'Unable to load analytics',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.grey[700],
+                    if (state.screenRequestStatus == RequestStatus.failure) {
+                      return Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.error_outline,
+                              size: 64,
+                              color: Colors.red[300],
+                            ),
+                            const SizedBox(height: 16),
+                            Text(
+                              'Unable to load analytics',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.grey[700],
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            ElevatedButton(
+                              onPressed: () {
+                                context.read<AnalyticsBloc>().add(
+                                  const LoadAnalyticsOverview(),
+                                );
+                              },
+                              child: const Text('Retry'),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+
+                    return Scrollbar(
+                      controller: _scrollController,
+                      thumbVisibility: true,
+                      thickness: 8,
+                      radius: const Radius.circular(8),
+                      child: CustomScrollView(
+                        controller: _scrollController,
+                        slivers: [
+                          const SliverPadding(
+                            padding: EdgeInsetsGeometry.symmetric(
+                              horizontal: 20,
+                              vertical: 20,
+                            ),
+                            sliver: SliverToBoxAdapter(
+                              child: AnalyticsOverview(),
                             ),
                           ),
-                          const SizedBox(height: 8),
-                          ElevatedButton(
-                            onPressed: () {
-                              context.read<AnalyticsBloc>().add(
-                                const LoadAnalyticsOverview(),
-                              );
-                            },
-                            child: const Text('Retry'),
+                          const SliverPadding(
+                            padding: EdgeInsetsGeometry.only(
+                              left: 20,
+                              right: 20,
+                              bottom: 20,
+                            ),
+                            sliver: SliverToBoxAdapter(
+                              child: AnalyticsActivityTrend(),
+                            ),
+                          ),
+                          const SliverPadding(
+                            padding: EdgeInsetsGeometry.only(
+                              left: 20,
+                              right: 20,
+                              bottom: 20,
+                            ),
+                            sliver: SliverToBoxAdapter(
+                              child: AnalyticsTopPerforming(),
+                            ),
+                          ),
+                          const SliverPadding(
+                            padding: EdgeInsets.only(
+                              left: 20,
+                              right: 20,
+                              bottom: 20,
+                            ),
+                            sliver: SliverToBoxAdapter(
+                              child: SizedBox(
+                                height: 270,
+                                child: AnalyticsTopStudents(),
+                              ),
+                            ),
+                          ),
+                          const SliverPadding(
+                            padding: EdgeInsets.only(
+                              left: 20,
+                              right: 20,
+                              bottom: 20,
+                            ),
+                            sliver: SliverToBoxAdapter(
+                              child: AnalyticsRecentActivity(),
+                            ),
                           ),
                         ],
                       ),
                     );
-                  }
-
-                  return SingleChildScrollView(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 20),
-                        const AnalyticsMetricsGrid(),
-                        const SizedBox(height: 20),
-                        const TopGamesChart(),
-                        const SizedBox(height: 20),
-                        const ActivityChart(),
-                        const SizedBox(height: 20),
-                        LayoutBuilder(
-                          builder: (context, constraints) {
-                            if (constraints.maxWidth > 600) {
-                              // Tablet/Desktop: Side by side
-                              return Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Expanded(
-                                    child: StudentLeaderboard(),
-                                  ),
-                                  SizedBox(width: 16),
-                                  Expanded(
-                                    child: AreasNeedingAttention(),
-                                  ),
-                                ],
-                              );
-                            }
-                            // Mobile: Stacked
-                            return Column(
-                              children: [
-                                StudentLeaderboard(),
-                                SizedBox(height: 16),
-                                AreasNeedingAttention(),
-                              ],
-                            );
-                          },
-                        ),
-                        const SizedBox(height: 20),
-                        const RecentActivityList(),
-                        const SizedBox(height: 20),
-                      ],
-                    ),
-                  );
-                },
+                  },
+                ),
               ),
-            ),
-            Positioned(
-              top: -83,
-              left: 70,
-              child: Image.asset(
-                Assets.adminOwl,
-                width: 100,
-                height: 100,
+              Positioned(
+                top: -83,
+                left: 70,
+                child: Image.asset(
+                  Assets.adminOwl,
+                  width: 100,
+                  height: 100,
+                ),
               ),
-            ),
-            Positioned(
-              top: -68,
-              left: 164,
-              child: Image.asset(
-                Assets.dashboard,
-                width: 400,
+              Positioned(
+                top: -68,
+                left: 164,
+                child: Image.asset(
+                  Assets.dashboard,
+                  width: 400,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
