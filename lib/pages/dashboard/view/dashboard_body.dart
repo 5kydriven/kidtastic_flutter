@@ -65,15 +65,6 @@ class DashboardBody extends StatelessWidget {
                       ),
                     ],
                   ),
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.center,
-                  //   children: [
-                  //     HoverImageButton(
-                  //       child: Image.asset(
-                  //         Assets.settingsButton,
-                  //         width: 200,
-                  //       ),
-                  //     ),
                   HoverImageButton(
                     onTap: () {
                       bloc.add(const DashboardSfxButtonPressed());
@@ -84,8 +75,6 @@ class DashboardBody extends StatelessWidget {
                       width: 200,
                     ),
                   ),
-                  //   ],
-                  // ),
                 ],
               ),
             ),

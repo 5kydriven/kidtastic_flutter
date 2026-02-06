@@ -102,6 +102,39 @@ class Assets {
   static const owl = 'assets/sorting/owl.png';
   static const bubbleText = 'assets/sorting/bubble_text.png';
 
+  // **Bubble Assets**
+  static const bubbleA = 'assets/bubble/bubble_a.png';
+  static const bubbleB = 'assets/bubble/bubble_b.png';
+  static const bubbleBg = 'assets/bubble/bubble_bg.png';
+  static const bubbleButtons = 'assets/bubble/bubble_buttons.png';
+  static const bubbleC = 'assets/bubble/bubble_c.png';
+  static const bubbleD = 'assets/bubble/bubble_d.png';
+  static const bubbleE = 'assets/bubble/bubble_e.png';
+  static const bubbleF = 'assets/bubble/bubble_f.png';
+  static const bubbleG = 'assets/bubble/bubble_g.png';
+  static const bubbleH = 'assets/bubble/bubble_h.png';
+  static const bubbleI = 'assets/bubble/bubble_i.png';
+  static const bubbleJ = 'assets/bubble/bubble_j.png';
+  static const bubbleK = 'assets/bubble/bubble_k.png';
+  static const bubbleL = 'assets/bubble/bubble_l.png';
+  static const bubbleM = 'assets/bubble/bubble_m.png';
+  static const bubbleN = 'assets/bubble/bubble_n.png';
+  static const bubbleO = 'assets/bubble/bubble_o.png';
+  static const bubbleP = 'assets/bubble/bubble_p.png';
+  static const bubbleQ = 'assets/bubble/bubble_q.png';
+  static const bubbleR = 'assets/bubble/bubble_r.png';
+  static const bubbleS = 'assets/bubble/bubble_s.png';
+  static const bubbleT = 'assets/bubble/bubble_t.png';
+  static const bubbleU = 'assets/bubble/bubble_u.png';
+  static const bubbleV = 'assets/bubble/bubble_v.png';
+  static const bubbleW = 'assets/bubble/bubble_w.png';
+  static const bubbleX = 'assets/bubble/bubble_x.png';
+  static const bubbleY = 'assets/bubble/bubble_y.png';
+  static const bubbleZ = 'assets/bubble/bubble_z.png';
+  static const miss = 'assets/bubble/miss.png';
+  static const bubbleOwl = 'assets/bubble/owl.png';
+  static const plusOne = 'assets/bubble/plus_one.png';
+
   // **Admin**
   static const activitiesButton = 'assets/admin/activities_button.png';
   static const adminBg = 'assets/admin/admin_bg.png';
