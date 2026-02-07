@@ -143,7 +143,20 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
                             sliver: SliverToBoxAdapter(
                               child: SizedBox(
                                 height: 270,
-                                child: AnalyticsTopStudents(),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Expanded(
+                                      child: AnalyticsTopStudents(),
+                                    ),
+                                    SizedBox(
+                                      width: 16,
+                                    ),
+                                    Expanded(
+                                      child: AnalyticsNeedsAttention(),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),

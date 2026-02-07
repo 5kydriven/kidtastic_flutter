@@ -3,6 +3,11 @@ import 'package:kidtastic_flutter/models/models.dart';
 
 part 'analytics_state.freezed.dart';
 
+enum AlertType {
+  lowPerformance,
+  inactive,
+}
+
 @freezed
 sealed class AnalyticsState with _$AnalyticsState {
   const factory AnalyticsState({
