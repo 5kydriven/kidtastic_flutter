@@ -96,6 +96,7 @@ class AnalyticsTopStudents extends StatelessWidget {
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
               Row(
                 children: [
@@ -116,9 +117,19 @@ class AnalyticsTopStudents extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 12),
-              ...state.topStudents.map(
-                (student) => StudentItem(
-                  student: student,
+              Flexible(
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      ...state.topStudents.map(
+                        (student) => StudentItem(
+                          student: student,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],
