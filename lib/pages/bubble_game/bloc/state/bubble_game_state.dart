@@ -8,5 +8,7 @@ part 'bubble_game_state.freezed.dart';
 sealed class BubbleGameState with _$BubbleGameState {
   const factory BubbleGameState({
     @Default(RequestStatus.waiting) RequestStatus screanRequestStatus,
+    Game? game,
+    Student? student,
   }) = _BubbleGameState;
 }

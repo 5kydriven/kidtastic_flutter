@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:math' hide log;
 
 import 'package:kidtastic_flutter/constants/constants.dart';
+import 'package:kidtastic_flutter/pages/bubble_game/bubble_game.dart';
 import 'package:kidtastic_flutter/pages/counting_game/view/counting_game_page.dart';
 import 'package:kidtastic_flutter/pages/pronunciation_game/view/pronunciation_game_page.dart';
 import 'package:kidtastic_flutter/pages/shape_game/view/shape_game_page.dart';
@@ -54,6 +55,13 @@ class InitialDataSeeder {
         imageAsset: Assets.shapesBtn,
         description: 'Match shapes to learn geometry.',
         route: ShapeGamePage.route,
+      ),
+      Game(
+        name: 'Bubble Letters',
+        category: GameType.bubble,
+        imageAsset: Assets.bubblePopBtn,
+        description: 'Pop the bubble!',
+        route: BubbleGamePage.route,
       ),
     ];
 
@@ -196,4 +204,9 @@ class InitialDataSeeder {
       );
     }
   }
+
+  // ---------------------------
+  // 🎨 Bubble Pop GAME
+  // ---------------------------
+  Future<void> _seedBubblePop(int gameId) async {}
 }

@@ -152,4 +152,5 @@ class Assets {
   static const numbersBtn = 'assets/games/numbersBtn.png';
   static const colorsBtn = 'assets/games/colorsBtn.png';
   static const gamesBtn = 'assets/games/gamesBtn.png';
+  static const bubblePopBtn = 'assets/games/bubble_pop_btn.png';
 }

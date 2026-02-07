@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:kidtastic_flutter/pages/bubble_game/bubble_game.dart';
 import 'package:kidtastic_flutter/pages/counting_game/counting_game.dart';
 import 'package:kidtastic_flutter/pages/game_list/view/view.dart';
 import 'package:kidtastic_flutter/pages/pronunciation_game/pronunciation_game.dart';
@@ -8,6 +9,7 @@ import 'package:kidtastic_flutter/widgets/widgets.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../../constants/constants.dart';
+import '../../../models/models.dart';
 import '../../match_game/match_game.dart';
 import '../bloc/bloc.dart';
 
@@ -17,6 +19,75 @@ class GameListBody extends StatelessWidget {
     super.key,
     required this.pageController,
   });
+
+  void _handleGameRoute(BuildContext context, Game game) {
+    final bloc = context.read<GameListBloc>();
+    final state = bloc.state;
+
+    bloc.add(const GameListSfxButtonPressed());
+    if (game.route?.isEmpty ?? true) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'This game has no route set.',
+          ),
+        ),
+      );
+      return;
+    }
+
+    switch (game.category) {
+      case GameType.counting:
+        context.push(
+          CountingGamePage.route,
+          extra: CountingGameState(
+            game: game,
+            student: state.student,
+          ),
+        );
+        break;
+      case GameType.pronunciation:
+        context.push(
+          PronunciationGamePage.route,
+          extra: PronunciationGameState(
+            game: game,
+            student: state.student,
+          ),
+        );
+      case GameType.shape:
+        context.push(
+          MatchGamePage.route,
+          extra: MatchGameState(
+            game: game,
+            student: state.student,
+          ),
+        );
+      case GameType.matching:
+        context.push(
+          MatchGamePage.route,
+          extra: MatchGameState(
+            game: game,
+            student: state.student,
+          ),
+        );
+      case GameType.bubble:
+        context.push(
+          BubbleGamePage.route,
+          extra: BubbleGameState(
+            game: game,
+            student: state.student,
+          ),
+        );
+      default:
+        context.push(
+          game.route ?? '',
+          extra: game,
+        );
+        break;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +148,7 @@ class GameListBody extends StatelessWidget {
                                 crossAxisCount: 3,
                                 mainAxisSpacing: 12,
                                 crossAxisSpacing: 12,
-                                childAspectRatio: 1,
+                                childAspectRatio: 172 / 172,
                               ),
                           physics: const NeverScrollableScrollPhysics(),
                           itemCount: pageItems.length,
@@ -85,182 +156,14 @@ class GameListBody extends StatelessWidget {
                             final game = pageItems[index];
 
                             return HoverImageButton(
-                              onTap: () {
-                                bloc.add(const GameListSfxButtonPressed());
-                                if (game.route?.isEmpty ?? true) {
-                                  ScaffoldMessenger.of(
-                                    context,
-                                  ).showSnackBar(
-                                    const SnackBar(
-                                      content: Text(
-                                        'This game has no route set.',
-                                      ),
-                                    ),
-                                  );
-                                  return;
-                                }
-
-                                switch (game.category) {
-                                  case GameType.counting:
-                                    context.push(
-                                      CountingGamePage.route,
-                                      extra: CountingGameState(
-                                        game: game,
-                                        student: state.student,
-                                      ),
-                                    );
-                                    break;
-                                  case GameType.pronunciation:
-                                    context.push(
-                                      PronunciationGamePage.route,
-                                      extra: PronunciationGameState(
-                                        game: game,
-                                        student: state.student,
-                                      ),
-                                    );
-                                  case GameType.shape:
-                                    context.push(
-                                      MatchGamePage.route,
-                                      extra: MatchGameState(
-                                        game: game,
-                                        student: state.student,
-                                      ),
-                                    );
-                                  case GameType.matching:
-                                    context.push(
-                                      MatchGamePage.route,
-                                      extra: MatchGameState(
-                                        game: game,
-                                        student: state.student,
-                                      ),
-                                    );
-                                  default:
-                                    context.push(
-                                      game.route ?? '',
-                                      extra: game,
-                                    );
-
-                                    break;
-                                }
-                              },
+                              onTap: () => _handleGameRoute(context, game),
                               child: Image.asset(
                                 game.imageAsset ?? '',
                                 height: 152,
                                 width: 152,
+                                fit: BoxFit.fill,
                               ),
                             );
-
-                            // return InkWell(
-                            //   borderRadius: BorderRadius.all(
-                            //     Radius.circular(24),
-                            //   ),
-                            //   onTap: () {
-                            //     bloc.add(
-                            //       const GameListSfxButtonPressed(),
-                            //     );
-                            //     if (game.route?.isNotEmpty ?? false) {
-                            //       switch (game.category) {
-                            //         case GameType.counting:
-                            //           context.push(
-                            //             CountingGamePage.route,
-                            //             extra: CountingGameState(
-                            //               game: game,
-                            //               student: state.student,
-                            //             ),
-                            //           );
-                            //           break;
-                            //         case GameType.pronunciation:
-                            //           context.push(
-                            //             PronunciationGamePage.route,
-                            //             extra: PronunciationGameState(
-                            //               game: game,
-                            //               student: state.student,
-                            //             ),
-                            //           );
-                            //         case GameType.shape:
-                            //           context.push(
-                            //             MatchGamePage.route,
-                            //             extra: MatchGameState(
-                            //               game: game,
-                            //               student: state.student,
-                            //             ),
-                            //           );
-                            //         case GameType.matching:
-                            //           context.push(
-                            //             MatchGamePage.route,
-                            //             extra: MatchGameState(
-                            //               game: game,
-                            //               student: state.student,
-                            //             ),
-                            //           );
-                            //         default:
-                            //           context.push(
-                            //             game.route ?? '',
-                            //             extra: game,
-                            //           );
-
-                            //           break;
-                            //       }
-                            //     } else {
-                            //       ScaffoldMessenger.of(
-                            //         context,
-                            //       ).showSnackBar(
-                            //         const SnackBar(
-                            //           content: Text(
-                            //             'This game has no route set.',
-                            //           ),
-                            //         ),
-                            //       );
-                            //     }
-                            //   },
-                            //   child: Card(
-                            //     elevation: 8,
-                            //     shape: RoundedRectangleBorder(
-                            //       borderRadius: BorderRadius.circular(24),
-                            //       side: const BorderSide(
-                            //         color: Color(0xffFFAE00),
-                            //         width: 2,
-                            //       ),
-                            //     ),
-                            //     child: Stack(
-                            //       fit: StackFit.expand,
-                            //       children: [
-                            //         Align(
-                            //           alignment: Alignment.center,
-                            //           child: Image.asset(
-                            //             game.imageAsset ?? '',
-                            //             width: 80,
-                            //             height: 80,
-                            //             errorBuilder:
-                            //                 (
-                            //                   context,
-                            //                   error,
-                            //                   stack,
-                            //                 ) => const Icon(
-                            //                   Icons.image_not_supported,
-                            //                 ),
-                            //           ),
-                            //         ),
-                            //         Align(
-                            //           alignment: Alignment.bottomCenter,
-                            //           child: Padding(
-                            //             padding: const EdgeInsets.only(
-                            //               bottom: 12,
-                            //             ),
-                            //             child: Text(
-                            //               game.name ?? '',
-                            //               textAlign: TextAlign.center,
-                            //               style: const TextStyle(
-                            //                 fontSize: 14,
-                            //                 fontWeight: FontWeight.w500,
-                            //               ),
-                            //             ),
-                            //           ),
-                            //         ),
-                            //       ],
-                            //     ),
-                            //   ),
-                            // );
                           },
                         );
                       },

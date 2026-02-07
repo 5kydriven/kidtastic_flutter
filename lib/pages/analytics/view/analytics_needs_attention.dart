@@ -99,6 +99,7 @@ class AnalyticsNeedsAttention extends StatelessWidget {
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
               Row(
                 children: [
@@ -119,28 +120,43 @@ class AnalyticsNeedsAttention extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 12),
-              if (hasLowPerformers) ...[
-                SectionTile(
-                  title: 'Low Performing Students',
-                  color: Colors.red,
+              Flexible(
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (hasLowPerformers) ...[
+                        SectionTile(
+                          title: 'Low Performing Students',
+                          color: Colors.red,
+                        ),
+                        const SizedBox(height: 8),
+                        ...state.lowPerformingStudents.map(
+                          (student) => StudentAlerts(
+                            student: student,
+                            type: AlertType.lowPerformance,
+                          ),
+                        ),
+                        if (hasInactive) const SizedBox(height: 16),
+                      ],
+                      if (hasInactive) ...[
+                        SectionTile(
+                          title: 'Inactive Students (7+ days)',
+                          color: Colors.orange,
+                        ),
+                        const SizedBox(height: 8),
+                        ...state.inactiveStudents.map(
+                          (student) => StudentAlerts(
+                            student: student,
+                            type: AlertType.inactive,
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
                 ),
-                const SizedBox(height: 8),
-                ...state.lowPerformingStudents.map(
-                  (student) =>
-                      StudentAlerts(student: student, type: AlertType.lowPerformance),
-                ),
-                if (hasInactive) const SizedBox(height: 16),
-              ],
-              if (hasInactive) ...[
-                SectionTile(
-                  title: 'Inactive Students (7+ days)',
-                  color: Colors.orange,
-                ),
-                const SizedBox(height: 8),
-                ...state.inactiveStudents.map(
-                  (student) => StudentAlerts(student: student, type: AlertType.inactive),
-                ),
-              ],
+              ),
             ],
           ),
         );
