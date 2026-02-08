@@ -1,5 +1,6 @@
 export 'game/game.dart';
 export 'control_buttons_widget.dart';
+export 'floating_image_button.dart';
 export 'game_scaffold_one.dart';
 export 'hover_image_button.dart';
 export 'labeled_text_form_field.dart';

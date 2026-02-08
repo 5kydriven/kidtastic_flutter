@@ -39,12 +39,6 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
 
     final result = await _teacherRepository.getTeacher();
 
-    await Future.delayed(
-      const Duration(
-        seconds: 1,
-      ),
-    );
-
     switch (result.resultStatus) {
       case ResultStatus.success:
         emit(

@@ -52,8 +52,13 @@ class Assets {
   static const ovalCutout = 'assets/shapes/oval_cutout.png';
   static const oval = 'assets/shapes/oval.png';
   static const pentagon = 'assets/shapes/pentagon.png';
+  static const rectangleCutout = 'assets/shapes/rectangle_cutout.png';
   static const rectangle = 'assets/shapes/rectangle.png';
+  static const squareCutout = 'assets/shapes/square_cutout.png';
   static const square = 'assets/shapes/square.png';
+  static const starCutout = 'assets/shapes/star_cutout.png';
+  static const star = 'assets/shapes/star.png';
+  static const trapezoidCutout = 'assets/shapes/trapezoid_cutout.png';
   static const trapezoid = 'assets/shapes/trapezoid.png';
   static const triangleCutout = 'assets/shapes/triangle_cutout.png';
   static const triangle = 'assets/shapes/triangle.png';
@@ -153,4 +158,11 @@ class Assets {
   static const colorsBtn = 'assets/games/colorsBtn.png';
   static const gamesBtn = 'assets/games/gamesBtn.png';
   static const bubblePopBtn = 'assets/games/bubble_pop_btn.png';
+
+  // **Initial Screen**
+  static const initialScreenBg = 'assets/initial_screen/initial_screen_bg.png';
+  static const initialScreenBtn =
+      'assets/initial_screen/initial_screen_btn.png';
+  static const initialScreenLogo =
+      'assets/initial_screen/initial_screen_logo.png';
 }

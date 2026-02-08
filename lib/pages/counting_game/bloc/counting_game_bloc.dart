@@ -90,7 +90,6 @@ class CountingGameBloc extends Bloc<CountingGameEvent, CountingGameState> {
                 question: gameQuestionResult.data ?? [],
                 score: 0,
                 currentIndex: 0,
-
                 screenRequestStatus: RequestStatus.success,
               ),
             );
