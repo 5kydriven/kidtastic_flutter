@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kidtastic_flutter/constants/assets.dart';
-import 'package:kidtastic_flutter/pages/home/home.dart';
+import 'package:kidtastic_flutter/pages/initial_screen/view/initial_screen_page.dart';
 import 'package:kidtastic_flutter/pages/register/view/register_body.dart';
 
 import '../../../models/models.dart';
@@ -21,7 +21,7 @@ class RegisterPage extends StatelessWidget {
   ) {
     switch (state.screenRequestStatus) {
       case RequestStatus.success:
-        context.push(HomePage.route);
+        context.push(InitialScreenPage.route);
         break;
       case RequestStatus.failure:
       default:
@@ -35,7 +35,7 @@ class RegisterPage extends StatelessWidget {
   ) {
     switch (state.registerRequestStatus) {
       case RequestStatus.success:
-        context.push(HomePage.route);
+        context.push(InitialScreenPage.route);
         break;
       case RequestStatus.failure:
       default:

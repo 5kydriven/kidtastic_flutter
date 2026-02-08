@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:kidtastic_flutter/models/models.dart';
 import 'package:kidtastic_flutter/pages/home/view/home_page.dart';
-import 'package:kidtastic_flutter/pages/register/register.dart';
+import 'package:kidtastic_flutter/pages/register/view/register_page.dart';
 import 'package:kidtastic_flutter/repositories/teacher_repository.dart';
 
+import '../../../constants/constants.dart';
+import '../../../models/models.dart';
+import '../../../widgets/widgets.dart';
 import '../initial_screen.dart';
 
 class InitialScreenPage extends StatelessWidget {
@@ -17,13 +19,10 @@ class InitialScreenPage extends StatelessWidget {
     InitialScreenState state,
   ) {
     switch (state.screenRequestStatus) {
-      case RequestStatus.inProgress:
-        break;
-      case RequestStatus.success:
-        context.go(HomePage.route);
+      case RequestStatus.failure:
+        context.go(RegisterPage.route);
         break;
       default:
-        context.go(RegisterPage.route);
         break;
     }
   }
@@ -35,19 +34,41 @@ class InitialScreenPage extends StatelessWidget {
         initialState: InitialScreenState(),
         teacherRepository: RepositoryProvider.of<TeacherRepository>(context),
       )..add(const InitialScreenCreated()),
-      child: BlocListener<InitialScreenBloc, InitialScreenState>(
+      child: BlocConsumer<InitialScreenBloc, InitialScreenState>(
         listener: _screenListener,
         listenWhen: (previous, current) =>
             previous.screenRequestStatus != current.screenRequestStatus,
-        child: Scaffold(
-          body: Center(
-            child: Image.asset(
-              'assets/icon/logo.png',
-              width: 200,
-              height: 200,
+        builder: (context, state) {
+          final bloc = context.read<InitialScreenBloc>();
+          return GameScaffold(
+            imageAssets: Assets.initialScreenBg,
+            contentPadding: EdgeInsetsGeometry.all(0),
+            bottomBar: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                FloatingImageButton(
+                  onTap: () {
+                    bloc.add(const InitialScreenSfxButtonPressed());
+                    context.go(HomePage.route);
+                  },
+                  child: Image.asset(
+                    Assets.initialScreenBtn,
+                    fit: BoxFit.fill,
+                    width: 300,
+                  ),
+                ),
+              ],
             ),
-          ),
-        ),
+            child: Center(
+              child: Image.asset(
+                Assets.initialScreenLogo,
+                fit: BoxFit.fill,
+                width: 800,
+              ),
+            ),
+          );
+        },
       ),
     );
   }

@@ -80,7 +80,7 @@ class InitialDataSeeder {
     await _seedCountingFruits(gameIds[0]);
     await _seedPronunciation(gameIds[1]);
     await _seedShapes(gameIds[2]);
-    // await _seedColors(gameIds[2]);
+    await _seedBubblePop(gameIds[3]);
   }
 
   // ---------------------------
@@ -184,29 +184,58 @@ class InitialDataSeeder {
   // ---------------------------
   // 🎨 COLOR GUESS GAME
   // ---------------------------
-  Future<void> _seedColors(int gameId) async {
-    const colorQuestions = [
-      {'question': 'What color is the sky?', 'answer': 'Blue'},
-      {'question': 'What color is the grass?', 'answer': 'Green'},
-      {'question': 'What color is a banana?', 'answer': 'Yellow'},
-      {'question': 'What color is an apple?', 'answer': 'Red'},
-    ];
+  // Future<void> _seedColors(int gameId) async {
+  //   const colorQuestions = [
+  //     {'question': 'What color is the sky?', 'answer': 'Blue'},
+  //     {'question': 'What color is the grass?', 'answer': 'Green'},
+  //     {'question': 'What color is a banana?', 'answer': 'Yellow'},
+  //     {'question': 'What color is an apple?', 'answer': 'Red'},
+  //   ];
 
-    for (final c in colorQuestions) {
-      final shuffled = ['Red', 'Green', 'Blue', 'Yellow']..shuffle(_rng);
-      await _gameQuestionRepository.addQuestion(
-        question: Question(
-          gameId: gameId,
-          question: c['question']!,
-          correctAnswer: c['answer']!,
-          choices: shuffled.toString(),
-        ),
-      );
-    }
-  }
+  //   for (final c in colorQuestions) {
+  //     final shuffled = ['Red', 'Green', 'Blue', 'Yellow']..shuffle(_rng);
+  //     await _gameQuestionRepository.addQuestion(
+  //       question: Question(
+  //         gameId: gameId,
+  //         question: c['question']!,
+  //         correctAnswer: c['answer']!,
+  //         choices: shuffled.toString(),
+  //       ),
+  //     );
+  //   }
+  // }
 
   // ---------------------------
   // 🎨 Bubble Pop GAME
   // ---------------------------
-  Future<void> _seedBubblePop(int gameId) async {}
+  Future<void> _seedBubblePop(int gameId) async {
+    final random = Random();
+    final letters = SeedData.bubble;
+
+    for (final letter in letters) {
+      final correctLetter = letters.firstWhere(
+        (s) => s.correctAnswer == letter.correctAnswer,
+      );
+      final wrongAnswers = letters
+          .where((s) => s.correctAnswer != correctLetter.correctAnswer)
+          .map((s) => s)
+          .toList();
+      wrongAnswers.shuffle(random);
+
+      final choices = wrongAnswers.take(7).toList();
+      choices.add(correctLetter);
+      choices.shuffle(random);
+
+      await _gameQuestionRepository.addQuestion(
+        question: Question(
+          gameId: gameId,
+          question: letter.question,
+          correctAnswer: correctLetter.correctAnswer,
+          difficulty: letter.difficulty,
+          image: letter.image,
+          choices: jsonEncode(choices),
+        ),
+      );
+    }
+  }
 }

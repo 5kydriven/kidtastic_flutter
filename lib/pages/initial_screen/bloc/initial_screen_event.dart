@@ -5,3 +5,7 @@ sealed class InitialScreenEvent {
 class InitialScreenCreated extends InitialScreenEvent {
   const InitialScreenCreated();
 }
+
+class InitialScreenSfxButtonPressed extends InitialScreenEvent {
+  const InitialScreenSfxButtonPressed();
+}
