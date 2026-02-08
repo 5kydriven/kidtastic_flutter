@@ -17,6 +17,7 @@ class AnalyticsNeedsAttention extends StatelessWidget {
         if (!hasLowPerformers && !hasInactive) {
           return Container(
             padding: const EdgeInsets.all(16),
+            height: double.infinity,
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(16),
@@ -86,6 +87,7 @@ class AnalyticsNeedsAttention extends StatelessWidget {
 
         return Container(
           padding: const EdgeInsets.all(16),
+          height: double.infinity,
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(16),

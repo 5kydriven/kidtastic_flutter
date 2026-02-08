@@ -368,8 +368,21 @@ class BubbleGameBloc extends Bloc<BubbleGameEvent, BubbleGameState> {
     BubbleGameTextSpeech event,
     Emitter<BubbleGameState> emit,
   ) async {
+    emit(
+      state.copyWith(
+        isSpeaking: true,
+      ),
+    );
+
     await flutterTts.setPitch(1.6);
     await flutterTts.setSpeechRate(0.2);
+    await flutterTts.awaitSpeakCompletion(true);
     await flutterTts.speak(event.text);
+
+    emit(
+      state.copyWith(
+        isSpeaking: false,
+      ),
+    );
   }
 }
