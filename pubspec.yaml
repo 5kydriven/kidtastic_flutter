@@ -63,6 +63,7 @@ flutter:
     - assets/admin/
     - assets/games/
     - assets/bubble/
+    - assets/initial_screen/
 
   fonts:
     - family: Vag
