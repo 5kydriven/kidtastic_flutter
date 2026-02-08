@@ -14,6 +14,7 @@ class AnalyticsTopStudents extends StatelessWidget {
         if (state.topStudents.isEmpty) {
           return Container(
             padding: const EdgeInsets.all(16),
+            height: double.infinity,
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(16),
@@ -83,6 +84,7 @@ class AnalyticsTopStudents extends StatelessWidget {
 
         return Container(
           padding: const EdgeInsets.all(16),
+          height: double.infinity,
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(16),

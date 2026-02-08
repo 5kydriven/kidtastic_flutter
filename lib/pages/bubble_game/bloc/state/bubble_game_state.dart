@@ -25,5 +25,6 @@ sealed class BubbleGameState with _$BubbleGameState {
     @Default(false) bool isSfxMuted,
     @Default(RequestStatus.waiting) RequestStatus sessionQuestionRequestStatus,
     @Default(RequestStatus.waiting) RequestStatus gameSessionRequestStatus,
+    @Default(false) bool isSpeaking,
   }) = _BubbleGameState;
 }
