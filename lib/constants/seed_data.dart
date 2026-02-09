@@ -434,4 +434,115 @@ class SeedData {
       difficulty: Difficulty.easy,
     ),
   ];
+
+  static const colorShapes = [
+    Question(
+      question: 'teal',
+      correctAnswer: 'teal',
+      image: Assets.circleTeal,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'brown',
+      correctAnswer: 'brown',
+      image: Assets.circleBrown,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'violet',
+      correctAnswer: 'violet',
+      image: Assets.diamondViolet,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'yellow',
+      correctAnswer: 'yellow',
+      image: Assets.diamondYellow,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'teal',
+      correctAnswer: 'teal',
+      image: Assets.heartTeal,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'pink',
+      correctAnswer: 'pink',
+      image: Assets.heartPink,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'brown',
+      correctAnswer: 'brown',
+      image: Assets.heptagonBrown,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'green',
+      correctAnswer: 'green',
+      image: Assets.heptagonGreen,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'violet',
+      correctAnswer: 'violet',
+      image: Assets.heptagonViolet,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'brown',
+      correctAnswer: 'brown',
+      image: Assets.hexagonBrown,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'violet',
+      correctAnswer: 'violet',
+      image: Assets.hexagonViolet,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'pink',
+      correctAnswer: 'pink',
+      image: Assets.rectanglePink,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'blue',
+      correctAnswer: 'blue',
+      image: Assets.squareBlue,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'red',
+      correctAnswer: 'red',
+      image: Assets.squareRed,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'green',
+      correctAnswer: 'green',
+      image: Assets.trapezoidGreen,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'violet',
+      correctAnswer: 'violet',
+      image: Assets.trapezoidViolet,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'blue',
+      correctAnswer: 'blue',
+      image: Assets.triangleBlue,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'red',
+      correctAnswer: 'red',
+      image: Assets.triangleRed,
+      difficulty: Difficulty.easy,
+    ),
+  ];
 }

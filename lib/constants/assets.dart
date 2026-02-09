@@ -92,6 +92,28 @@ class Assets {
   static const homeBg = 'assets/backgrounds/home_bg.png';
   static const login = 'assets/backgrounds/login.jpg';
 
+  // **Colors**
+  static const circleTeal = 'assets/color/circle_teal.png';
+  static const circleBrown = 'assets/color/circle_brown.png';
+  static const colorBg = 'assets/color/color_bg.png';
+  static const colorLogo = 'assets/color/color_logo.png';
+  static const diamondViolet = 'assets/color/diamond_violet.png';
+  static const diamondYellow = 'assets/color/diamond_yellow.png';
+  static const heartTeal = 'assets/color/heart_teal.png';
+  static const heartPink = 'assets/color/heart_pink.png';
+  static const heptagonBrown = 'assets/color/heptagon_brown.png';
+  static const heptagonGreen = 'assets/color/heptagon_green.png';
+  static const heptagonViolet = 'assets/color/heptagon_violet.png';
+  static const hexagonBrown = 'assets/color/hexagon_brown.png';
+  static const hexagonViolet = 'assets/color/hexagon_violet.png';
+  static const rectanglePink = 'assets/color/rectangle_pink.png';
+  static const squareBlue = 'assets/color/square_blue.png';
+  static const squareRed = 'assets/color/square_red.png';
+  static const trapezoidGreen = 'assets/color/trapezoid_green.png';
+  static const trapezoidViolet = 'assets/color/trapezoid_violet.png';
+  static const triangleBlue = 'assets/color/triangle_blue.png';
+  static const triangleRed = 'assets/color/triangle_red.png';
+
   // **Icons**
   static const logo = 'assets/icon/logo.png';
   static const gear2 = 'assets/icon/3d_gear.png';
@@ -102,7 +124,7 @@ class Assets {
   static const teacherModeButton = 'assets/icon/teacher_mode_button.png';
 
   // **Sorting Game**
-  static const colorBg = 'assets/sorting/color_bg.png';
+  static const sortingBg = 'assets/sorting/color_bg.png';
   static const owlBubbleText = 'assets/sorting/owl_bubble_text.png';
   static const owl = 'assets/sorting/owl.png';
   static const bubbleText = 'assets/sorting/bubble_text.png';
