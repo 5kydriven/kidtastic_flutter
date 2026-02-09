@@ -12,6 +12,7 @@ import 'package:kidtastic_flutter/repositories/game_question_repository.dart';
 import 'package:kidtastic_flutter/utils/pluralize_helper.dart';
 
 import '../../models/models.dart';
+import '../../pages/color_game/view/view.dart';
 
 class InitialDataSeeder {
   final GameRepository _gameRepository;
@@ -63,6 +64,13 @@ class InitialDataSeeder {
         description: 'Pop the bubble!',
         route: BubbleGamePage.route,
       ),
+      Game(
+        name: 'Learn your color',
+        category: GameType.color,
+        imageAsset: Assets.colorBg,
+        description: 'Learn your color',
+        route: ColorGamePage.route,
+      ),
     ];
 
     final gameIds = <int>[];
@@ -81,6 +89,7 @@ class InitialDataSeeder {
     await _seedPronunciation(gameIds[1]);
     await _seedShapes(gameIds[2]);
     await _seedBubblePop(gameIds[3]);
+    await _seedColors(gameIds[4]);
   }
 
   // ---------------------------
@@ -182,28 +191,40 @@ class InitialDataSeeder {
   }
 
   // ---------------------------
-  // 🎨 COLOR GUESS GAME
+  // 🎨 COLOR GAME
   // ---------------------------
-  // Future<void> _seedColors(int gameId) async {
-  //   const colorQuestions = [
-  //     {'question': 'What color is the sky?', 'answer': 'Blue'},
-  //     {'question': 'What color is the grass?', 'answer': 'Green'},
-  //     {'question': 'What color is a banana?', 'answer': 'Yellow'},
-  //     {'question': 'What color is an apple?', 'answer': 'Red'},
-  //   ];
+  Future<void> _seedColors(int gameId) async {
+    final random = Random();
 
-  //   for (final c in colorQuestions) {
-  //     final shuffled = ['Red', 'Green', 'Blue', 'Yellow']..shuffle(_rng);
-  //     await _gameQuestionRepository.addQuestion(
-  //       question: Question(
-  //         gameId: gameId,
-  //         question: c['question']!,
-  //         correctAnswer: c['answer']!,
-  //         choices: shuffled.toString(),
-  //       ),
-  //     );
-  //   }
-  // }
+    const colorShapes = SeedData.colorShapes;
+
+    for (final colorShape in colorShapes) {
+      final correctAnswers = colorShapes.firstWhere(
+        (s) => s.correctAnswer == colorShape.correctAnswer,
+      );
+
+      final wrongAnswers = colorShapes
+          .where((s) => s.correctAnswer != colorShape.correctAnswer)
+          .map((s) => s)
+          .toList();
+      wrongAnswers.shuffle(random);
+
+      final choices = wrongAnswers.take(2).toList();
+      choices.add(correctAnswers);
+      choices.shuffle(random);
+
+      await _gameQuestionRepository.addQuestion(
+        question: Question(
+          gameId: gameId,
+          question: colorShape.correctAnswer,
+          correctAnswer: colorShape.correctAnswer,
+          image: colorShape.image,
+          difficulty: colorShape.difficulty,
+          choices: jsonEncode(choices),
+        ),
+      );
+    }
+  }
 
   // ---------------------------
   // 🎨 Bubble Pop GAME
