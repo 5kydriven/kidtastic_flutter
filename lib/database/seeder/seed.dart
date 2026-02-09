@@ -67,7 +67,7 @@ class InitialDataSeeder {
       Game(
         name: 'Learn your color',
         category: GameType.color,
-        imageAsset: Assets.colorBg,
+        imageAsset: Assets.learnColorBtn,
         description: 'Learn your color',
         route: ColorGamePage.route,
       ),

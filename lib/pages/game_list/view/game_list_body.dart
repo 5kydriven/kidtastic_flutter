@@ -10,6 +10,7 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../../constants/constants.dart';
 import '../../../models/models.dart';
+import '../../color_game/color_game.dart';
 import '../../match_game/match_game.dart';
 import '../bloc/bloc.dart';
 
@@ -76,6 +77,14 @@ class GameListBody extends StatelessWidget {
         context.push(
           BubbleGamePage.route,
           extra: BubbleGameState(
+            game: game,
+            student: state.student,
+          ),
+        );
+      case GameType.color:
+        context.push(
+          ColorGamePage.route,
+          extra: ColorGameState(
             game: game,
             student: state.student,
           ),

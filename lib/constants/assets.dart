@@ -180,6 +180,7 @@ class Assets {
   static const colorsBtn = 'assets/games/colorsBtn.png';
   static const gamesBtn = 'assets/games/gamesBtn.png';
   static const bubblePopBtn = 'assets/games/bubble_pop_btn.png';
+  static const learnColorBtn = 'assets/games/learnColorBtn.png';
 
   // **Initial Screen**
   static const initialScreenBg = 'assets/initial_screen/initial_screen_bg.png';
