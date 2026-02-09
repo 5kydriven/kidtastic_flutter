@@ -64,6 +64,7 @@ flutter:
     - assets/games/
     - assets/bubble/
     - assets/initial_screen/
+    - assets/color/
 
   fonts:
     - family: Vag
