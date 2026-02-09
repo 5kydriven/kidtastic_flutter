@@ -268,7 +268,9 @@ class _MyAppState extends State<MyApp> {
         GoRoute(
           path: ColorGamePage.route,
           builder: (context, state) {
-            return const ColorGamePage();
+            return ColorGamePage(
+              initialState: state.extra as ColorGameState,
+            );
           },
         ),
         GoRoute(
