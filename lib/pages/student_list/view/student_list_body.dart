@@ -5,6 +5,7 @@ import 'package:kidtastic_flutter/extensions/extentions.dart';
 
 import '../../../constants/constants.dart';
 import '../../../models/models.dart';
+import '../../student_edit/student_edit.dart';
 import '../../student_profile/student_profile.dart';
 import '../bloc/bloc.dart';
 import '../widgets/widgets.dart';
@@ -113,6 +114,71 @@ class StudentListBody extends StatelessWidget {
                   ),
                 ),
               ),
+
+              Expanded(
+                flex: 1,
+                child: PopupMenuButton<String>(
+                  onOpened: () => bloc.add(const StudentListSfxButtonPressed()),
+                  icon: const Icon(Icons.more_vert),
+                  onSelected: (value) {
+                    if (value == 'edit') {
+                      bloc.add(const StudentListSfxButtonPressed());
+                      context.push(
+                        StudentEditPage.route,
+                        extra: student,
+                      );
+                    } else if (value == 'delete') {
+                      showDialog(
+                        context: context,
+                        builder: (_) {
+                          return AlertDialog(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            title: Row(
+                              children: const [
+                                Icon(
+                                  Icons.warning_amber_rounded,
+                                  color: Colors.deepOrange,
+                                ),
+                                SizedBox(width: 8),
+                                Text('Delete Student'),
+                              ],
+                            ),
+                            content: const Text(
+                              'Are you sure you want to delete this student? '
+                              'This action cannot be undone.',
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () => context.pop(),
+                                child: const Text('Cancel'),
+                              ),
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.red,
+                                ),
+                                onPressed: () => context.pop(),
+                                child: const Text('Delete'),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    }
+                  },
+                  itemBuilder: (BuildContext context) => [
+                    const PopupMenuItem(
+                      value: 'edit',
+                      child: Text('Edit'),
+                    ),
+                    const PopupMenuItem(
+                      value: 'delete',
+                      child: Text('Delete'),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
@@ -206,6 +272,11 @@ class StudentListBody extends StatelessWidget {
                                       context: context,
                                       label: 'Status',
                                       flex: 2,
+                                    ),
+                                    _headerCell(
+                                      context: context,
+                                      label: 'Actions',
+                                      flex: 1,
                                     ),
                                   ],
                                 ),

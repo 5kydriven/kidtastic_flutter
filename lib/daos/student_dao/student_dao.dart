@@ -30,4 +30,10 @@ class StudentDao extends DatabaseAccessor<KidtasticDatabase>
   Stream<List<StudentTableData>> watchAll() {
     return select(studentTable).watch();
   }
+
+  Future<bool> updateStudent(
+    StudentTableCompanion student,
+  ) async {
+    return await update(studentTable).replace(student);
+  }
 }

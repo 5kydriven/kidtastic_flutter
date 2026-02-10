@@ -8,6 +8,7 @@ class LabeledTextFormField extends StatelessWidget {
   final ValueChanged<String>? onChanged;
   final Widget? suffixIcon;
   final TextInputAction? textInputAction;
+  final String? initialValue;
 
   const LabeledTextFormField({
     super.key,
@@ -18,6 +19,7 @@ class LabeledTextFormField extends StatelessWidget {
     this.onChanged,
     this.suffixIcon,
     this.textInputAction,
+    this.initialValue,
   });
 
   @override
@@ -59,6 +61,7 @@ class LabeledTextFormField extends StatelessWidget {
         TextFormField(
           obscureText: obscure,
           onChanged: onChanged,
+          initialValue: initialValue,
           textInputAction: textInputAction,
           decoration: InputDecoration(
             isDense: true,

@@ -1,0 +1,27 @@
+{
+  "id": "student-edit-refactor-18",
+  "seq": "18",
+  "title": "Run Freezed Code Generation",
+  "status": "pending",
+  "depends_on": ["02", "14"],
+  "parallel": false,
+  "suggested_agent": "coder-agent",
+  "context_files": [
+    ".opencode/context/core/task-management/standards/task-schema.md"
+  ],
+  "reference_files": [
+    ".tmp/student_edit_refactor_todo.md",
+    "pubspec.yaml"
+  ],
+  "acceptance_criteria": [
+    "flutter pub run build_runner build --delete-conflicting-outputs executed",
+    "student_edit_state.freezed.dart generated successfully",
+    "student_list_state.freezed.dart regenerated (after modifications)",
+    "No build errors",
+    "All generated files up to date"
+  ],
+  "deliverables": [
+    "lib/pages/student_edit/bloc/state/student_edit_state.freezed.dart",
+    "lib/pages/student_list/bloc/state/student_list_state.freezed.dart (updated)"
+  ]
+}

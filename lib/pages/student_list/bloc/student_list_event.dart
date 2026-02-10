@@ -33,3 +33,11 @@ class StudentListSfxVolumeChanged extends StudentListEvent {
 class StudentListSfxButtonPressed extends StudentListEvent {
   const StudentListSfxButtonPressed();
 }
+
+class StudentListDeleteStudentPressed extends StudentListEvent {
+  final int id;
+
+  const StudentListDeleteStudentPressed({
+    required this.id,
+  });
+}

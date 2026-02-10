@@ -1,0 +1,30 @@
+{
+  "id": "student-edit-refactor-15",
+  "seq": "15",
+  "title": "Update Student List BLoC",
+  "status": "pending",
+  "depends_on": ["13", "14"],
+  "parallel": false,
+  "suggested_agent": "coder-agent",
+  "context_files": [
+    ".opencode/context/core/task-management/standards/task-schema.md"
+  ],
+  "reference_files": [
+    ".tmp/student_edit_refactor_todo.md",
+    "lib/pages/student_list/bloc/student_list_bloc.dart",
+    "lib/pages/student_list/bloc/student_list_event.dart"
+  ],
+  "acceptance_criteria": [
+    "Event handlers for removed events deleted",
+    "on<StudentListFirstNameChanged> handler removed",
+    "on<StudentListLastNameChanged> handler removed",
+    "on<StudentListGenderChanged> handler removed",
+    "on<StudentListAvatarSelected> handler removed",
+    "on<StudentListEditStudentPressed> handler removed",
+    "on<StudentListErrorTypeCleared> handler removed (if applicable)",
+    "Remaining handlers preserved: ScreenCreated, GameSessionFetched, Audio controls, DeleteStudent"
+  ],
+  "deliverables": [
+    "lib/pages/student_list/bloc/student_list_bloc.dart (modified)"
+  ]
+}

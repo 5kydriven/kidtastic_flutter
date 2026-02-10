@@ -1,0 +1,31 @@
+{
+  "id": "student-edit-refactor-20",
+  "seq": "20",
+  "title": "Verify Navigation and Form Functionality",
+  "status": "pending",
+  "depends_on": ["19"],
+  "parallel": false,
+  "suggested_agent": "coder-agent",
+  "context_files": [
+    ".opencode/context/core/task-management/standards/task-schema.md"
+  ],
+  "reference_files": [
+    ".tmp/student_edit_refactor_todo.md",
+    "lib/pages/student_edit/view/student_edit_page.dart",
+    "lib/pages/student_edit/view/student_edit_body.dart"
+  ],
+  "acceptance_criteria": [
+    "Clicking edit from student list navigates to student edit page",
+    "Student data loads correctly in form",
+    "Avatar selection works",
+    "First name field updates correctly",
+    "Last name field updates correctly",
+    "Gender dropdown works",
+    "Save button saves changes",
+    "Validation errors display correctly",
+    "Cancel button navigates back"
+  ],
+  "deliverables": [
+    "Verification report (no file changes)"
+  ]
+}

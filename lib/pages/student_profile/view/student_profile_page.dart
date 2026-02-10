@@ -32,6 +32,8 @@ class _StudentProfilePageState extends State<StudentProfilePage> {
         gameSessionRepository: context.read<GameSessionRepository>(),
         studentInsightRepository: context.read<StudentInsightRepository>(),
         gameRepository: context.read<GameRepository>(),
+        sessionQuestionRepository: context.read<SessionQuestionRepository>(),
+        pronunciationAttemptRepository: context.read<PronunciationAttemptRepository>(),
       )..add(const StudentProfileScreenCreated()),
       child: BlocBuilder<StudentProfileBloc, StudentProfileState>(
         builder: (context, state) {

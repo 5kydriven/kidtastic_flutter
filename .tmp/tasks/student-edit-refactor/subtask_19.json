@@ -1,0 +1,28 @@
+{
+  "id": "student-edit-refactor-19",
+  "seq": "19",
+  "title": "Verify Imports and Build",
+  "status": "pending",
+  "depends_on": ["10", "12", "17", "18"],
+  "parallel": false,
+  "suggested_agent": "coder-agent",
+  "context_files": [
+    ".opencode/context/core/task-management/standards/task-schema.md"
+  ],
+  "reference_files": [
+    ".tmp/student_edit_refactor_todo.md",
+    "lib/pages/student_edit/student_edit.dart",
+    "lib/pages/student_list/view/student_list_body.dart",
+    "lib/main.dart"
+  ],
+  "acceptance_criteria": [
+    "All imports in student_edit.dart resolve correctly",
+    "All imports in student_list_body.dart resolve correctly",
+    "Router imports resolve correctly",
+    "flutter analyze passes with no errors",
+    "Project builds successfully"
+  ],
+  "deliverables": [
+    "Verification report (no file changes)"
+  ]
+}

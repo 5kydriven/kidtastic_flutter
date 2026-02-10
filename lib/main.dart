@@ -10,12 +10,14 @@ import 'package:kidtastic_flutter/pages/analytics/view/analytics_page.dart';
 import 'package:kidtastic_flutter/pages/color_game/color_game.dart';
 import 'package:kidtastic_flutter/pages/counting_game/counting_game.dart';
 import 'package:kidtastic_flutter/pages/dashboard/view/dashboard_page.dart';
+import 'package:kidtastic_flutter/pages/student_edit/student_edit.dart';
 import 'package:kidtastic_flutter/pages/student_list/student_list.dart';
 import 'package:path/path.dart' as p;
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'constants/constants.dart';
+import 'models/models.dart';
 import 'pages/bubble_game/bubble_game.dart';
 import 'pages/game_list/game_list.dart';
 import 'pages/home/home.dart';
@@ -105,6 +107,8 @@ Future<void> main() async {
           studentDao: StudentDao(db),
           gameSessionDao: GameSessionDao(db),
           gameDao: GameDao(db),
+          sessionQuestionDao: SessionQuestionDao(db),
+          pronunciationAttemptDao: PronunciationAttemptDao(db),
         ),
       ),
     );
@@ -277,6 +281,14 @@ class _MyAppState extends State<MyApp> {
           path: StudentListPage.route,
           builder: (context, state) {
             return const StudentListPage();
+          },
+        ),
+        GoRoute(
+          path: StudentEditPage.route,
+          builder: (context, state) {
+            return StudentEditPage(
+              student: state.extra as Student,
+            );
           },
         ),
         GoRoute(

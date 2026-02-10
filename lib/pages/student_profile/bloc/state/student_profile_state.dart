@@ -25,6 +25,7 @@ sealed class StudentProfileState with _$StudentProfileState {
     // Recent Activity
     @Default([]) List<GameSession> recentSessions,
     @Default([]) List<Game> games,
+    @Default({}) Map<int, double> sessionAccuracyMap,
     
     // Audio settings
     @Default(0.0) double bgmVolume,

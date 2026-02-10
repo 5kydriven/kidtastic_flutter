@@ -1,0 +1,28 @@
+{
+  "id": "student-edit-refactor-21",
+  "seq": "21",
+  "title": "Verify Student List Still Works",
+  "status": "pending",
+  "depends_on": ["19"],
+  "parallel": false,
+  "suggested_agent": "coder-agent",
+  "context_files": [
+    ".opencode/context/core/task-management/standards/task-schema.md"
+  ],
+  "reference_files": [
+    ".tmp/student_edit_refactor_todo.md",
+    "lib/pages/student_list/bloc/student_list_bloc.dart",
+    "lib/pages/student_list/view/student_list_body.dart"
+  ],
+  "acceptance_criteria": [
+    "Student list loads correctly",
+    "Delete student functionality works",
+    "Settings dialog works",
+    "Audio controls (BGM/SFX) work",
+    "No edit-related functionality remains in student_list",
+    "No compilation errors in student_list feature"
+  ],
+  "deliverables": [
+    "Verification report (no file changes)"
+  ]
+}

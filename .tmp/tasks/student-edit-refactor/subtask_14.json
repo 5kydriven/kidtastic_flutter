@@ -1,0 +1,28 @@
+{
+  "id": "student-edit-refactor-14",
+  "seq": "14",
+  "title": "Remove Edit Dialog State Properties from Student List",
+  "status": "pending",
+  "depends_on": ["13"],
+  "parallel": false,
+  "suggested_agent": "coder-agent",
+  "context_files": [
+    ".opencode/context/core/task-management/standards/task-schema.md"
+  ],
+  "reference_files": [
+    ".tmp/student_edit_refactor_todo.md",
+    "lib/pages/student_list/bloc/state/student_list_state.dart"
+  ],
+  "acceptance_criteria": [
+    "firstName: TextFieldInput removed",
+    "lastName: TextFieldInput removed",
+    "gender: TextFieldInput removed",
+    "selectedAvatar: String removed",
+    "isAvatarMenuOpen: bool removed",
+    "studentRequestStatus: RequestStatus removed (if only for edit)",
+    "Remaining properties preserved: screenRequestStatus, gameSessionRequestStatus, students, gameSessions, bgmVolume, sfxVolume, isBgmMuted, isSfxMuted"
+  ],
+  "deliverables": [
+    "lib/pages/student_list/bloc/state/student_list_state.dart (modified)"
+  ]
+}

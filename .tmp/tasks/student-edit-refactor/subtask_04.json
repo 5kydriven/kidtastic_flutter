@@ -1,0 +1,31 @@
+{
+  "id": "student-edit-refactor-04",
+  "seq": "04",
+  "title": "Create Student Edit BLoC",
+  "status": "pending",
+  "depends_on": ["02", "03"],
+  "parallel": false,
+  "suggested_agent": "coder-agent",
+  "context_files": [
+    ".opencode/context/core/task-management/standards/task-schema.md"
+  ],
+  "reference_files": [
+    ".tmp/student_edit_refactor_todo.md",
+    "lib/pages/student_list/bloc/student_list_bloc.dart",
+    "lib/pages/student_edit/bloc/state/student_edit_state.dart",
+    "lib/pages/student_edit/bloc/student_edit_event.dart"
+  ],
+  "acceptance_criteria": [
+    "StudentEditBloc extends Bloc<StudentEditEvent, StudentEditState>",
+    "Initializes state with student data on StudentEditScreenCreated",
+    "Handles first name changes with validation",
+    "Handles last name changes with validation",
+    "Handles gender changes with validation",
+    "Handles avatar selection",
+    "Handles save operation with API call",
+    "Emits success/failure states appropriately"
+  ],
+  "deliverables": [
+    "lib/pages/student_edit/bloc/student_edit_bloc.dart"
+  ]
+}

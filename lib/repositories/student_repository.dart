@@ -73,4 +73,30 @@ class StudentRepository {
       (rows) => rows.map((e) => Student.fromJson(e.toJson())).toList(),
     );
   }
+
+  Future<Result<bool>> updateStudent({
+    required int id,
+    required Student student,
+  }) async {
+    try {
+      final response = await _studentDao.updateStudent(
+        StudentTableCompanion.insert(
+          id: Value(id),
+          name: student.name ?? '',
+          firstName: student.firstName ?? '',
+          lastName: student.lastName ?? '',
+          gender: student.gender ?? '',
+          image: Value(student.image),
+        ),
+      );
+      return Result(
+        statusCode: 200,
+        data: response,
+      );
+    } catch (e) {
+      return Result(
+        statusCode: 400,
+      );
+    }
+  }
 }

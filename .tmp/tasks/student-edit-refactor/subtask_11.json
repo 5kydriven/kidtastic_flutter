@@ -1,0 +1,25 @@
+{
+  "id": "student-edit-refactor-11",
+  "seq": "11",
+  "title": "Add Student Edit Route to Router",
+  "status": "pending",
+  "depends_on": ["10", "06"],
+  "parallel": false,
+  "suggested_agent": "coder-agent",
+  "context_files": [
+    ".opencode/context/core/task-management/standards/task-schema.md"
+  ],
+  "reference_files": [
+    ".tmp/student_edit_refactor_todo.md",
+    "lib/main.dart"
+  ],
+  "acceptance_criteria": [
+    "GoRoute added to router in lib/main.dart",
+    "Route path is '/student/edit'",
+    "Student object passed via state.extra",
+    "Returns StudentEditPage with student parameter"
+  ],
+  "deliverables": [
+    "lib/main.dart (modified)"
+  ]
+}

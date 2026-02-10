@@ -1,0 +1,23 @@
+{
+  "id": "student-edit-refactor-09",
+  "seq": "09",
+  "title": "Create Widgets Exports",
+  "status": "pending",
+  "depends_on": [],
+  "parallel": false,
+  "suggested_agent": "coder-agent",
+  "context_files": [
+    ".opencode/context/core/task-management/standards/task-schema.md"
+  ],
+  "reference_files": [
+    ".tmp/student_edit_refactor_todo.md",
+    "lib/pages/student_list/widgets/widgets.dart"
+  ],
+  "acceptance_criteria": [
+    "widgets.dart file exists in lib/pages/student_edit/widgets/",
+    "File is a valid Dart export file (placeholder for future widgets)"
+  ],
+  "deliverables": [
+    "lib/pages/student_edit/widgets/widgets.dart"
+  ]
+}

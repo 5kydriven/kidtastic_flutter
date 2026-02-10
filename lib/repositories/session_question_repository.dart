@@ -33,16 +33,20 @@ class SessionQuestionRepository {
     }
   }
 
-  Future<Result> getSessionQuestions({
+  Future<Result<List<SessionQuestion>>> getSessionQuestions({
     required int sessionId,
   }) async {
     try {
-      final response = _sessionQuestionDao.getQuestionsBySession(
+      final response = await _sessionQuestionDao.getQuestionsBySession(
         sessionId: sessionId,
       );
 
+      final data = response
+          .map((row) => SessionQuestion.fromJson(row.toJson()))
+          .toList();
+
       return Result(
-        data: response,
+        data: data,
         statusCode: 200,
       );
     } catch (e) {

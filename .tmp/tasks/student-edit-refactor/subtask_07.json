@@ -1,0 +1,31 @@
+{
+  "id": "student-edit-refactor-07",
+  "seq": "07",
+  "title": "Create Student Edit Body",
+  "status": "pending",
+  "depends_on": ["06"],
+  "parallel": false,
+  "suggested_agent": "coder-agent",
+  "context_files": [
+    ".opencode/context/core/task-management/standards/task-schema.md"
+  ],
+  "reference_files": [
+    ".tmp/student_edit_refactor_todo.md",
+    "lib/pages/student_list/view/student_list_edit_dialog.dart",
+    "lib/pages/student_edit/view/student_edit_page.dart"
+  ],
+  "acceptance_criteria": [
+    "StudentEditBody widget created",
+    "Avatar selection with overlay menu implemented",
+    "First name input field with validation",
+    "Last name input field with validation",
+    "Gender dropdown with validation",
+    "Save button that dispatches StudentEditSavePressed",
+    "Cancel button that navigates back",
+    "Keyboard shortcuts preserved (Escape, Enter)",
+    "All 19 avatars available for selection"
+  ],
+  "deliverables": [
+    "lib/pages/student_edit/view/student_edit_body.dart"
+  ]
+}

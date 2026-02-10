@@ -1,0 +1,24 @@
+{
+  "id": "student-edit-refactor-16",
+  "seq": "16",
+  "title": "Delete Student List Edit Dialog",
+  "status": "pending",
+  "depends_on": ["12"],
+  "parallel": false,
+  "suggested_agent": "coder-agent",
+  "context_files": [
+    ".opencode/context/core/task-management/standards/task-schema.md"
+  ],
+  "reference_files": [
+    ".tmp/student_edit_refactor_todo.md",
+    "lib/pages/student_list/view/student_list_edit_dialog.dart"
+  ],
+  "acceptance_criteria": [
+    "student_list_edit_dialog.dart file deleted",
+    "No references to StudentListEditDialog remain",
+    "All functionality migrated to student_edit page"
+  ],
+  "deliverables": [
+    "lib/pages/student_list/view/student_list_edit_dialog.dart (deleted)"
+  ]
+}

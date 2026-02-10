@@ -1,0 +1,24 @@
+{
+  "id": "student-edit-refactor-08",
+  "seq": "08",
+  "title": "Create View Exports",
+  "status": "pending",
+  "depends_on": ["06", "07"],
+  "parallel": false,
+  "suggested_agent": "coder-agent",
+  "context_files": [
+    ".opencode/context/core/task-management/standards/task-schema.md"
+  ],
+  "reference_files": [
+    ".tmp/student_edit_refactor_todo.md",
+    "lib/pages/student_list/view/view.dart"
+  ],
+  "acceptance_criteria": [
+    "view.dart file exists in lib/pages/student_edit/view/",
+    "Exports student_edit_page.dart",
+    "Exports student_edit_body.dart"
+  ],
+  "deliverables": [
+    "lib/pages/student_edit/view/view.dart"
+  ]
+}

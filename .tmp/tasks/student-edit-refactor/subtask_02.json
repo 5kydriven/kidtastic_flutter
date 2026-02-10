@@ -1,0 +1,29 @@
+{
+  "id": "student-edit-refactor-02",
+  "seq": "02",
+  "title": "Create Student Edit State",
+  "status": "pending",
+  "depends_on": ["01"],
+  "parallel": false,
+  "suggested_agent": "coder-agent",
+  "context_files": [
+    ".opencode/context/core/task-management/standards/task-schema.md"
+  ],
+  "reference_files": [
+    ".tmp/student_edit_refactor_todo.md",
+    "lib/pages/student_list/bloc/state/student_list_state.dart",
+    "lib/models/student.dart"
+  ],
+  "acceptance_criteria": [
+    "StudentEditState class defined with @freezed annotation",
+    "Contains student: Student property",
+    "Contains firstName: TextFieldInput property",
+    "Contains lastName: TextFieldInput property",
+    "Contains gender: TextFieldInput property",
+    "Contains selectedAvatar: String property",
+    "Contains studentRequestStatus: RequestStatus property"
+  ],
+  "deliverables": [
+    "lib/pages/student_edit/bloc/state/student_edit_state.dart"
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "id": "student-edit-refactor-01",
+  "seq": "01",
+  "title": "Create Student Edit Directory Structure",
+  "status": "pending",
+  "depends_on": [],
+  "parallel": false,
+  "suggested_agent": "coder-agent",
+  "context_files": [
+    ".opencode/context/core/task-management/standards/task-schema.md"
+  ],
+  "reference_files": [
+    ".tmp/student_edit_refactor_todo.md",
+    "lib/pages/student_list/"
+  ],
+  "acceptance_criteria": [
+    "Directory lib/pages/student_edit/ exists",
+    "Subdirectory lib/pages/student_edit/bloc/ exists",
+    "Subdirectory lib/pages/student_edit/bloc/state/ exists",
+    "Subdirectory lib/pages/student_edit/view/ exists",
+    "Subdirectory lib/pages/student_edit/widgets/ exists"
+  ],
+  "deliverables": [
+    "lib/pages/student_edit/",
+    "lib/pages/student_edit/bloc/",
+    "lib/pages/student_edit/bloc/state/",
+    "lib/pages/student_edit/view/",
+    "lib/pages/student_edit/widgets/"
+  ]
+}

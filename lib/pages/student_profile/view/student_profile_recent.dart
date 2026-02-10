@@ -34,10 +34,21 @@ class StudentProfileRecent extends StatelessWidget {
           );
 
           final totalQuestions = session.totalQuestions ?? 10;
-          final correctAnswers = session.score ?? 0;
-          final accuracy = totalQuestions > 0
-              ? (correctAnswers / totalQuestions) * 100
-              : 0.0;
+          final isPronunciation = _getGameType(game.name ?? '') == 'pronunciation';
+          
+          // Use calculated accuracy from map for pronunciation games
+          double accuracy;
+          int correctAnswers;
+          final sessionId = session.id ?? 0;
+          if (isPronunciation && state.sessionAccuracyMap.containsKey(sessionId)) {
+            accuracy = state.sessionAccuracyMap[sessionId] ?? 0.0;
+            correctAnswers = ((accuracy / 100) * totalQuestions).round();
+          } else {
+            correctAnswers = session.score ?? 0;
+            accuracy = totalQuestions > 0
+                ? (correctAnswers / totalQuestions) * 100
+                : 0.0;
+          }
 
           return ActivityItem(
             gameName: game.name ?? 'Unknown Game',

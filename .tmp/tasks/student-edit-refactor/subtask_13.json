@@ -1,0 +1,28 @@
+{
+  "id": "student-edit-refactor-13",
+  "seq": "13",
+  "title": "Remove Edit Dialog Events from Student List",
+  "status": "pending",
+  "depends_on": [],
+  "parallel": false,
+  "suggested_agent": "coder-agent",
+  "context_files": [
+    ".opencode/context/core/task-management/standards/task-schema.md"
+  ],
+  "reference_files": [
+    ".tmp/student_edit_refactor_todo.md",
+    "lib/pages/student_list/bloc/student_list_event.dart"
+  ],
+  "acceptance_criteria": [
+    "StudentListFirstNameChanged removed",
+    "StudentListLastNameChanged removed",
+    "StudentListGenderChanged removed",
+    "StudentListAvatarSelected removed",
+    "StudentListEditStudentPressed removed",
+    "StudentListErrorTypeCleared removed (if only used for edit dialog)",
+    "Remaining events: ScreenCreated, GameSessionFetched, BgmToggled, BgmVolumeChanged, SfxToggled, SfxVolumeChanged, SfxButtonPressed, DeleteStudentPressed"
+  ],
+  "deliverables": [
+    "lib/pages/student_list/bloc/student_list_event.dart (modified)"
+  ]
+}

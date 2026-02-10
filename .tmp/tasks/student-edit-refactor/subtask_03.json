@@ -1,0 +1,29 @@
+{
+  "id": "student-edit-refactor-03",
+  "seq": "03",
+  "title": "Create Student Edit Events",
+  "status": "pending",
+  "depends_on": ["01"],
+  "parallel": false,
+  "suggested_agent": "coder-agent",
+  "context_files": [
+    ".opencode/context/core/task-management/standards/task-schema.md"
+  ],
+  "reference_files": [
+    ".tmp/student_edit_refactor_todo.md",
+    "lib/pages/student_list/bloc/student_list_event.dart"
+  ],
+  "acceptance_criteria": [
+    "StudentEditScreenCreated event defined with Student parameter",
+    "StudentEditFirstNameChanged event defined with String value",
+    "StudentEditLastNameChanged event defined with String value",
+    "StudentEditGenderChanged event defined with String value",
+    "StudentEditAvatarSelected event defined with String avatar",
+    "StudentEditSavePressed event defined",
+    "StudentEditErrorTypeCleared event defined",
+    "StudentEditSfxButtonPressed event defined"
+  ],
+  "deliverables": [
+    "lib/pages/student_edit/bloc/student_edit_event.dart"
+  ]
+}

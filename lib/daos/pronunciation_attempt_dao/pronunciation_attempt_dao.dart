@@ -30,4 +30,13 @@ class PronunciationAttemptDao extends DatabaseAccessor<KidtasticDatabase>
       pronunciationAttemptTable,
     )..where((tbl) => tbl.sessionQuestionId.equals(sessionQuestionId))).go();
   }
+
+  Future<List<PronunciationAttemptTableData>> getAttemptsBySessionQuestionIds({
+    required List<int> sessionQuestionIds,
+  }) async {
+    if (sessionQuestionIds.isEmpty) return [];
+    return await (select(
+      pronunciationAttemptTable,
+    )..where((tbl) => tbl.sessionQuestionId.isIn(sessionQuestionIds))).get();
+  }
 }

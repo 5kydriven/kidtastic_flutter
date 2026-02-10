@@ -45,6 +45,7 @@ class PronunciationGameBloc
   Timer? _silenceTimer;
 
   bool _isInitialized = false;
+  bool _isStopping = false;
 
   String _accumulatedText = '';
 
@@ -181,17 +182,17 @@ class PronunciationGameBloc
       return;
     }
 
-    final firstQuestion = gameQuestionResult.data!.first;
+    final firstQuestion = gameQuestionResult.data?.first;
     final sessionQuestionResult = await _sessionQuestionRepository
         .addSessionQuestion(
           entry: SessionQuestion(
             sessionId: gameSessionResult.data ?? 0,
-            questionId: firstQuestion.id ?? 0,
+            questionId: firstQuestion?.id ?? 0,
           ),
         );
-    
+
     final sessionStartTime = DateTime.now();
-    
+
     emit(
       state.copyWith(
         sessionId: gameSessionResult.data ?? 0,
@@ -210,6 +211,7 @@ class PronunciationGameBloc
     Emitter<PronunciationGameState> emit,
   ) async {
     final nextIndex = state.currentIndex + 1;
+    print('QuestionNext called: nextIndex=$nextIndex, currentIndex=${state.currentIndex}, _isStopping=$_isStopping');
     if (nextIndex >= state.question.length) {
       emit(
         state.copyWith(
@@ -219,6 +221,7 @@ class PronunciationGameBloc
       add(const PronunciationGameGameEnd());
       return;
     }
+    print('here 2 $nextIndex');
 
     final result = await _sessionQuestionRepository.addSessionQuestion(
       entry: SessionQuestion(
@@ -252,7 +255,6 @@ class PronunciationGameBloc
       ),
     );
 
-    // Calculate session duration
     final durationSeconds = state.sessionStartTime != null
         ? DateTime.now().difference(state.sessionStartTime!).inSeconds
         : 0;
@@ -402,7 +404,7 @@ class PronunciationGameBloc
       bestMatch = _accumulatedText.trim();
     }
 
-    final isCorrect = bestSimilarity >= 0.75;
+    final isCorrect = bestSimilarity >= 0.6;
     final confidence = (bestSimilarity * 100).clamp(0, 100);
 
     debugPrint(
@@ -420,6 +422,7 @@ class PronunciationGameBloc
     );
 
     if (isCorrect) {
+      _silenceTimer?.cancel();
       await _stopRecording(
         emit,
         triggeredByUser: false,
@@ -433,6 +436,13 @@ class PronunciationGameBloc
     bool triggeredByUser = false,
     bool wasCorrect = false,
   }) async {
+    print('_stopRecording called: isRecording=${state.isRecording}, _isStopping=$_isStopping, wasCorrect=$wasCorrect, triggeredByUser=$triggeredByUser');
+    if (!state.isRecording || _isStopping) {
+      print('_stopRecording: early return (isRecording=${state.isRecording}, _isStopping=$_isStopping)');
+      return;
+    }
+    _isStopping = true;
+
     emit(
       state.copyWith(
         pronunciationRequestStatus: RequestStatus.inProgress,
@@ -509,9 +519,8 @@ class PronunciationGameBloc
       );
 
       add(const PronunciationGameQuestionNext());
-    } else {
-      // not correct: if user triggered stop, UI already reflects stopped. If automatic stop (silence/max) we do nothing more.
     }
+    _isStopping = false;
   }
 
   Future<void> _modelReady(
