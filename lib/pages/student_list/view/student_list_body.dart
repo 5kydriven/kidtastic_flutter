@@ -123,9 +123,35 @@ class StudentListBody extends StatelessWidget {
                   onSelected: (value) {
                     if (value == 'edit') {
                       bloc.add(const StudentListSfxButtonPressed());
-                      context.push(
-                        StudentEditPage.route,
-                        extra: student,
+                      showDialog(
+                        context: context,
+                        barrierDismissible: true,
+                        builder: (_) {
+                          return Dialog(
+                            child: SizedBox(
+                              width: 450,
+                              height: 550,
+                              child: StudentEditPage(
+                                initialState: StudentEditState(
+                                  student: student,
+                                  firstName: TextFieldInput(
+                                    value: student.firstName ?? '',
+                                  ),
+                                  lastName: TextFieldInput(
+                                    value: student.lastName ?? '',
+                                  ),
+                                  gender: TextFieldInput(
+                                    value: student.gender ?? '',
+                                  ),
+                                  selectedAvatar: student.image ?? '',
+                                  onSave: () => bloc.add(
+                                    const StudentListScreenCreated(),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
                       );
                     } else if (value == 'delete') {
                       showDialog(
@@ -158,7 +184,11 @@ class StudentListBody extends StatelessWidget {
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.red,
                                 ),
-                                onPressed: () => context.pop(),
+                                onPressed: () => bloc.add(
+                                  StudentListDeleteStudentPressed(
+                                    id: student.id ?? 0,
+                                  ),
+                                ),
                                 child: const Text('Delete'),
                               ),
                             ],

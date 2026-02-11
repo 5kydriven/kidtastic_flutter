@@ -26,6 +26,7 @@ class StudentListBloc extends Bloc<StudentListEvent, StudentListState> {
     on<StudentListSfxToggled>(_sfxToggled);
     on<StudentListSfxVolumeChanged>(_sfxVolumeChanged);
     on<StudentListSfxButtonPressed>(_sfxButtonPressed);
+    on<StudentListDeleteStudentPressed>(_deleteStudentPressed);
   }
 
   Future<void> _screenCreated(
@@ -54,7 +55,6 @@ class StudentListBloc extends Bloc<StudentListEvent, StudentListState> {
       case ResultStatus.success:
         final studentsData = result.data ?? [];
 
-        // Wait for all lastPlayedAt fetches
         final students = await Future.wait(
           studentsData.map((e) async {
             final lastPlayedAt = await _gameSessionRepository
@@ -194,5 +194,40 @@ class StudentListBloc extends Bloc<StudentListEvent, StudentListState> {
     Emitter<StudentListState> emit,
   ) async {
     await _audioService.playSfx(Audios.pop2Wav);
+  }
+
+  Future<void> _deleteStudentPressed(
+    StudentListDeleteStudentPressed event,
+    Emitter<StudentListState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        studentRequestStatus: RequestStatus.inProgress,
+      ),
+    );
+
+    add(const StudentListSfxButtonPressed());
+
+    final response = await _studentRepository.deleteStudent(
+      id: event.id,
+    );
+
+    switch (response.resultStatus) {
+      case ResultStatus.success:
+        emit(
+          state.copyWith(
+            studentRequestStatus: RequestStatus.success,
+          ),
+        );
+        add(const StudentListScreenCreated());
+        break;
+      default:
+        emit(
+          state.copyWith(
+            studentRequestStatus: RequestStatus.failure,
+          ),
+        );
+        break;
+    }
   }
 }

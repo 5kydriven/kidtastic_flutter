@@ -9,6 +9,7 @@ sealed class StudentListState with _$StudentListState {
   const factory StudentListState({
     @Default(RequestStatus.waiting) RequestStatus screenRequestStatus,
     @Default(RequestStatus.waiting) RequestStatus gameSessionRequestStatus,
+    @Default(RequestStatus.waiting) RequestStatus studentRequestStatus,
     @Default([]) List<Student> students,
     @Default([]) List<GameSession> gameSessions,
     @Default(0.5) double bgmVolume,
