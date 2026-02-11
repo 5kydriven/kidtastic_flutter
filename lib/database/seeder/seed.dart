@@ -138,7 +138,7 @@ class InitialDataSeeder {
   // 🗣️ PRONUNCIATION GAME
   // ---------------------------
   Future<void> _seedPronunciation(int gameId) async {
-    const words = SeedData.words;
+    const words = SeedData.wordsV2;
 
     for (final word in words) {
       await _gameQuestionRepository.addQuestion(
