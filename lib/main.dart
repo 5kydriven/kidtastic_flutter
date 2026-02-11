@@ -10,6 +10,7 @@ import 'package:kidtastic_flutter/pages/analytics/view/analytics_page.dart';
 import 'package:kidtastic_flutter/pages/color_game/color_game.dart';
 import 'package:kidtastic_flutter/pages/counting_game/counting_game.dart';
 import 'package:kidtastic_flutter/pages/dashboard/view/dashboard_page.dart';
+import 'package:kidtastic_flutter/pages/forgot_password/view/forgot_password_page.dart';
 import 'package:kidtastic_flutter/pages/student_edit/student_edit.dart';
 import 'package:kidtastic_flutter/pages/student_list/student_list.dart';
 import 'package:path/path.dart' as p;
@@ -310,6 +311,12 @@ class _MyAppState extends State<MyApp> {
             return BubbleGamePage(
               initialState: state.extra as BubbleGameState,
             );
+          },
+        ),
+        GoRoute(
+          path: ForgotPasswordPage.route,
+          builder: (context, state) {
+            return const ForgotPasswordPage();
           },
         ),
       ],

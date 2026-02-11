@@ -1,3 +1,4 @@
+export 'admin/admin.dart';
 export 'daily_activity/daily_activity.dart';
 export 'fruit/fruit.dart';
 export 'game/game.dart';

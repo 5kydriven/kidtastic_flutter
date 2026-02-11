@@ -75,7 +75,7 @@ class AnalyticsRepository {
       if (game.isPronunciationGame) {
         // For pronunciation games, calculate accuracy from attempts
         final sessionAccuracy = await _calculatePronunciationSessionAccuracy(
-          session.id ?? 0,
+          session.id,
         );
         if (sessionAccuracy >= 0) {
           final sessionQs = session.totalQuestions ?? 0;
@@ -101,7 +101,9 @@ class AnalyticsRepository {
     final gameAccuracyMap = <String, double>{};
 
     for (final game in games) {
-      final gameSessions = completedSessions.where((s) => s.gameId == game.id).toList();
+      final gameSessions = completedSessions
+          .where((s) => s.gameId == game.id)
+          .toList();
       if (gameSessions.isNotEmpty) {
         double totalPercentage = 0;
         int validSessions = 0;
@@ -109,9 +111,10 @@ class AnalyticsRepository {
         for (final session in gameSessions) {
           if (game.isPronunciationGame) {
             // For pronunciation games, calculate accuracy from attempts
-            final sessionAccuracy = await _calculatePronunciationSessionAccuracy(
-              session.id ?? 0,
-            );
+            final sessionAccuracy =
+                await _calculatePronunciationSessionAccuracy(
+                  session.id,
+                );
             if (sessionAccuracy >= 0) {
               totalPercentage += sessionAccuracy;
               validSessions++;
@@ -148,13 +151,13 @@ class AnalyticsRepository {
 
     if (sessionQuestions.isEmpty) return -1;
 
-    final sessionQuestionIds = sessionQuestions.map((sq) => sq.id ?? 0).toList();
+    final sessionQuestionIds = sessionQuestions.map((sq) => sq.id).toList();
 
     // Get all attempts for these session questions
     final attempts = await _pronunciationAttemptDao
         .getAttemptsBySessionQuestionIds(
-      sessionQuestionIds: sessionQuestionIds,
-    );
+          sessionQuestionIds: sessionQuestionIds,
+        );
 
     if (attempts.isEmpty) return -1;
 
@@ -208,7 +211,7 @@ class AnalyticsRepository {
       int score = session.score ?? 0;
       if (game.isPronunciationGame) {
         final sessionAccuracy = await _calculatePronunciationSessionAccuracy(
-          session.id ?? 0,
+          session.id,
         );
         if (sessionAccuracy >= 0) {
           // Convert accuracy percentage to number of correct answers
@@ -283,7 +286,7 @@ class AnalyticsRepository {
       if (game.isPronunciationGame) {
         // For pronunciation games, calculate accuracy from attempts
         final sessionAccuracy = await _calculatePronunciationSessionAccuracy(
-          session.id ?? 0,
+          session.id,
         );
         if (sessionAccuracy >= 0) {
           final sessionQs = session.totalQuestions ?? 0;
@@ -312,8 +315,10 @@ class AnalyticsRepository {
     final studentRankings = <StudentRanking>[];
 
     for (final student in students) {
-      final studentSessions = completedSessions.where((s) => s.studentId == student.id).toList();
-      
+      final studentSessions = completedSessions
+          .where((s) => s.studentId == student.id)
+          .toList();
+
       if (studentSessions.isEmpty) continue;
 
       double totalScore = 0;
@@ -336,7 +341,7 @@ class AnalyticsRepository {
         if (game.isPronunciationGame) {
           // For pronunciation games, calculate score from attempts
           final sessionAccuracy = await _calculatePronunciationSessionAccuracy(
-            session.id ?? 0,
+            session.id,
           );
           if (sessionAccuracy >= 0) {
             final sessionQuestions = session.totalQuestions ?? 0;
@@ -350,7 +355,9 @@ class AnalyticsRepository {
         }
       }
 
-      final accuracy = totalQuestions > 0 ? (totalScore / totalQuestions) * 100 : 0.0;
+      final accuracy = totalQuestions > 0
+          ? (totalScore / totalQuestions) * 100
+          : 0.0;
 
       studentRankings.add(
         StudentRanking(
@@ -365,7 +372,9 @@ class AnalyticsRepository {
     }
 
     // Sort by accuracy descending
-    studentRankings.sort((a, b) => b.averageAccuracy.compareTo(a.averageAccuracy));
+    studentRankings.sort(
+      (a, b) => b.averageAccuracy.compareTo(a.averageAccuracy),
+    );
 
     // Assign ranks
     for (var i = 0; i < studentRankings.length; i++) {
@@ -389,7 +398,8 @@ class AnalyticsRepository {
 
       final daySessions = completedSessions.where((s) {
         final sessionDate = s.endedAt ?? s.startedAt;
-        return sessionDate.isAfter(startOfDay) && sessionDate.isBefore(endOfDay);
+        return sessionDate.isAfter(startOfDay) &&
+            sessionDate.isBefore(endOfDay);
       }).toList();
 
       final dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
@@ -416,8 +426,10 @@ class AnalyticsRepository {
     final lowPerformers = <StudentRanking>[];
 
     for (final student in students) {
-      final studentSessions = completedSessions.where((s) => s.studentId == student.id).toList();
-      
+      final studentSessions = completedSessions
+          .where((s) => s.studentId == student.id)
+          .toList();
+
       if (studentSessions.isEmpty) continue;
 
       double totalScore = 0;
@@ -440,7 +452,7 @@ class AnalyticsRepository {
         if (game.isPronunciationGame) {
           // For pronunciation games, calculate score from attempts
           final sessionAccuracy = await _calculatePronunciationSessionAccuracy(
-            session.id ?? 0,
+            session.id,
           );
           if (sessionAccuracy >= 0) {
             final sessionQuestions = session.totalQuestions ?? 0;
@@ -454,7 +466,9 @@ class AnalyticsRepository {
         }
       }
 
-      final accuracy = totalQuestions > 0 ? (totalScore / totalQuestions) * 100 : 0.0;
+      final accuracy = totalQuestions > 0
+          ? (totalScore / totalQuestions) * 100
+          : 0.0;
 
       // Only include students with accuracy < 50%
       if (accuracy < 50) {
@@ -472,12 +486,17 @@ class AnalyticsRepository {
     }
 
     // Sort by accuracy ascending (lowest first)
-    lowPerformers.sort((a, b) => a.averageAccuracy.compareTo(b.averageAccuracy));
+    lowPerformers.sort(
+      (a, b) => a.averageAccuracy.compareTo(b.averageAccuracy),
+    );
 
     return lowPerformers.take(limit).toList();
   }
 
-  Future<List<StudentRanking>> getInactiveStudents({int days = 7, int limit = 5}) async {
+  Future<List<StudentRanking>> getInactiveStudents({
+    int days = 7,
+    int limit = 5,
+  }) async {
     final students = await _studentDao.getAllStudents();
     final sessions = await _gameSessionDao.getAllGameSessions();
     final games = await _gameDao.getAllGames();
@@ -488,8 +507,10 @@ class AnalyticsRepository {
     final inactiveStudents = <StudentRanking>[];
 
     for (final student in students) {
-      final studentSessions = completedSessions.where((s) => s.studentId == student.id).toList();
-      
+      final studentSessions = completedSessions
+          .where((s) => s.studentId == student.id)
+          .toList();
+
       if (studentSessions.isEmpty) {
         // Never played - consider inactive
         inactiveStudents.add(
@@ -513,7 +534,7 @@ class AnalyticsRepository {
       });
 
       final lastPlayed = lastSession.endedAt ?? lastSession.startedAt;
-      
+
       if (lastPlayed.isBefore(cutoffDate)) {
         double totalScore = 0;
         int totalQuestions = 0;
@@ -534,12 +555,14 @@ class AnalyticsRepository {
 
           if (game.isPronunciationGame) {
             // For pronunciation games, calculate score from attempts
-            final sessionAccuracy = await _calculatePronunciationSessionAccuracy(
-              session.id ?? 0,
-            );
+            final sessionAccuracy =
+                await _calculatePronunciationSessionAccuracy(
+                  session.id,
+                );
             if (sessionAccuracy >= 0) {
               final sessionQuestions = session.totalQuestions ?? 0;
-              totalScore += ((sessionAccuracy / 100) * sessionQuestions).round();
+              totalScore += ((sessionAccuracy / 100) * sessionQuestions)
+                  .round();
               totalQuestions += sessionQuestions;
             }
           } else {
@@ -549,7 +572,9 @@ class AnalyticsRepository {
           }
         }
 
-        final accuracy = totalQuestions > 0 ? (totalScore / totalQuestions) * 100 : 0.0;
+        final accuracy = totalQuestions > 0
+            ? (totalScore / totalQuestions) * 100
+            : 0.0;
 
         inactiveStudents.add(
           StudentRanking(
@@ -596,7 +621,7 @@ class AnalyticsRepository {
       );
       if (game.isPronunciationGame) {
         final accuracy = await _calculatePronunciationSessionAccuracy(
-          session.id ?? 0,
+          session.id,
         );
         // Skip if no attempts found (user didn't actually play)
         if (accuracy < 0) {

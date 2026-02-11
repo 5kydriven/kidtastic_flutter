@@ -9,6 +9,7 @@ class LabeledTextFormField extends StatelessWidget {
   final Widget? suffixIcon;
   final TextInputAction? textInputAction;
   final String? initialValue;
+  final TextEditingController? controller;
 
   const LabeledTextFormField({
     super.key,
@@ -20,6 +21,7 @@ class LabeledTextFormField extends StatelessWidget {
     this.suffixIcon,
     this.textInputAction,
     this.initialValue,
+    this.controller,
   });
 
   @override
@@ -59,9 +61,10 @@ class LabeledTextFormField extends StatelessWidget {
         ),
 
         TextFormField(
+          controller: controller,
           obscureText: obscure,
           onChanged: onChanged,
-          initialValue: initialValue,
+          initialValue: controller == null ? initialValue : null,
           textInputAction: textInputAction,
           decoration: InputDecoration(
             isDense: true,

@@ -87,4 +87,46 @@ class TeacherRepository {
       );
     }
   }
+
+  Future<Result<int>> changePassword({
+    required int id,
+    required String password,
+  }) async {
+    try {
+      final hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+
+      final result = await _teacherDao.updateTeacher(
+        id: id,
+        data: TeacherTableCompanion(
+          password: Value(hashedPassword),
+        ),
+      );
+
+      return Result(
+        data: result,
+        statusCode: 200,
+      );
+    } catch (e) {
+      return Result(
+        statusCode: 400,
+      );
+    }
+  }
+
+  Future<Result<Admin>> verifyUsername({
+    required String username,
+  }) async {
+    try {
+      final result = await _teacherDao.getTeacherByUsername(username);
+
+      return Result(
+        statusCode: 200,
+        data: Admin.fromJson(result.toJson()),
+      );
+    } catch (e) {
+      return Result(
+        statusCode: 400,
+      );
+    }
+  }
 }

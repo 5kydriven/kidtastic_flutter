@@ -24,4 +24,13 @@ class TeacherDao extends DatabaseAccessor<KidtasticDatabase>
       teacherTable,
     )..where((teacher) => teacher.username.equals(username))).getSingle();
   }
+
+  Future<int> updateTeacher({
+    required int id,
+    required TeacherTableCompanion data,
+  }) async {
+    return await (update(
+      teacherTable,
+    )..where((t) => t.id.equals(id))).write(data);
+  }
 }

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:kidtastic_flutter/widgets/labeled_text_form_field.dart';
 
 import '../../../constants/constants.dart';
 import '../../../models/models.dart';
+import '../../forgot_password/view/forgot_password_page.dart';
 import '../bloc/bloc.dart';
 
 class LoginBody extends StatelessWidget {
@@ -178,6 +180,25 @@ class LoginBody extends StatelessWidget {
                               fontSize: 20,
                               fontWeight: FontWeight.w500,
                             ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 12,
+                      ),
+                      TextButton(
+                        style: TextButton.styleFrom(
+                          backgroundColor: Colors.transparent,
+                        ),
+                        onPressed: () => context.push(ForgotPasswordPage.route),
+                        child: const Text(
+                          'Forgot Password?',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            decoration: TextDecoration.underline,
+                            color: Colors.blue,
+                            decorationColor: Colors.blue,
                           ),
                         ),
                       ),
