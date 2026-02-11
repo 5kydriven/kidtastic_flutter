@@ -45,154 +45,213 @@ class HomeBody extends StatelessWidget {
       builder: (context, state) {
         final bloc = context.read<HomeBloc>();
 
-        final students = state.students;
-        final int itemsPerPage = 8;
-        final totalItems = students.length + 1;
-        final totalPages = (totalItems / itemsPerPage).ceil();
-
-        return Card(
-          elevation: 8,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(32),
-          ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                width: 48,
-                child: state.currentPage > 0
-                    ? IconButton(
-                        icon: const Icon(Icons.arrow_back_ios),
-                        onPressed: () => bloc.add(
-                          const HomePrevButtonPressed(),
-                        ),
-                      )
-                    : null,
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Hello ${state.student?.firstName?.toUpperCase() ?? ''}!',
+              style: TextStyle(
+                fontSize: MediaQuery.of(context).size.width * 0.05,
+                fontWeight: FontWeight.bold,
+                color: Color(0xffA66609),
               ),
+              textAlign: TextAlign.center,
+            ),
+            const Text(
+              'Choose an activity to learn and play.',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 20,
+                color: Color(0xffA66609),
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: 48,
+                  child: state.currentPage > 0
+                      ? IconButton(
+                          icon: const Icon(Icons.arrow_back_ios),
+                          onPressed: () =>
+                              bloc.add(const HomePrevButtonPressed()),
+                        )
+                      : null,
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  spacing: 24,
+                  children: [
+                    SizedBox(
+                      width: 550,
+                      height: 360,
+                      child: PageView.builder(
+                        controller: pageController,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: totalPages,
+                        itemBuilder: (context, pageIndex) {
+                          final start = pageIndex * itemsPerPage;
+                          final end = (start + itemsPerPage > games.length)
+                              ? games.length
+                              : start + itemsPerPage;
+                          final pageItems = games.sublist(start, end);
 
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                spacing: 24,
-                children: [
-                  SizedBox(
-                    width: 580,
-                    height: 400,
-                    child: PageView.builder(
-                      controller: pageController,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: totalPages,
-                      itemBuilder: (context, pageIndex) {
-                        final isFirstPage = pageIndex == 0;
-
-                        final start =
-                            pageIndex * itemsPerPage - (isFirstPage ? 0 : 1);
-                        final end =
-                            (start + itemsPerPage - (isFirstPage ? 1 : 0))
-                                .clamp(0, students.length);
-
-                        final pageItems = start >= 0
-                            ? students.sublist(start, end)
-                            : <Student>[];
-
-                        return ScrollConfiguration(
-                          behavior: ScrollConfiguration.of(context).copyWith(
-                            scrollbars: false,
-                          ),
-                          child: GridView.builder(
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 4,
-                                  mainAxisSpacing: 12,
-                                  crossAxisSpacing: 12,
-                                  childAspectRatio: 1 / 1.4,
-                                ),
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: pageIndex == 0
-                                ? pageItems.length + 1
-                                : pageItems.length,
-                            itemBuilder: (context, index) {
-                              if (pageIndex == 0 && index == 0) {
-                                return Card(
-                                  elevation: 4,
-                                  shape: RoundedRectangleBorder(
-                                    side: const BorderSide(color: Colors.grey),
-                                    borderRadius: BorderRadius.circular(24),
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8.0,
+                            ),
+                            child: GridView.builder(
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 3,
+                                    mainAxisSpacing: 12,
+                                    crossAxisSpacing: 12,
+                                    childAspectRatio: 1,
                                   ),
-                                  child: InkWell(
-                                    borderRadius: BorderRadius.circular(24),
-                                    onTap: () =>
-                                        _handleAddStudentDialog(context),
-                                    child: const Center(
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Icon(
-                                            Icons.add,
-                                            size: 48,
-                                            color: Colors.grey,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: pageItems.length,
+                              itemBuilder: (context, index) {
+                                final game = pageItems[index];
+                                return InkWell(
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(24),
+                                  ),
+                                  onTap: () {
+                                    if (game.route?.isNotEmpty ?? false) {
+                                      switch (game.category) {
+                                        case GameType.counting:
+                                          context.push(
+                                            CountingGamePage.route,
+                                            extra: CountingGameState(
+                                              game: game,
+                                              student: state.student,
+                                            ),
+                                          );
+                                          break;
+                                        case GameType.pronunciation:
+                                          context.push(
+                                            PronunciationGamePage.route,
+                                            extra: PronunciationGameState(
+                                              game: game,
+                                              student: state.student,
+                                            ),
+                                          );
+                                        case GameType.shape:
+                                          context.push(
+                                            MatchGamePage.route,
+                                            extra: MatchGameState(
+                                              game: game,
+                                              student: state.student,
+                                            ),
+                                          );
+                                        case GameType.matching:
+                                          context.push(
+                                            MatchGamePage.route,
+                                            extra: MatchGameState(
+                                              game: game,
+                                              student: state.student,
+                                            ),
+                                          );
+                                        default:
+                                          context.push(
+                                            game.route ?? '',
+                                            extra: game,
+                                          );
+
+                                          break;
+                                      }
+                                    } else {
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        const SnackBar(
+                                          content: Text(
+                                            'This game has no route set.',
                                           ),
-                                          SizedBox(height: 12),
-                                          Text(
-                                            'Add Profile',
-                                            style: TextStyle(fontSize: 18),
-                                          ),
-                                        ],
+                                        ),
+                                      );
+                                    }
+                                  },
+                                  child: Card(
+                                    elevation: 8,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(24),
+                                      side: const BorderSide(
+                                        color: Color(0xffFFAE00),
+                                        width: 2,
                                       ),
+                                    ),
+                                    child: Stack(
+                                      fit: StackFit.expand,
+                                      children: [
+                                        Align(
+                                          alignment: Alignment.center,
+                                          child: Image.asset(
+                                            game.imageAsset ?? '',
+                                            width: 80,
+                                            height: 80,
+                                            errorBuilder:
+                                                (context, error, stack) =>
+                                                    const Icon(
+                                                      Icons.image_not_supported,
+                                                    ),
+                                          ),
+                                        ),
+                                        Align(
+                                          alignment: Alignment.bottomCenter,
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                              bottom: 12,
+                                            ),
+                                            child: Text(
+                                              game.name ?? '',
+                                              textAlign: TextAlign.center,
+                                              style: const TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 );
-                              }
-
-                              final studentIndex = pageIndex == 0
-                                  ? index - 1
-                                  : index;
-
-                              final student = pageItems[studentIndex];
-
-                              return StudentCard(
-                                name: student.firstName ?? '',
-                                image: student.image ?? '',
-                                onTap: () =>
-                                    _handleStudentCard(context, student),
-                                onPressed: () => bloc.add(
-                                  HomeDeleteStudentPressed(id: student.id ?? 0),
-                                ),
-                              );
-                            },
-                          ),
-                        );
-                      },
+                              },
+                            ),
+                          );
+                        },
+                      ),
                     ),
-                  ),
-
-                  SmoothPageIndicator(
-                    controller: pageController,
-                    count: totalPages,
-                    effect: const WormEffect(
-                      dotHeight: 12,
-                      dotWidth: 12,
-                      spacing: 8,
-                      activeDotColor: Colors.deepPurple,
-                      dotColor: Colors.grey,
+                    SmoothPageIndicator(
+                      controller: pageController,
+                      count: totalPages,
+                      effect: const WormEffect(
+                        dotHeight: 12,
+                        dotWidth: 12,
+                        spacing: 8,
+                        activeDotColor: Colors.deepPurple,
+                        dotColor: Colors.grey,
+                      ),
                     ),
-                  ),
-                ],
-              ),
-
-              SizedBox(
-                width: 48,
-                child: state.currentPage < totalPages - 1
-                    ? IconButton(
-                        icon: const Icon(Icons.arrow_forward_ios),
-                        onPressed: () => bloc.add(
-                          const HomeNextButtonPressed(),
-                        ),
-                      )
-                    : null,
-              ),
-            ],
-          ),
+                  ],
+                ),
+                SizedBox(
+                  width: 48,
+                  child: state.currentPage < totalPages - 1
+                      ? IconButton(
+                          icon: const Icon(Icons.arrow_forward_ios),
+                          onPressed: () => bloc.add(HomeNextButtonPressed()),
+                        )
+                      : null,
+                ),
+              ],
+            ),
+          ],
         );
       },
     );

@@ -5,14 +5,17 @@ import 'dart:typed_data';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:kidtastic_flutter/workers/sherpa_worker.dart';
 import 'package:record/record.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sherpa_onnx/sherpa_onnx.dart' as sherpa;
 
 import '../../../constants/constants.dart';
 import '../../../models/models.dart';
 import '../../../repositories/repositories.dart';
+import '../../../service/services.dart';
 import '../../../service/services.dart';
 import '../../../utils/utils.dart';
 import 'bloc.dart';
@@ -27,8 +30,12 @@ class PronunciationGameBloc
   final StudentInsightRepository _studentInsightRepository;
 
   final AudioService _audioService = AudioService.instance;
+  final StudentInsightRepository _studentInsightRepository;
+
+  final AudioService _audioService = AudioService.instance;
 
   late final AudioRecorder _audioRecorder;
+  final FlutterTts flutterTts = FlutterTts();
   final FlutterTts flutterTts = FlutterTts();
 
   sherpa.OnlineRecognizer? _recognizer;
@@ -56,10 +63,12 @@ class PronunciationGameBloc
     required SessionQuestionRepository sessionQuestionRepository,
     required PronunciationAttemptRepository pronunciationAttemptRepository,
     required StudentInsightRepository studentInsightRepository,
+    required StudentInsightRepository studentInsightRepository,
   }) : _gameQuestionRepository = gameQuestionRepository,
        _gameSessionRepository = gameSessionRepository,
        _sessionQuestionRepository = sessionQuestionRepository,
        _pronunciationAttemptRepository = pronunciationAttemptRepository,
+       _studentInsightRepository = studentInsightRepository,
        _studentInsightRepository = studentInsightRepository,
        super(initialState) {
     on<PronunciationGameScreenCreated>(_screenCreated);
@@ -70,6 +79,14 @@ class PronunciationGameBloc
     on<PronunciationGameTextRecognized>(_textRecognized);
     on<PronunciationGameModelReady>(_modelReady);
     on<PronunciationGameTextSpeech>(_textSpeech);
+    on<PronunciationGameBgmToggled>(_bgmToggled);
+    on<PronunciationGameSfxToggled>(_sfxToggled);
+    on<PronunciationGameBgmVolumeChanged>(_bgmVolumeChanged);
+    on<PronunciationGameSfxVolumeChanged>(_sfxVolumeChanged);
+    on<PronunciationGameSfxButtonPressed>(_sfxButtonPressed);
+    on<PronunciationGameTutorialStarted>(_tutorialStarted);
+    on<PronunciationGameTutorialNextPressed>(_tutorialNext);
+    on<PronunciationGameTutorialFinished>(_tutorialFinished);
     on<PronunciationGameBgmToggled>(_bgmToggled);
     on<PronunciationGameSfxToggled>(_sfxToggled);
     on<PronunciationGameBgmVolumeChanged>(_bgmVolumeChanged);
@@ -89,9 +106,18 @@ class PronunciationGameBloc
     final isSfxMuted = prefs.getBool(BoolPreference.keyIsSfxMuted) ?? false;
     final bgmVolume = prefs.getDouble(DoublePreference.keyBgmVolume) ?? 1.0;
     final sfxVolume = prefs.getDouble(DoublePreference.keySfxVolume) ?? 1.0;
+    final prefs = await SharedPreferences.getInstance();
+    final isBgmMuted = prefs.getBool(BoolPreference.keyIsBgmMuted) ?? false;
+    final isSfxMuted = prefs.getBool(BoolPreference.keyIsSfxMuted) ?? false;
+    final bgmVolume = prefs.getDouble(DoublePreference.keyBgmVolume) ?? 1.0;
+    final sfxVolume = prefs.getDouble(DoublePreference.keySfxVolume) ?? 1.0;
     emit(
       state.copyWith(
         screenRequestStatus: RequestStatus.inProgress,
+        isBgmMuted: isBgmMuted,
+        isSfxMuted: isSfxMuted,
+        bgmVolume: bgmVolume,
+        sfxVolume: sfxVolume,
         isBgmMuted: isBgmMuted,
         isSfxMuted: isSfxMuted,
         bgmVolume: bgmVolume,
@@ -109,6 +135,28 @@ class PronunciationGameBloc
       await _startSherpaIsolate();
       _isInitialized = true;
     }
+
+    await flutterTts.setLanguage('en-US');
+
+    final voices = await flutterTts.getVoices;
+
+    final voiceList = (voices as List)
+        .map((e) => Voices.fromJson(Map<String, dynamic>.from(e)))
+        .toList();
+
+    final selected = voiceList.firstWhere(
+      (v) => v.locale == 'en-US' && v.gender == 'female',
+      orElse: () => voiceList.first,
+    );
+
+    await flutterTts.setVoice({
+      'name': selected.name ?? '',
+      'locale': selected.locale ?? '',
+    });
+
+    await flutterTts.setPitch(1.6);
+    await flutterTts.setSpeechRate(0.6);
+    await flutterTts.setVolume(1.0);
 
     await flutterTts.setLanguage('en-US');
 
@@ -168,6 +216,7 @@ class PronunciationGameBloc
     final gameQuestionResult = await _gameQuestionRepository.getQuestion(
       gameId: state.game?.id ?? 0,
       limit: 10,
+      limit: 10,
       isRandom: true,
     );
 
@@ -196,6 +245,7 @@ class PronunciationGameBloc
     emit(
       state.copyWith(
         sessionId: gameSessionResult.data ?? 0,
+        sessionStartTime: sessionStartTime,
         sessionStartTime: sessionStartTime,
         question: gameQuestionResult.data ?? [],
         score: 0,
@@ -273,7 +323,35 @@ class PronunciationGameBloc
               studentId: state.student?.id ?? 0,
               gameId: state.game?.id ?? 0,
             );
+      totalQuestions: state.question.length,
+      durationSeconds: durationSeconds,
+    );
 
+    switch (gameSessionResult.resultStatus) {
+      case ResultStatus.success:
+        final studentInsightResult = await _studentInsightRepository
+            .updateStudentInsight(
+              studentId: state.student?.id ?? 0,
+              gameId: state.game?.id ?? 0,
+            );
+
+        emit(
+          state.copyWith(
+            gameSessionRequestStatus:
+                studentInsightResult.resultStatus == ResultStatus.success
+                ? RequestStatus.success
+                : RequestStatus.failure,
+          ),
+        );
+        break;
+      default:
+        emit(
+          state.copyWith(
+            gameSessionRequestStatus: RequestStatus.failure,
+          ),
+        );
+        break;
+    }
         emit(
           state.copyWith(
             gameSessionRequestStatus:
@@ -313,6 +391,7 @@ class PronunciationGameBloc
 
       _sherpaSend?.send({'type': 'reset'});
 
+      await _audioService.playSfx(Audios.startRecord);
       await _audioService.playSfx(Audios.startRecord);
 
       const config = RecordConfig(
@@ -500,6 +579,7 @@ class PronunciationGameBloc
     if (finalIsCorrect) {
       try {
         await _audioService.playSfx(Audios.correctRecord);
+        await _audioService.playSfx(Audios.correctRecord);
       } catch (e) {
         debugPrint('play correct sound error: $e');
       }
@@ -653,7 +733,126 @@ class PronunciationGameBloc
         tutorialStep: PronunciationGameTutorialStep.none,
       ),
     );
+    await flutterTts.speak(event.text);
   }
+
+  Future<void> _bgmToggled(
+    PronunciationGameBgmToggled event,
+    Emitter<PronunciationGameState> emit,
+  ) async {
+    if (state.isBgmMuted) {
+      await _audioService.unmuteBgm();
+    } else {
+      await _audioService.muteBgm();
+    }
+
+    add(const PronunciationGameSfxButtonPressed());
+
+    emit(
+      state.copyWith(
+        isBgmMuted: !state.isBgmMuted,
+      ),
+    );
+  }
+
+  Future<void> _sfxToggled(
+    PronunciationGameSfxToggled event,
+    Emitter<PronunciationGameState> emit,
+  ) async {
+    if (state.isSfxMuted) {
+      await _audioService.unmuteSfx();
+    } else {
+      await _audioService.muteSfx();
+    }
+
+    add(const PronunciationGameSfxButtonPressed());
+
+    emit(
+      state.copyWith(
+        isSfxMuted: !state.isSfxMuted,
+      ),
+    );
+  }
+
+  Future<void> _bgmVolumeChanged(
+    PronunciationGameBgmVolumeChanged event,
+    Emitter<PronunciationGameState> emit,
+  ) async {
+    await _audioService.setBgmVolume(event.volume);
+
+    emit(
+      state.copyWith(
+        bgmVolume: event.volume,
+      ),
+    );
+  }
+
+  Future<void> _sfxVolumeChanged(
+    PronunciationGameSfxVolumeChanged event,
+    Emitter<PronunciationGameState> emit,
+  ) async {
+    await _audioService.setSfxVolume(event.volume);
+
+    emit(
+      state.copyWith(
+        sfxVolume: event.volume,
+      ),
+    );
+  }
+
+  Future<void> _sfxButtonPressed(
+    PronunciationGameSfxButtonPressed event,
+    Emitter<PronunciationGameState> emit,
+  ) async {
+    await _audioService.playSfx(Audios.pop2Wav);
+  }
+
+  void _tutorialStarted(
+    PronunciationGameTutorialStarted event,
+    Emitter<PronunciationGameState> emit,
+  ) {
+    emit(
+      state.copyWith(
+        tutorialStep: PronunciationGameTutorialStep.welcome,
+      ),
+    );
+  }
+
+  void _tutorialNext(
+    PronunciationGameTutorialNextPressed event,
+    Emitter<PronunciationGameState> emit,
+  ) {
+    final nextStep = switch (state.tutorialStep) {
+      PronunciationGameTutorialStep.welcome =>
+        PronunciationGameTutorialStep.contents,
+      PronunciationGameTutorialStep.contents =>
+        PronunciationGameTutorialStep.buttons,
+      PronunciationGameTutorialStep.buttons =>
+        PronunciationGameTutorialStep.finished,
+      _ => PronunciationGameTutorialStep.finished,
+    };
+
+    emit(
+      state.copyWith(
+        tutorialStep: nextStep,
+      ),
+    );
+  }
+
+  void _tutorialFinished(
+    PronunciationGameTutorialFinished event,
+    Emitter<PronunciationGameState> emit,
+  ) {
+    emit(
+      state.copyWith(
+        tutorialStep: PronunciationGameTutorialStep.none,
+      ),
+    );
+  }
+
+  /* =======================
+     Helpers
+     ======================= */
 
   /* =======================
      Helpers
