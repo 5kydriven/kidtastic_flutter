@@ -12,10 +12,10 @@ class StudentEditBloc extends Bloc<StudentEditEvent, StudentEditState> {
   final AudioService _audioService = AudioService.instance;
 
   StudentEditBloc({
+    required StudentEditState initialState,
     required StudentRepository studentRepository,
   }) : _studentRepository = studentRepository,
-       super(const StudentEditState()) {
-    on<StudentEditScreenCreated>(_screenCreated);
+       super(initialState) {
     on<StudentEditFirstNameChanged>(_firstNameChanged);
     on<StudentEditLastNameChanged>(_lastNameChanged);
     on<StudentEditGenderChanged>(_genderChanged);
@@ -23,28 +23,7 @@ class StudentEditBloc extends Bloc<StudentEditEvent, StudentEditState> {
     on<StudentEditSavePressed>(_savePressed);
     on<StudentEditErrorTypeCleared>(_errorTypeCleared);
     on<StudentEditSfxButtonPressed>(_sfxButtonPressed);
-  }
-
-  void _screenCreated(
-    StudentEditScreenCreated event,
-    Emitter<StudentEditState> emit,
-  ) {
-    final student = event.student;
-    emit(
-      state.copyWith(
-        student: student,
-        firstName: TextFieldInput(
-          value: student.firstName ?? '',
-        ),
-        lastName: TextFieldInput(
-          value: student.lastName ?? '',
-        ),
-        gender: TextFieldInput(
-          value: student.gender ?? '',
-        ),
-        selectedAvatar: student.image ?? Assets.sheepAvatar,
-      ),
-    );
+    
   }
 
   void _firstNameChanged(
@@ -165,7 +144,9 @@ class StudentEditBloc extends Bloc<StudentEditEvent, StudentEditState> {
         gender: state.gender.copyWith(
           errorType: validateRequired(state.gender.value),
         ),
-        studentRequestStatus: hasError ? RequestStatus.failure : RequestStatus.waiting,
+        studentRequestStatus: hasError
+            ? RequestStatus.failure
+            : RequestStatus.waiting,
       ),
     );
 

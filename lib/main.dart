@@ -17,7 +17,6 @@ import 'package:responsive_framework/responsive_framework.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'constants/constants.dart';
-import 'models/models.dart';
 import 'pages/bubble_game/bubble_game.dart';
 import 'pages/game_list/game_list.dart';
 import 'pages/home/home.dart';
@@ -287,7 +286,7 @@ class _MyAppState extends State<MyApp> {
           path: StudentEditPage.route,
           builder: (context, state) {
             return StudentEditPage(
-              student: state.extra as Student,
+              initialState: state.extra as StudentEditState,
             );
           },
         ),

@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../../constants/constants.dart';
@@ -15,5 +16,6 @@ sealed class StudentEditState with _$StudentEditState {
     @Default(TextFieldInput(value: '')) TextFieldInput gender,
     @Default(Assets.sheepAvatar) String selectedAvatar,
     @Default(false) bool isAvatarMenuOpen,
+    VoidCallback? onSave,
   }) = _StudentEditState;
 }
