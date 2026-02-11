@@ -45,7 +45,13 @@ class _CountingGamePageState extends State<CountingGamePage> {
         barrierDismissible: false,
         builder: (context) {
           return AlertDialog(
-            title: const Text('Game Over'),
+            title: const Text(
+              'Game Over',
+              style: TextStyle(
+                fontSize: 32,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             content: Text(
               'Your score is ${state.score}',
               textAlign: TextAlign.center,

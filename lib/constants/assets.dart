@@ -1,5 +1,34 @@
 class Assets {
   static const letters = 'assets/letters.png';
+
+  // **Individual Letters**
+  static const letterA = 'assets/letters/a.png';
+  static const letterB = 'assets/letters/b.png';
+  static const letterC = 'assets/letters/c.png';
+  static const letterD = 'assets/letters/d.png';
+  static const letterE = 'assets/letters/e.png';
+  static const letterF = 'assets/letters/f.png';
+  static const letterG = 'assets/letters/g.png';
+  static const letterH = 'assets/letters/h.png';
+  static const letterI = 'assets/letters/i.png';
+  static const letterJ = 'assets/letters/j.png';
+  static const letterK = 'assets/letters/k.png';
+  static const letterL = 'assets/letters/l.png';
+  static const letterM = 'assets/letters/m.png';
+  static const letterN = 'assets/letters/n.png';
+  static const letterO = 'assets/letters/o.png';
+  static const letterP = 'assets/letters/p.png';
+  static const letterQ = 'assets/letters/q.png';
+  static const letterR = 'assets/letters/r.png';
+  static const letterS = 'assets/letters/s.png';
+  static const letterT = 'assets/letters/t.png';
+  static const letterU = 'assets/letters/u.png';
+  static const letterV = 'assets/letters/v.png';
+  static const letterW = 'assets/letters/w.png';
+  static const letterX = 'assets/letters/x.png';
+  static const letterY = 'assets/letters/y.png';
+  static const letterZ = 'assets/letters/z.png';
+
   static const pronunciationBg = 'assets/pronunciation_bg.png';
   static const shapes = 'assets/shapes.png';
   static const musicNotes = 'assets/music_notes.png';
@@ -84,6 +113,18 @@ class Assets {
   static const queen = 'assets/pronunciation/queen.png';
   static const rabbitWithBall = 'assets/pronunciation/rabbit_with_ball.png';
   static const rainbow = 'assets/pronunciation/rainbow.png';
+
+  // **Pronunciation Numbers**
+  static const numberOne = 'assets/pronunciation/one.png';
+  static const numberTwo = 'assets/pronunciation/two.png';
+  static const numberThree = 'assets/pronunciation/three.png';
+  static const numberFour = 'assets/pronunciation/four.png';
+  static const numberFive = 'assets/pronunciation/five.png';
+  static const numberSix = 'assets/pronunciation/six.png';
+  static const numberSeven = 'assets/pronunciation/seven.png';
+  static const numberEight = 'assets/pronunciation/eight.png';
+  static const numberNine = 'assets/pronunciation/nine.png';
+  static const numberTen = 'assets/pronunciation/ten.png';
 
   // **Backgrounds**
   static const matchTheShapeHome =

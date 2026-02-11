@@ -175,6 +175,313 @@ class SeedData {
     ),
   ];
 
+  static const wordsV2 = [
+    // Numbers (10 entries)
+    Question(
+      question: 'one',
+      correctAnswer: 'one',
+      image: Assets.numberOne,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'two',
+      correctAnswer: 'two',
+      image: Assets.numberTwo,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'three',
+      correctAnswer: 'three',
+      image: Assets.numberThree,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'four',
+      correctAnswer: 'four',
+      image: Assets.numberFour,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'five',
+      correctAnswer: 'five',
+      image: Assets.numberFive,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'six',
+      correctAnswer: 'six',
+      image: Assets.numberSix,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'seven',
+      correctAnswer: 'seven',
+      image: Assets.numberSeven,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'eight',
+      correctAnswer: 'eight',
+      image: Assets.numberEight,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'nine',
+      correctAnswer: 'nine',
+      image: Assets.numberNine,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'ten',
+      correctAnswer: 'ten',
+      image: Assets.numberTen,
+      difficulty: Difficulty.easy,
+    ),
+    // Shapes (7 entries)
+    Question(
+      question: 'circle',
+      correctAnswer: 'circle',
+      image: Assets.circleBrown,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'diamond',
+      correctAnswer: 'diamond',
+      image: Assets.diamondViolet,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'heart',
+      correctAnswer: 'heart',
+      image: Assets.heartPink,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'hexagon',
+      correctAnswer: 'hexagon',
+      image: Assets.hexagonBrown,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'rectangle',
+      correctAnswer: 'rectangle',
+      image: Assets.rectanglePink,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'square',
+      correctAnswer: 'square',
+      image: Assets.squareBlue,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'triangle',
+      correctAnswer: 'triangle',
+      image: Assets.triangleBlue,
+      difficulty: Difficulty.easy,
+    ),
+    // Colors (8 entries)
+    Question(
+      question: 'brown',
+      correctAnswer: 'brown',
+      image: Assets.hexagonBrown,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'violet',
+      correctAnswer: 'violet',
+      image: Assets.diamondViolet,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'yellow',
+      correctAnswer: 'yellow',
+      image: Assets.diamondYellow,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'pink',
+      correctAnswer: 'pink',
+      image: Assets.heartPink,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'green',
+      correctAnswer: 'green',
+      image: Assets.trapezoidGreen,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'red',
+      correctAnswer: 'red',
+      image: Assets.triangleRed,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'blue',
+      correctAnswer: 'blue',
+      image: Assets.squareBlue,
+      difficulty: Difficulty.easy,
+    ),
+    // Letters (26 entries)
+    Question(
+      question: 'a',
+      correctAnswer: 'a',
+      image: Assets.letterA,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'b',
+      correctAnswer: 'b',
+      image: Assets.letterB,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'c',
+      correctAnswer: 'c',
+      image: Assets.letterC,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'd',
+      correctAnswer: 'd',
+      image: Assets.letterD,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'e',
+      correctAnswer: 'e',
+      image: Assets.letterE,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'f',
+      correctAnswer: 'f',
+      image: Assets.letterF,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'g',
+      correctAnswer: 'g',
+      image: Assets.letterG,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'h',
+      correctAnswer: 'h',
+      image: Assets.letterH,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'i',
+      correctAnswer: 'i',
+      image: Assets.letterI,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'j',
+      correctAnswer: 'j',
+      image: Assets.letterJ,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'k',
+      correctAnswer: 'k',
+      image: Assets.letterK,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'l',
+      correctAnswer: 'l',
+      image: Assets.letterL,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'm',
+      correctAnswer: 'm',
+      image: Assets.letterM,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'n',
+      correctAnswer: 'n',
+      image: Assets.letterN,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'o',
+      correctAnswer: 'o',
+      image: Assets.letterO,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'p',
+      correctAnswer: 'p',
+      image: Assets.letterP,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'q',
+      correctAnswer: 'q',
+      image: Assets.letterQ,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'r',
+      correctAnswer: 'r',
+      image: Assets.letterR,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 's',
+      correctAnswer: 's',
+      image: Assets.letterS,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 't',
+      correctAnswer: 't',
+      image: Assets.letterT,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'u',
+      correctAnswer: 'u',
+      image: Assets.letterU,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'v',
+      correctAnswer: 'v',
+      image: Assets.letterV,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'w',
+      correctAnswer: 'w',
+      image: Assets.letterW,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'x',
+      correctAnswer: 'x',
+      image: Assets.letterX,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'y',
+      correctAnswer: 'y',
+      image: Assets.letterY,
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'z',
+      correctAnswer: 'z',
+      image: Assets.letterZ,
+      difficulty: Difficulty.easy,
+    ),
+  ];
+
   static const shapes = [
     Question(
       correctAnswer: 'circle',
