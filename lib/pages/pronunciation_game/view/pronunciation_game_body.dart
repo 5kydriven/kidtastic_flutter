@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kidtastic_flutter/extensions/string_extension.dart';
 
 import '../bloc/bloc.dart';
 import 'view.dart';
@@ -76,7 +77,7 @@ class PronunciationGameBody extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.all(12.0),
                         child: Image.asset(
-                          current.image!,
+                          current.image ?? '',
                           fit: BoxFit.contain,
                           errorBuilder: (context, error, stack) => const Icon(
                             Icons.image_not_supported,
@@ -92,11 +93,11 @@ class PronunciationGameBody extends StatelessWidget {
                   Flexible(
                     flex: 4,
                     child: Text(
-                      current.question ?? '',
+                      current.question?.capitalize() ?? '',
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 28,
+                        fontSize: 40,
                         color: Color(0xff09877D),
                       ),
                     ),

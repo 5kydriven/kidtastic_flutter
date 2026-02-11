@@ -44,25 +44,82 @@ class _MatchGamePageState extends State<MatchGamePage>
         barrierDismissible: false,
         builder: (context) {
           return AlertDialog(
-            title: const Text('Game Over'),
-            content: Text(
-              'Your score is ${state.score}',
-              textAlign: TextAlign.center,
+            insetPadding: const EdgeInsets.symmetric(
+              horizontal: 24,
+              vertical: 24,
             ),
+            title: const Center(
+              child: Text(
+                'Game Over',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 32,
+                  fontWeight: FontWeight.bold,
+                  height: 1.2,
+                ),
+              ),
+            ),
+            content: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(height: 8),
+                  Text(
+                    'Your score',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    '${state.score}',
+                    style: const TextStyle(
+                      fontSize: 36,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            actionsPadding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+            actionsAlignment: MainAxisAlignment.center,
+            actionsOverflowDirection: VerticalDirection.up,
             actions: [
               TextButton(
+                style: TextButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 12,
+                  ),
+                ),
                 onPressed: () {
+                  bloc.add(const MatchGameSfxButtonPressed());
                   context.pop();
                   context.pop();
                 },
-                child: const Text('Choose another game'),
+                child: const Text(
+                  'Choose another game',
+                  style: TextStyle(fontSize: 16),
+                ),
               ),
               TextButton(
+                style: TextButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 12,
+                  ),
+                ),
                 onPressed: () {
+                  bloc.add(const MatchGameSfxButtonPressed());
                   bloc.add(const MatchGameScreenCreated());
                   context.pop();
                 },
-                child: const Text('Play again'),
+                child: const Text(
+                  'Play again',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                ),
               ),
             ],
           );
