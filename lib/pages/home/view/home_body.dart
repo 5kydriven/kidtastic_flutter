@@ -83,14 +83,17 @@ class HomeBody extends StatelessWidget {
                       physics: const NeverScrollableScrollPhysics(),
                       itemCount: totalPages,
                       itemBuilder: (context, pageIndex) {
-                        final start = pageIndex * itemsPerPage;
-                        final end = (start + itemsPerPage > students.length)
-                            ? students.length
-                            : start + itemsPerPage;
+                        final isFirstPage = pageIndex == 0;
 
-                        final pageItems = students.sublist(start, end);
+                        final start =
+                            pageIndex * itemsPerPage - (isFirstPage ? 0 : 1);
+                        final end =
+                            (start + itemsPerPage - (isFirstPage ? 1 : 0))
+                                .clamp(0, students.length);
 
-                        final showAddButton = pageIndex == totalPages - 1;
+                        final pageItems = start >= 0
+                            ? students.sublist(start, end)
+                            : <Student>[];
 
                         return ScrollConfiguration(
                           behavior: ScrollConfiguration.of(context).copyWith(
@@ -105,57 +108,55 @@ class HomeBody extends StatelessWidget {
                                   childAspectRatio: 1 / 1.4,
                                 ),
                             physics: const NeverScrollableScrollPhysics(),
-                            itemCount: showAddButton
+                            itemCount: pageIndex == 0
                                 ? pageItems.length + 1
                                 : pageItems.length,
                             itemBuilder: (context, index) {
-                              if (index < pageItems.length) {
-                                final student = pageItems[index];
-                                return StudentCard(
-                                  name: student.firstName ?? '',
-                                  image: student.image ?? '',
-                                  onTap: () =>
-                                      _handleStudentCard(context, student),
-                                  onPressed: () => bloc.add(
-                                    HomeDeleteStudentPressed(
-                                      id: student.id ?? 0,
+                              if (pageIndex == 0 && index == 0) {
+                                return Card(
+                                  elevation: 4,
+                                  shape: RoundedRectangleBorder(
+                                    side: const BorderSide(color: Colors.grey),
+                                    borderRadius: BorderRadius.circular(24),
+                                  ),
+                                  child: InkWell(
+                                    borderRadius: BorderRadius.circular(24),
+                                    onTap: () =>
+                                        _handleAddStudentDialog(context),
+                                    child: const Center(
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Icon(
+                                            Icons.add,
+                                            size: 48,
+                                            color: Colors.grey,
+                                          ),
+                                          SizedBox(height: 12),
+                                          Text(
+                                            'Add Profile',
+                                            style: TextStyle(fontSize: 18),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 );
                               }
 
-                              return Card(
-                                elevation: 4,
-                                shape: RoundedRectangleBorder(
-                                  side: const BorderSide(
-                                    color: Colors.grey,
-                                  ),
-                                  borderRadius: BorderRadius.circular(24),
-                                ),
-                                child: InkWell(
-                                  borderRadius: BorderRadius.circular(24),
-                                  onTap: () => _handleAddStudentDialog(context),
-                                  child: const Center(
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Icon(
-                                          Icons.add,
-                                          size: 48,
-                                          color: Colors.grey,
-                                        ),
-                                        SizedBox(
-                                          height: 12,
-                                        ),
-                                        Text(
-                                          'Add Profile',
-                                          style: TextStyle(
-                                            fontSize: 18,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
+                              final studentIndex = pageIndex == 0
+                                  ? index - 1
+                                  : index;
+
+                              final student = pageItems[studentIndex];
+
+                              return StudentCard(
+                                name: student.firstName ?? '',
+                                image: student.image ?? '',
+                                onTap: () =>
+                                    _handleStudentCard(context, student),
+                                onPressed: () => bloc.add(
+                                  HomeDeleteStudentPressed(id: student.id ?? 0),
                                 ),
                               );
                             },

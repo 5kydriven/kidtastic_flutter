@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+// import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../bloc/bloc.dart';
+// import '../bloc/bloc.dart';
 
 class StudentCard extends StatelessWidget {
   final String name;
@@ -19,7 +19,7 @@ class StudentCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bloc = context.read<HomeBloc>();
+    // final bloc = context.read<HomeBloc>();
     return Card(
       elevation: 4,
       shape: RoundedRectangleBorder(
@@ -37,43 +37,44 @@ class StudentCard extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Align(
-                alignment: Alignment.topRight,
-                child: PopupMenuButton<String>(
-                  onOpened: () => bloc.add(const HomeSfxButtonPressed()),
-                  icon: const Icon(Icons.more_vert),
-                  onSelected: (value) {
-                    if (value == 'edit') {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Edit clicked'),
-                        ),
-                      );
-                    } else if (value == 'delete') {
-                      onPressed?.call();
-                    }
-                  },
-                  itemBuilder: (BuildContext context) => [
-                    const PopupMenuItem(
-                      value: 'delete',
-                      child: Text('Delete'),
+              // Align(
+              //   alignment: Alignment.topRight,
+              //   child: PopupMenuButton<String>(
+              //     onOpened: () => bloc.add(const HomeSfxButtonPressed()),
+              //     icon: const Icon(Icons.more_vert),
+              //     onSelected: (value) {
+              //       if (value == 'edit') {
+              //         ScaffoldMessenger.of(context).showSnackBar(
+              //           const SnackBar(
+              //             content: Text('Edit clicked'),
+              //           ),
+              //         );
+              //       } else if (value == 'delete') {
+              //         onPressed?.call();
+              //       }
+              //     },
+              //     itemBuilder: (BuildContext context) => [
+              //       const PopupMenuItem(
+              //         value: 'delete',
+              //         child: Text('Delete'),
+              //       ),
+              //     ],
+              //   ),
+              // ),
+              Expanded(
+                child: Container(
+                  width: 68,
+                  height: 68,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: Color(0xffFFAE00),
+                      width: 2,
                     ),
-                  ],
-                ),
-              ),
-
-              Container(
-                width: 68,
-                height: 68,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: Color(0xffFFAE00),
-                    width: 2,
-                  ),
-                  image: DecorationImage(
-                    image: AssetImage(image),
-                    fit: BoxFit.cover,
+                    image: DecorationImage(
+                      image: AssetImage(image),
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               ),
