@@ -66,19 +66,17 @@ class ColorGameBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ColorGameBloc, ColorGameState>(
       builder: (context, state) {
-        final current = state.question.isNotEmpty
-            ? state.question[state.currentIndex]
-            : null;
-
-        final choices = (jsonDecode(current?.choices ?? '[]') as List)
-            .map((e) => Question.fromJson(Map<String, dynamic>.from(e)))
-            .toList();
-
-        if (state.screenRequestStatus == RequestStatus.inProgress) {
+        if (state.screenRequestStatus != RequestStatus.success) {
           return const Center(
             child: CircularProgressIndicator(),
           );
         }
+
+        final current = state.question[state.currentIndex];
+
+        final choices = (jsonDecode(current.choices ?? '[]') as List)
+            .map((e) => Question.fromJson(Map<String, dynamic>.from(e)))
+            .toList();
 
         return Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -96,7 +94,7 @@ class ColorGameBody extends StatelessWidget {
             ),
             Expanded(
               child: Image.asset(
-                current?.image ?? '',
+                current.image ?? '',
                 width: 142,
               ),
             ),

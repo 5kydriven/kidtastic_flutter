@@ -195,28 +195,31 @@ class InitialDataSeeder {
   // ---------------------------
   Future<void> _seedColors(int gameId) async {
     final random = Random();
-
     const colorShapes = SeedData.colorShapes;
 
     for (final colorShape in colorShapes) {
-      final correctAnswers = colorShapes.firstWhere(
-        (s) => s.correctAnswer == s.correctAnswer && s.question != s.question,
+      final sameColorDifferentShape = colorShapes.firstWhere(
+        (s) =>
+            s.correctAnswer == colorShape.correctAnswer &&
+            s.question != colorShape.question,
+        orElse: () => colorShape,
       );
 
-      final wrongAnswers = colorShapes
-          .where((s) => s.correctAnswer != colorShape.correctAnswer)
-          .map((s) => s)
-          .toList();
-      wrongAnswers.shuffle(random);
+      final wrongAnswers =
+          colorShapes
+              .where((s) => s.correctAnswer != colorShape.correctAnswer)
+              .toList()
+            ..shuffle(random);
 
       final choices = wrongAnswers.take(2).toList();
-      choices.add(correctAnswers);
+
+      choices.add(sameColorDifferentShape);
       choices.shuffle(random);
 
       await _gameQuestionRepository.addQuestion(
         question: Question(
           gameId: gameId,
-          question: colorShape.correctAnswer,
+          question: colorShape.question,
           correctAnswer: colorShape.correctAnswer,
           image: colorShape.image,
           difficulty: colorShape.difficulty,

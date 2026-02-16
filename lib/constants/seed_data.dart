@@ -756,7 +756,7 @@ class SeedData {
       difficulty: Difficulty.easy,
     ),
     Question(
-      question: 'diamonViolet',
+      question: 'diamondViolet',
       correctAnswer: 'violet',
       image: Assets.diamondViolet,
       difficulty: Difficulty.easy,
@@ -834,7 +834,7 @@ class SeedData {
       difficulty: Difficulty.easy,
     ),
     Question(
-      question: 'tapezoidPurple',
+      question: 'trapezoidPurple',
       correctAnswer: 'purple',
       image: Assets.trapezoidPurple,
       difficulty: Difficulty.easy,
