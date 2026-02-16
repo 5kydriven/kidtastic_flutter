@@ -200,7 +200,7 @@ class InitialDataSeeder {
 
     for (final colorShape in colorShapes) {
       final correctAnswers = colorShapes.firstWhere(
-        (s) => s.correctAnswer == colorShape.correctAnswer,
+        (s) => s.correctAnswer == s.correctAnswer && s.question != s.question,
       );
 
       final wrongAnswers = colorShapes

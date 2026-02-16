@@ -135,7 +135,7 @@ class Assets {
 
   // **Colors**
   static const circleTeal = 'assets/color/circle_teal.png';
-  static const circleBrown = 'assets/color/circle_brown.png';
+  static const circleDarkBrown = 'assets/color/circle_dark_brown.png';
   static const colorBg = 'assets/color/color_bg.png';
   static const colorLogo = 'assets/color/color_logo.png';
   static const diamondViolet = 'assets/color/diamond_violet.png';
@@ -144,14 +144,14 @@ class Assets {
   static const heartPink = 'assets/color/heart_pink.png';
   static const heptagonBrown = 'assets/color/heptagon_brown.png';
   static const heptagonGreen = 'assets/color/heptagon_green.png';
-  static const heptagonViolet = 'assets/color/heptagon_violet.png';
+  static const heptagonPurple = 'assets/color/heptagon_purple.png';
   static const hexagonBrown = 'assets/color/hexagon_brown.png';
   static const hexagonViolet = 'assets/color/hexagon_violet.png';
   static const rectanglePink = 'assets/color/rectangle_pink.png';
   static const squareBlue = 'assets/color/square_blue.png';
   static const squareRed = 'assets/color/square_red.png';
   static const trapezoidGreen = 'assets/color/trapezoid_green.png';
-  static const trapezoidViolet = 'assets/color/trapezoid_violet.png';
+  static const trapezoidPurple = 'assets/color/trapezoid_purple.png';
   static const triangleBlue = 'assets/color/triangle_blue.png';
   static const triangleRed = 'assets/color/triangle_red.png';
 

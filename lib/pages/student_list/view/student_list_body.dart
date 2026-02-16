@@ -337,7 +337,7 @@ class StudentListBody extends StatelessWidget {
                                 child: Expanded(
                                   child: ListView.separated(
                                     itemCount: state.students.length,
-                                    separatorBuilder: (_, __) => const SizedBox(
+                                    separatorBuilder: (_, _) => const SizedBox(
                                       height: 4,
                                     ),
                                     itemBuilder: (context, index) {

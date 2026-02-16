@@ -63,6 +63,12 @@ class ColorGameBloc extends Bloc<ColorGameEvent, ColorGameState> {
       gameId: state.game?.id ?? 0,
     );
 
+    await Future.delayed(
+      Duration(
+        seconds: 1,
+      ),
+    );
+
     switch (gameSessionResult.resultStatus) {
       case ResultStatus.success:
         final gameQuestionResult = await _gameQuestionRepository.getQuestion(

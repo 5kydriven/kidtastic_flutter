@@ -58,7 +58,7 @@ class _GameListPageState extends State<GameListPage> {
                   top: MediaQuery.of(context).size.height * 0.5,
                   left: MediaQuery.of(context).size.width * 0.05,
                 ),
-                builder: (_, __) {
+                builder: (_, _) {
                   return OwlGuideTemplate(
                     message:
                         'Hello ${state.student?.name}, welcome to Kidtastic!',
@@ -84,7 +84,7 @@ class _GameListPageState extends State<GameListPage> {
                   top: MediaQuery.of(context).size.height * 0.5,
                   left: MediaQuery.of(context).size.width * 0.05,
                 ),
-                builder: (_, __) {
+                builder: (_, _) {
                   return OwlGuideTemplate(
                     message: 'This is where you can play games!',
                   );
@@ -113,9 +113,32 @@ class _GameListPageState extends State<GameListPage> {
       colorShadow: Colors.black,
       opacityShadow: 0.5,
       paddingFocus: 0,
-      hideSkip: true,
+      hideSkip: false,
       onClickTarget: (_) => _bloc.add(const GameListTutorialNextPressed()),
       onClickOverlay: (_) => _bloc.add(const GameListTutorialNextPressed()),
+      skipWidget: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 40,
+          vertical: 36,
+        ),
+        child: FilledButton(
+          onPressed: () {
+            _bloc.add(const GameListSfxButtonPressed());
+            tutorialCoachMark?.skip();
+          },
+          style: FilledButton.styleFrom(
+            backgroundColor: Colors.orange,
+          ),
+          child: const Text(
+            'Skip',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
+      onSkip: () => true,
     );
 
     tutorialCoachMark?.show(context: context);
