@@ -12,7 +12,8 @@
 .swiftpm/
 migrate_working_dir/
 .env
-Output/*
+Output/*.exe
+Output/*.zip
 
 # IntelliJ related
 *.iml
