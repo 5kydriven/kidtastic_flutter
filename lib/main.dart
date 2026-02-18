@@ -30,6 +30,7 @@ import 'pages/register/register.dart';
 import 'pages/shape_game/shape_game.dart';
 import 'pages/initial_screen/initial_screen.dart';
 import 'pages/student_profile/student_profile.dart';
+import 'pages/tracing_game/view/tracing_game_page.dart';
 import 'repositories/repositories.dart';
 import 'service/services.dart';
 
@@ -317,6 +318,12 @@ class _MyAppState extends State<MyApp> {
           path: ForgotPasswordPage.route,
           builder: (context, state) {
             return const ForgotPasswordPage();
+          },
+        ),
+        GoRoute(
+          path: TracingGamePage.route,
+          builder: (context, state) {
+            return const TracingGamePage();
           },
         ),
       ],
