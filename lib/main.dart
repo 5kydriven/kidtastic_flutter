@@ -30,6 +30,7 @@ import 'pages/register/register.dart';
 import 'pages/shape_game/shape_game.dart';
 import 'pages/initial_screen/initial_screen.dart';
 import 'pages/student_profile/student_profile.dart';
+import 'pages/tracing_game/bloc/bloc.dart';
 import 'pages/tracing_game/view/tracing_game_page.dart';
 import 'repositories/repositories.dart';
 import 'service/services.dart';
@@ -181,6 +182,7 @@ class _MyAppState extends State<MyApp> {
 
     router = GoRouter(
       initialLocation: InitialScreenPage.route,
+      // initialLocation: TracingGamePage.route,
       routes: <RouteBase>[
         GoRoute(
           path: InitialScreenPage.route,
@@ -323,7 +325,9 @@ class _MyAppState extends State<MyApp> {
         GoRoute(
           path: TracingGamePage.route,
           builder: (context, state) {
-            return const TracingGamePage();
+            return TracingGamePage(
+              initialState: state.extra as TracingGameState,
+            );
           },
         ),
       ],

@@ -211,9 +211,7 @@ class PronunciationGameBloc
     Emitter<PronunciationGameState> emit,
   ) async {
     final nextIndex = state.currentIndex + 1;
-    print(
-      'QuestionNext called: nextIndex=$nextIndex, currentIndex=${state.currentIndex}, _isStopping=$_isStopping',
-    );
+
     if (nextIndex >= state.question.length) {
       emit(
         state.copyWith(
@@ -223,7 +221,6 @@ class PronunciationGameBloc
       add(const PronunciationGameGameEnd());
       return;
     }
-    print('here 2 $nextIndex');
 
     final result = await _sessionQuestionRepository.addSessionQuestion(
       entry: SessionQuestion(
@@ -438,13 +435,7 @@ class PronunciationGameBloc
     bool triggeredByUser = false,
     bool wasCorrect = false,
   }) async {
-    print(
-      '_stopRecording called: isRecording=${state.isRecording}, _isStopping=$_isStopping, wasCorrect=$wasCorrect, triggeredByUser=$triggeredByUser',
-    );
     if (!state.isRecording || _isStopping) {
-      print(
-        '_stopRecording: early return (isRecording=${state.isRecording}, _isStopping=$_isStopping)',
-      );
       return;
     }
     _isStopping = true;
