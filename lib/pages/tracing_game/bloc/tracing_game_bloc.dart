@@ -28,6 +28,9 @@ class TracingGameBloc extends Bloc<TracingGameEvent, TracingGameState> {
        _studentInsightRepository = studentInsightRepository,
        super(initialState) {
     on<TracingGameScreenCreated>(_screenCreated);
+    on<TracingGameButtonPressed>(_buttonPressed);
+    on<TracingGameNextQuestion>(_nextQuestion);
+    on<TracingGameGameEnd>(_gameEnd);
     on<TracingGameBgmToggled>(_bgmToggled);
     on<TracingGameSfxToggled>(_sfxToggled);
     on<TracingGameBgmVolumeChanged>(_bgmVolumeChanged);
@@ -67,7 +70,7 @@ class TracingGameBloc extends Bloc<TracingGameEvent, TracingGameState> {
         final gameQuestionResult = await _gameQuestionRepository.getQuestion(
           gameId: state.game?.id ?? 0,
           limit: 10,
-          isRandom: true,
+          isRandom: false,
         );
 
         switch (gameQuestionResult.resultStatus) {
@@ -98,6 +101,134 @@ class TracingGameBloc extends Bloc<TracingGameEvent, TracingGameState> {
         emit(
           state.copyWith(
             screenRequestStatus: RequestStatus.failure,
+          ),
+        );
+        break;
+    }
+  }
+
+  Future<void> _buttonPressed(
+    TracingGameButtonPressed event,
+    Emitter<TracingGameState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        sessionQuestionRequestStatus: RequestStatus.inProgress,
+      ),
+    );
+
+    final isCorrect =
+        state.question[state.currentIndex].correctAnswer == event.answer;
+
+    if (isCorrect) {
+      _audioService.playSfx(Audios.applause);
+      _audioService.playSfx(Audios.correctRecord);
+    } else {
+      _audioService.playSfx(Audios.wrongChime);
+    }
+
+    final sessionQuestionResult = await _sessionQuestionRepository
+        .addSessionQuestion(
+          entry: SessionQuestion(
+            sessionId: state.sessionId ?? 0,
+            questionId: state.question[state.currentIndex].id ?? 0,
+            studentAnswer: event.answer,
+            isCorrect: isCorrect,
+          ),
+        );
+
+    switch (sessionQuestionResult.resultStatus) {
+      case ResultStatus.success:
+        await Future.delayed(
+          const Duration(
+            milliseconds: 3000,
+          ),
+        );
+        _audioService.stop();
+        add(const TracingGameNextQuestion());
+
+        emit(
+          state.copyWith(
+            score: isCorrect ? state.score + 1 : state.score,
+            sessionQuestionRequestStatus: RequestStatus.success,
+          ),
+        );
+        break;
+      default:
+        emit(
+          state.copyWith(
+            sessionQuestionRequestStatus: RequestStatus.failure,
+          ),
+        );
+        break;
+    }
+  }
+
+  Future<void> _nextQuestion(
+    TracingGameNextQuestion event,
+    Emitter<TracingGameState> emit,
+  ) async {
+    final nextIndex = state.currentIndex + 1;
+
+    if (nextIndex == state.question.length) {
+      emit(
+        state.copyWith(
+          hasEnded: true,
+        ),
+      );
+      add(const TracingGameGameEnd());
+      return;
+    }
+
+    emit(
+      state.copyWith(
+        currentIndex: nextIndex,
+      ),
+    );
+  }
+
+  Future<void> _gameEnd(
+    TracingGameGameEnd event,
+    Emitter<TracingGameState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        gameSessionRequestStatus: RequestStatus.inProgress,
+      ),
+    );
+
+    final durationSeconds = state.sessionStartTime != null
+        ? DateTime.now().difference(state.sessionStartTime!).inSeconds
+        : 0;
+
+    final gameSessionResult = await _gameSessionRepository.endSession(
+      sessionId: state.sessionId ?? 0,
+      score: state.score,
+      totalQuestions: state.question.length,
+      durationSeconds: durationSeconds,
+    );
+
+    switch (gameSessionResult.resultStatus) {
+      case ResultStatus.success:
+        final studentInsightResult = await _studentInsightRepository
+            .updateStudentInsight(
+              studentId: state.student?.id ?? 0,
+              gameId: state.game?.id ?? 0,
+            );
+
+        emit(
+          state.copyWith(
+            gameSessionRequestStatus:
+                studentInsightResult.resultStatus == ResultStatus.success
+                ? RequestStatus.success
+                : RequestStatus.failure,
+          ),
+        );
+        break;
+      default:
+        emit(
+          state.copyWith(
+            gameSessionRequestStatus: RequestStatus.failure,
           ),
         );
         break;

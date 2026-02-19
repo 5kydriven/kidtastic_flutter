@@ -11,6 +11,7 @@ import '../tracing_game.dart';
 class TracingGamePage extends StatelessWidget {
   static const route = '/tracing-game';
   final TracingGameState initialState;
+
   const TracingGamePage({
     super.key,
     required this.initialState,
@@ -41,7 +42,16 @@ class TracingGamePage extends StatelessWidget {
           showSettings: true,
         ),
         child: TracingCharsGame(
-          // showAnchor: true,
+          showAnchor: true,
+          onCurrentTracingScreenFinished: (index) async {
+            print('/////onCurrentTracingScreenFinished:$index');
+          },
+          onGameFinished: (int screenIndex) async {
+            print('/////onGameFinished:$screenIndex');
+          },
+          onTracingUpdated: (int currentTracingIndex) async {
+            print('/////onTracingUpdated:$currentTracingIndex');
+          },
           traceShapeModel: [
             TraceCharsModel(
               chars: [
@@ -53,6 +63,22 @@ class TracingGamePage extends StatelessWidget {
                 ),
                 TraceCharModel(
                   char: 'f',
+                  traceShapeOptions: const TraceShapeOptions(
+                    innerPaintColor: Colors.orange,
+                  ),
+                ),
+              ],
+            ),
+            TraceCharsModel(
+              chars: [
+                TraceCharModel(
+                  char: 'A',
+                  traceShapeOptions: const TraceShapeOptions(
+                    innerPaintColor: Colors.orange,
+                  ),
+                ),
+                TraceCharModel(
+                  char: 'a',
                   traceShapeOptions: const TraceShapeOptions(
                     innerPaintColor: Colors.orange,
                   ),

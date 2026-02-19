@@ -852,4 +852,245 @@ class SeedData {
       difficulty: Difficulty.easy,
     ),
   ];
+
+  static const numberTracing = [
+    Question(
+      question: '0',
+      correctAnswer: '0',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: '1',
+      correctAnswer: '1',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: '2',
+      correctAnswer: '2',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: '3',
+      correctAnswer: '3',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: '4',
+      correctAnswer: '4',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: '5',
+      correctAnswer: '5',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: '6',
+      correctAnswer: '6',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: '7',
+      correctAnswer: '7',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: '8',
+      correctAnswer: '8',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: '9',
+      correctAnswer: '9',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: '10',
+      correctAnswer: '10',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: '11',
+      correctAnswer: '11',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: '12',
+      correctAnswer: '12',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: '13',
+      correctAnswer: '13',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: '14',
+      correctAnswer: '14',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: '15',
+      correctAnswer: '15',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: '16',
+      correctAnswer: '16',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: '17',
+      correctAnswer: '17',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: '18',
+      correctAnswer: '18',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: '19',
+      correctAnswer: '19',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: '20',
+      correctAnswer: '20',
+      difficulty: Difficulty.easy,
+    ),
+  ];
+
+  static const letterTracing = [
+    Question(
+      question: 'Aa',
+      correctAnswer: 'Aa',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'Bb',
+      correctAnswer: 'Bb',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'Cc',
+      correctAnswer: 'Cc',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'Dd',
+      correctAnswer: 'Dd',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'Ee',
+      correctAnswer: 'Ee',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'Ff',
+      correctAnswer: 'Ff',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'Gg',
+      correctAnswer: 'Gg',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'Hh',
+      correctAnswer: 'Hh',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'Ii',
+      correctAnswer: 'Ii',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'Jj',
+      correctAnswer: 'Jj',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'Kk',
+      correctAnswer: 'Kk',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'Ll',
+      correctAnswer: 'Ll',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'Mm',
+      correctAnswer: 'Mm',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'Nn',
+      correctAnswer: 'Nn',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'Oo',
+      correctAnswer: 'Oo',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'Pp',
+      correctAnswer: 'Pp',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'Qq',
+      correctAnswer: 'Qq',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'Rr',
+      correctAnswer: 'Rr',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'Ss',
+      correctAnswer: 'Ss',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'Tt',
+      correctAnswer: 'Tt',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'Uu',
+      correctAnswer: 'Uu',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'Vv',
+      correctAnswer: 'Vv',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'Ww',
+      correctAnswer: 'Ww',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'Xx',
+      correctAnswer: 'Xx',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'Yy',
+      correctAnswer: 'Yy',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'Zz',
+      correctAnswer: 'Zz',
+      difficulty: Difficulty.easy,
+    ),
+  ];
 }

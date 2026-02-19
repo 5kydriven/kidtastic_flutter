@@ -12,6 +12,7 @@ import '../../../constants/constants.dart';
 import '../../../models/models.dart';
 import '../../color_game/color_game.dart';
 import '../../match_game/match_game.dart';
+import '../../tracing_game/tracing_game.dart';
 import '../bloc/bloc.dart';
 
 class GameListBody extends StatelessWidget {
@@ -85,6 +86,14 @@ class GameListBody extends StatelessWidget {
         context.push(
           ColorGamePage.route,
           extra: ColorGameState(
+            game: game,
+            student: state.student,
+          ),
+        );
+      case GameType.tracing:
+        context.push(
+          TracingGamePage.route,
+          extra: TracingGameState(
             game: game,
             student: state.student,
           ),

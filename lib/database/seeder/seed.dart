@@ -7,6 +7,7 @@ import 'package:kidtastic_flutter/pages/bubble_game/bubble_game.dart';
 import 'package:kidtastic_flutter/pages/counting_game/view/counting_game_page.dart';
 import 'package:kidtastic_flutter/pages/pronunciation_game/view/pronunciation_game_page.dart';
 import 'package:kidtastic_flutter/pages/shape_game/view/shape_game_page.dart';
+import 'package:kidtastic_flutter/pages/tracing_game/view/tracing_game_page.dart';
 import 'package:kidtastic_flutter/repositories/game_repository.dart';
 import 'package:kidtastic_flutter/repositories/game_question_repository.dart';
 import 'package:kidtastic_flutter/utils/pluralize_helper.dart';
@@ -71,6 +72,13 @@ class InitialDataSeeder {
         description: 'Learn your color',
         route: ColorGamePage.route,
       ),
+      Game(
+        name: 'Trace Space',
+        category: GameType.tracing,
+        imageAsset: Assets.gamesBtn,
+        description: 'Learn to trace numbers and letters',
+        route: TracingGamePage.route,
+      ),
     ];
 
     final gameIds = <int>[];
@@ -90,6 +98,7 @@ class InitialDataSeeder {
     await _seedShapes(gameIds[2]);
     await _seedBubblePop(gameIds[3]);
     await _seedColors(gameIds[4]);
+    await _seedTracingSpace(gameIds[5]);
   }
 
   // ---------------------------
@@ -258,6 +267,27 @@ class InitialDataSeeder {
           difficulty: letter.difficulty,
           image: letter.image,
           choices: jsonEncode(choices),
+        ),
+      );
+    }
+  }
+
+  // ---------------------------
+  // 🎨 Tracing Space GAME
+  // ---------------------------
+  Future<void> _seedTracingSpace(int gameId) async {
+    final items = [
+      ...SeedData.numberTracing,
+      ...SeedData.letterTracing,
+    ];
+
+    for (final item in items) {
+      await _gameQuestionRepository.addQuestion(
+        question: Question(
+          gameId: gameId,
+          question: item.question,
+          correctAnswer: item.correctAnswer,
+          difficulty: item.difficulty,
         ),
       );
     }

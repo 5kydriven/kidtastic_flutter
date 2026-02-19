@@ -6,6 +6,22 @@ class TracingGameScreenCreated extends TracingGameEvent {
   const TracingGameScreenCreated();
 }
 
+class TracingGameButtonPressed extends TracingGameEvent {
+  final String answer;
+
+  const TracingGameButtonPressed({
+    required this.answer,
+  });
+}
+
+class TracingGameNextQuestion extends TracingGameEvent {
+  const TracingGameNextQuestion();
+}
+
+class TracingGameGameEnd extends TracingGameEvent {
+  const TracingGameGameEnd();
+}
+
 class TracingGameBgmToggled extends TracingGameEvent {
   const TracingGameBgmToggled();
 }
