@@ -28,7 +28,7 @@ class TracingGameBloc extends Bloc<TracingGameEvent, TracingGameState> {
        _studentInsightRepository = studentInsightRepository,
        super(initialState) {
     on<TracingGameScreenCreated>(_screenCreated);
-    on<TracingGameButtonPressed>(_buttonPressed);
+    on<TracingGameTraceDone>(_traceDone);
     on<TracingGameNextQuestion>(_nextQuestion);
     on<TracingGameGameEnd>(_gameEnd);
     on<TracingGameBgmToggled>(_bgmToggled);
@@ -69,7 +69,7 @@ class TracingGameBloc extends Bloc<TracingGameEvent, TracingGameState> {
       case ResultStatus.success:
         final gameQuestionResult = await _gameQuestionRepository.getQuestion(
           gameId: state.game?.id ?? 0,
-          limit: 10,
+          // limit: 21,
           isRandom: false,
         );
 
@@ -107,8 +107,8 @@ class TracingGameBloc extends Bloc<TracingGameEvent, TracingGameState> {
     }
   }
 
-  Future<void> _buttonPressed(
-    TracingGameButtonPressed event,
+  Future<void> _traceDone(
+    TracingGameTraceDone event,
     Emitter<TracingGameState> emit,
   ) async {
     emit(
@@ -117,42 +117,35 @@ class TracingGameBloc extends Bloc<TracingGameEvent, TracingGameState> {
       ),
     );
 
-    final isCorrect =
-        state.question[state.currentIndex].correctAnswer == event.answer;
-
-    if (isCorrect) {
-      _audioService.playSfx(Audios.applause);
-      _audioService.playSfx(Audios.correctRecord);
-    } else {
-      _audioService.playSfx(Audios.wrongChime);
-    }
+    _audioService.playSfx(Audios.applause);
+    _audioService.playSfx(Audios.correctRecord);
 
     final sessionQuestionResult = await _sessionQuestionRepository
         .addSessionQuestion(
           entry: SessionQuestion(
             sessionId: state.sessionId ?? 0,
             questionId: state.question[state.currentIndex].id ?? 0,
-            studentAnswer: event.answer,
-            isCorrect: isCorrect,
+            studentAnswer: state.question[state.currentIndex].correctAnswer,
+            isCorrect: true,
           ),
         );
 
     switch (sessionQuestionResult.resultStatus) {
       case ResultStatus.success:
-        await Future.delayed(
-          const Duration(
-            milliseconds: 3000,
-          ),
-        );
-        _audioService.stop();
         add(const TracingGameNextQuestion());
 
         emit(
           state.copyWith(
-            score: isCorrect ? state.score + 1 : state.score,
+            score: state.score + 1,
             sessionQuestionRequestStatus: RequestStatus.success,
           ),
         );
+        await Future.delayed(
+          const Duration(
+            milliseconds: 2000,
+          ),
+        );
+        _audioService.stop();
         break;
       default:
         emit(

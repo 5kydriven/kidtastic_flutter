@@ -74,7 +74,7 @@ class InitialDataSeeder {
       ),
       Game(
         name: 'Trace Space',
-        category: GameType.tracing,
+        category: GameType.traceSpace,
         imageAsset: Assets.gamesBtn,
         description: 'Learn to trace numbers and letters',
         route: TracingGamePage.route,
@@ -276,10 +276,12 @@ class InitialDataSeeder {
   // 🎨 Tracing Space GAME
   // ---------------------------
   Future<void> _seedTracingSpace(int gameId) async {
-    final items = [
-      ...SeedData.numberTracing,
-      ...SeedData.letterTracing,
-    ];
+    // final items = [
+    //   ...SeedData.numberTracing,
+    //   ...SeedData.letterTracing,
+    // ];
+
+    final items = SeedData.numberTracing;
 
     for (final item in items) {
       await _gameQuestionRepository.addQuestion(

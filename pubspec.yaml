@@ -67,6 +67,7 @@ flutter:
     - assets/initial_screen/
     - assets/color/
     - assets/letters/
+    - assets/trace/
 
   fonts:
     - family: Vag

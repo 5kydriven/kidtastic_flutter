@@ -222,6 +222,9 @@ class Assets {
   static const gamesBtn = 'assets/games/gamesBtn.png';
   static const bubblePopBtn = 'assets/games/bubble_pop_btn.png';
   static const learnColorBtn = 'assets/games/learnColorBtn.png';
+  static const traceSpaceBtn = 'assets/games/traceSpaceBtn.png';
+  static const matchShapeBtn = 'assets/games/matchShapeBtn.png';
+  static const letterTraceBtn = 'assets/games/letter_tracing.png';
 
   // **Initial Screen**
   static const initialScreenBg = 'assets/initial_screen/initial_screen_bg.png';
@@ -229,4 +232,13 @@ class Assets {
       'assets/initial_screen/initial_screen_btn.png';
   static const initialScreenLogo =
       'assets/initial_screen/initial_screen_logo.png';
+
+  // Trace Space Game
+  static const traceBg = 'assets/trace/traceBg.jpg';
+  static const traceBgOne = 'assets/trace/traceBgOne.jpg';
+  static const traceBgTwo = 'assets/trace/traceBgTwo.jpg';
+  static const traceYay = 'assets/trace/traceYay.jpg';
+  static const tracePlayBtn = 'assets/trace/trace_play_btn.png';
+  static const traceQuitBtn = 'assets/trace/trace_quit_btn.png';
+  static const traceLogo = 'assets/trace/trace_logo.png';
 }

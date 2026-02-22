@@ -855,107 +855,107 @@ class SeedData {
 
   static const numberTracing = [
     Question(
-      question: '0',
+      question: 'zero',
       correctAnswer: '0',
       difficulty: Difficulty.easy,
     ),
     Question(
-      question: '1',
+      question: 'one',
       correctAnswer: '1',
       difficulty: Difficulty.easy,
     ),
     Question(
-      question: '2',
+      question: 'two',
       correctAnswer: '2',
       difficulty: Difficulty.easy,
     ),
     Question(
-      question: '3',
+      question: 'three',
       correctAnswer: '3',
       difficulty: Difficulty.easy,
     ),
     Question(
-      question: '4',
+      question: 'four',
       correctAnswer: '4',
       difficulty: Difficulty.easy,
     ),
     Question(
-      question: '5',
+      question: 'five',
       correctAnswer: '5',
       difficulty: Difficulty.easy,
     ),
     Question(
-      question: '6',
+      question: 'six',
       correctAnswer: '6',
       difficulty: Difficulty.easy,
     ),
     Question(
-      question: '7',
+      question: 'seven',
       correctAnswer: '7',
       difficulty: Difficulty.easy,
     ),
     Question(
-      question: '8',
+      question: 'eight',
       correctAnswer: '8',
       difficulty: Difficulty.easy,
     ),
     Question(
-      question: '9',
+      question: 'nine',
       correctAnswer: '9',
       difficulty: Difficulty.easy,
     ),
     Question(
-      question: '10',
+      question: 'ten',
       correctAnswer: '10',
       difficulty: Difficulty.easy,
     ),
     Question(
-      question: '11',
+      question: 'eleven',
       correctAnswer: '11',
       difficulty: Difficulty.easy,
     ),
     Question(
-      question: '12',
+      question: 'twelve',
       correctAnswer: '12',
       difficulty: Difficulty.easy,
     ),
     Question(
-      question: '13',
+      question: 'thirteen',
       correctAnswer: '13',
       difficulty: Difficulty.easy,
     ),
     Question(
-      question: '14',
+      question: 'fourteen',
       correctAnswer: '14',
       difficulty: Difficulty.easy,
     ),
     Question(
-      question: '15',
+      question: 'fifteen',
       correctAnswer: '15',
       difficulty: Difficulty.easy,
     ),
     Question(
-      question: '16',
+      question: 'sixteen',
       correctAnswer: '16',
       difficulty: Difficulty.easy,
     ),
     Question(
-      question: '17',
+      question: 'seventeen',
       correctAnswer: '17',
       difficulty: Difficulty.easy,
     ),
     Question(
-      question: '18',
+      question: 'eighteen',
       correctAnswer: '18',
       difficulty: Difficulty.easy,
     ),
     Question(
-      question: '19',
+      question: 'nineteen',
       correctAnswer: '19',
       difficulty: Difficulty.easy,
     ),
     Question(
-      question: '20',
+      question: 'twenty',
       correctAnswer: '20',
       difficulty: Difficulty.easy,
     ),
@@ -1094,3 +1094,4 @@ class SeedData {
     ),
   ];
 }
+

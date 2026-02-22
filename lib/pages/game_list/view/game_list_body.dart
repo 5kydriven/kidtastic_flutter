@@ -90,7 +90,7 @@ class GameListBody extends StatelessWidget {
             student: state.student,
           ),
         );
-      case GameType.tracing:
+      case GameType.traceSpace:
         context.push(
           TracingGamePage.route,
           extra: TracingGameState(
