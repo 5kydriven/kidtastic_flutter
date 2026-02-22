@@ -9,6 +9,7 @@ class GameScaffold extends StatelessWidget {
   final Widget? bottomBar;
   final double constraintsBox;
   final EdgeInsetsGeometry contentPadding;
+  final Color? backgroundColor;
 
   const GameScaffold({
     super.key,
@@ -20,6 +21,7 @@ class GameScaffold extends StatelessWidget {
     this.contentPadding = const EdgeInsets.only(
       bottom: 24,
     ),
+    this.backgroundColor,
   });
 
   @override
@@ -33,6 +35,7 @@ class GameScaffold extends StatelessWidget {
       top: false,
       child: Scaffold(
         extendBodyBehindAppBar: true,
+        backgroundColor: backgroundColor,
         body: Stack(
           children: [
             Positioned.fill(

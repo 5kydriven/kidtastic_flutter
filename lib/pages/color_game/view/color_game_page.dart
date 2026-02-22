@@ -170,61 +170,19 @@ class _ColorGamePageState extends State<ColorGamePage> {
                 value: progress,
               ),
             ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                  ),
-                  child: Text('test'),
+            child: Card(
+              color: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              elevation: 8,
+              child: Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: ColorGameBody(
+                  confettiController: _confettiController,
                 ),
-                Container(
-                  color: Colors.white,
-                  padding: EdgeInsetsGeometry.all(16),
-                  child: Image.asset(
-                    Assets.circleBrown,
-                    width: 100,
-                  ),
-                ),
-                Container(
-                  color: Colors.white,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Image.asset(
-                        Assets.circleBrown,
-                        width: 70,
-                      ),
-                      Image.asset(
-                        Assets.circleBrown,
-                        width: 70,
-                      ),
-                      Image.asset(
-                        Assets.circleBrown,
-                        width: 70,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+              ),
             ),
-            // child: Card(
-            //   elevation: 8,
-            //   shape: RoundedRectangleBorder(
-            //     borderRadius: BorderRadius.circular(24),
-            //   ),
-            //   child: Padding(
-            //     padding: const EdgeInsets.symmetric(
-            //       vertical: 20,
-            //       horizontal: 16,
-            //     ),
-            //     child: ColorGameBody(
-            //       confettiController: _confettiController,
-            //     ),
-            //   ),
-            // ),
           );
         },
       ),

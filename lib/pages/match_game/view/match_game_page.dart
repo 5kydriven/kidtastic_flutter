@@ -184,7 +184,7 @@ class _MatchGamePageState extends State<MatchGamePage>
                   top: MediaQuery.of(context).size.height * 0.5,
                   left: MediaQuery.of(context).size.width * 0.05,
                 ),
-                builder: (_, __) {
+                builder: (_, _) {
                   return const OwlGuideTemplate(
                     message:
                         'Hoot! Welcome to the Match Game! Let’s go on a fun matching adventure and see how many shapes we can match!',
@@ -210,7 +210,7 @@ class _MatchGamePageState extends State<MatchGamePage>
                   top: MediaQuery.of(context).size.height * 0.5,
                   left: MediaQuery.of(context).size.width * 0.05,
                 ),
-                builder: (_, __) {
+                builder: (_, _) {
                   return const OwlGuideTemplate(
                     message: 'Here’s the shape we need to match!',
                   );
@@ -235,7 +235,7 @@ class _MatchGamePageState extends State<MatchGamePage>
                   top: MediaQuery.of(context).size.height * 0.3,
                   left: MediaQuery.of(context).size.width * 0.05,
                 ),
-                builder: (_, __) {
+                builder: (_, _) {
                   return const OwlGuideTemplate(
                     message:
                         'Click and drag the shapes on the right to the matching shape on the left. That’s all you need to do! Good luck!',
@@ -268,9 +268,32 @@ class _MatchGamePageState extends State<MatchGamePage>
       colorShadow: Colors.black,
       opacityShadow: 0.5,
       paddingFocus: 0,
-      hideSkip: true,
+      hideSkip: false,
       onClickTarget: (_) => _bloc.add(const MatchGameTutorialNextPressed()),
       onClickOverlay: (_) => _bloc.add(const MatchGameTutorialNextPressed()),
+      skipWidget: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 40,
+          vertical: 36,
+        ),
+        child: FilledButton(
+          onPressed: () {
+            _bloc.add(const MatchGameSfxButtonPressed());
+            tutorialCoachMark?.skip();
+          },
+          style: FilledButton.styleFrom(
+            backgroundColor: Colors.orange,
+          ),
+          child: const Text(
+            'Skip',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
+      onSkip: () => true,
     );
 
     tutorialCoachMark?.show(context: context);
@@ -357,7 +380,6 @@ class _MatchGamePageState extends State<MatchGamePage>
                   )
                 : 0.0;
             return GameScaffold(
-              key: matchWelcomeKey,
               constraintsBox: 800,
               header: GameHeaderConfig(
                 showBack: true,
@@ -380,6 +402,7 @@ class _MatchGamePageState extends State<MatchGamePage>
               ),
               imageAssets: Assets.matchTheShape,
               child: MatchGameBody(
+                key: matchWelcomeKey,
                 confettiController: _confettiController,
                 animationController: _animationController,
                 shake: _shake,

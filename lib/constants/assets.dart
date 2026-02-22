@@ -135,7 +135,7 @@ class Assets {
 
   // **Colors**
   static const circleTeal = 'assets/color/circle_teal.png';
-  static const circleBrown = 'assets/color/circle_brown.png';
+  static const circleDarkBrown = 'assets/color/circle_dark_brown.png';
   static const colorBg = 'assets/color/color_bg.png';
   static const colorLogo = 'assets/color/color_logo.png';
   static const diamondViolet = 'assets/color/diamond_violet.png';
@@ -144,14 +144,14 @@ class Assets {
   static const heartPink = 'assets/color/heart_pink.png';
   static const heptagonBrown = 'assets/color/heptagon_brown.png';
   static const heptagonGreen = 'assets/color/heptagon_green.png';
-  static const heptagonViolet = 'assets/color/heptagon_violet.png';
+  static const heptagonPurple = 'assets/color/heptagon_purple.png';
   static const hexagonBrown = 'assets/color/hexagon_brown.png';
   static const hexagonViolet = 'assets/color/hexagon_violet.png';
   static const rectanglePink = 'assets/color/rectangle_pink.png';
   static const squareBlue = 'assets/color/square_blue.png';
   static const squareRed = 'assets/color/square_red.png';
   static const trapezoidGreen = 'assets/color/trapezoid_green.png';
-  static const trapezoidViolet = 'assets/color/trapezoid_violet.png';
+  static const trapezoidPurple = 'assets/color/trapezoid_purple.png';
   static const triangleBlue = 'assets/color/triangle_blue.png';
   static const triangleRed = 'assets/color/triangle_red.png';
 
@@ -222,6 +222,9 @@ class Assets {
   static const gamesBtn = 'assets/games/gamesBtn.png';
   static const bubblePopBtn = 'assets/games/bubble_pop_btn.png';
   static const learnColorBtn = 'assets/games/learnColorBtn.png';
+  static const traceSpaceBtn = 'assets/games/traceSpaceBtn.png';
+  static const matchShapeBtn = 'assets/games/matchShapeBtn.png';
+  static const letterTraceBtn = 'assets/games/letter_tracing.png';
 
   // **Initial Screen**
   static const initialScreenBg = 'assets/initial_screen/initial_screen_bg.png';
@@ -229,4 +232,20 @@ class Assets {
       'assets/initial_screen/initial_screen_btn.png';
   static const initialScreenLogo =
       'assets/initial_screen/initial_screen_logo.png';
+
+  // Trace Space Game
+  static const traceBg = 'assets/trace/traceBg.jpg';
+  static const traceBgOne = 'assets/trace/traceBgOne.jpg';
+  static const traceBgTwo = 'assets/trace/traceBgTwo.jpg';
+  static const traceYay = 'assets/trace/traceYay.jpg';
+  static const tracePlayBtn = 'assets/trace/trace_play_btn.png';
+  static const traceQuitBtn = 'assets/trace/trace_quit_btn.png';
+  static const traceLogo = 'assets/trace/trace_logo.png';
+
+  // Letter Tracing Game
+  static const letterBg = 'assets/letter_trace/letter_bg.png';
+  static const letterContainer = 'assets/letter_trace/letter_container.png';
+  static const letterLogo = 'assets/letter_trace/letter_logo.png';
+  static const playBtn = 'assets/letter_trace/play_btn.png';
+  static const quitBtn = 'assets/letter_trace/quit_btn.png';
 }

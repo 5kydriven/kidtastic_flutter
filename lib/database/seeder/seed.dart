@@ -5,8 +5,10 @@ import 'dart:math' hide log;
 import 'package:kidtastic_flutter/constants/constants.dart';
 import 'package:kidtastic_flutter/pages/bubble_game/bubble_game.dart';
 import 'package:kidtastic_flutter/pages/counting_game/view/counting_game_page.dart';
+import 'package:kidtastic_flutter/pages/letter_game/letter_game.dart';
 import 'package:kidtastic_flutter/pages/pronunciation_game/view/pronunciation_game_page.dart';
 import 'package:kidtastic_flutter/pages/shape_game/view/shape_game_page.dart';
+import 'package:kidtastic_flutter/pages/tracing_game/view/tracing_game_page.dart';
 import 'package:kidtastic_flutter/repositories/game_repository.dart';
 import 'package:kidtastic_flutter/repositories/game_question_repository.dart';
 import 'package:kidtastic_flutter/utils/pluralize_helper.dart';
@@ -71,6 +73,20 @@ class InitialDataSeeder {
         description: 'Learn your color',
         route: ColorGamePage.route,
       ),
+      Game(
+        name: 'Trace Space',
+        category: GameType.traceSpace,
+        imageAsset: Assets.traceSpaceBtn,
+        description: 'Learn to trace numbers',
+        route: TracingGamePage.route,
+      ),
+      Game(
+        name: 'Letter Tracing',
+        category: GameType.letterTracing,
+        imageAsset: Assets.letterTraceBtn,
+        description: 'Learn to trace letters',
+        route: LetterGamePage.route,
+      ),
     ];
 
     final gameIds = <int>[];
@@ -90,6 +106,8 @@ class InitialDataSeeder {
     await _seedShapes(gameIds[2]);
     await _seedBubblePop(gameIds[3]);
     await _seedColors(gameIds[4]);
+    await _seedTracingSpace(gameIds[5]);
+    await _seedLetterTracing(gameIds[6]);
   }
 
   // ---------------------------
@@ -195,28 +213,31 @@ class InitialDataSeeder {
   // ---------------------------
   Future<void> _seedColors(int gameId) async {
     final random = Random();
-
     const colorShapes = SeedData.colorShapes;
 
     for (final colorShape in colorShapes) {
-      final correctAnswers = colorShapes.firstWhere(
-        (s) => s.correctAnswer == colorShape.correctAnswer,
+      final sameColorDifferentShape = colorShapes.firstWhere(
+        (s) =>
+            s.correctAnswer == colorShape.correctAnswer &&
+            s.question != colorShape.question,
+        orElse: () => colorShape,
       );
 
-      final wrongAnswers = colorShapes
-          .where((s) => s.correctAnswer != colorShape.correctAnswer)
-          .map((s) => s)
-          .toList();
-      wrongAnswers.shuffle(random);
+      final wrongAnswers =
+          colorShapes
+              .where((s) => s.correctAnswer != colorShape.correctAnswer)
+              .toList()
+            ..shuffle(random);
 
       final choices = wrongAnswers.take(2).toList();
-      choices.add(correctAnswers);
+
+      choices.add(sameColorDifferentShape);
       choices.shuffle(random);
 
       await _gameQuestionRepository.addQuestion(
         question: Question(
           gameId: gameId,
-          question: colorShape.correctAnswer,
+          question: colorShape.question,
           correctAnswer: colorShape.correctAnswer,
           image: colorShape.image,
           difficulty: colorShape.difficulty,
@@ -255,6 +276,42 @@ class InitialDataSeeder {
           difficulty: letter.difficulty,
           image: letter.image,
           choices: jsonEncode(choices),
+        ),
+      );
+    }
+  }
+
+  // ---------------------------
+  // 🎨 Tracing Space GAME
+  // ---------------------------
+  Future<void> _seedTracingSpace(int gameId) async {
+    final items = SeedData.numberTracing;
+
+    for (final item in items) {
+      await _gameQuestionRepository.addQuestion(
+        question: Question(
+          gameId: gameId,
+          question: item.question,
+          correctAnswer: item.correctAnswer,
+          difficulty: item.difficulty,
+        ),
+      );
+    }
+  }
+
+  // ---------------------------
+  // 🎨 Letter Tracing GAME
+  // ---------------------------
+  Future<void> _seedLetterTracing(int gameId) async {
+    final items = SeedData.letterTracing;
+
+    for (final item in items) {
+      await _gameQuestionRepository.addQuestion(
+        question: Question(
+          gameId: gameId,
+          question: item.question,
+          correctAnswer: item.correctAnswer,
+          difficulty: item.difficulty,
         ),
       );
     }

@@ -21,6 +21,7 @@ import 'constants/constants.dart';
 import 'pages/bubble_game/bubble_game.dart';
 import 'pages/game_list/game_list.dart';
 import 'pages/home/home.dart';
+import 'pages/letter_game/letter_game.dart';
 import 'pages/login/login.dart';
 import 'pages/match_game/match_game.dart';
 import 'pages/math_game/math_game.dart';
@@ -30,6 +31,8 @@ import 'pages/register/register.dart';
 import 'pages/shape_game/shape_game.dart';
 import 'pages/initial_screen/initial_screen.dart';
 import 'pages/student_profile/student_profile.dart';
+import 'pages/tracing_game/bloc/bloc.dart';
+import 'pages/tracing_game/view/tracing_game_page.dart';
 import 'repositories/repositories.dart';
 import 'service/services.dart';
 
@@ -180,6 +183,7 @@ class _MyAppState extends State<MyApp> {
 
     router = GoRouter(
       initialLocation: InitialScreenPage.route,
+      // initialLocation: TracingGamePage.route,
       routes: <RouteBase>[
         GoRoute(
           path: InitialScreenPage.route,
@@ -317,6 +321,22 @@ class _MyAppState extends State<MyApp> {
           path: ForgotPasswordPage.route,
           builder: (context, state) {
             return const ForgotPasswordPage();
+          },
+        ),
+        GoRoute(
+          path: TracingGamePage.route,
+          builder: (context, state) {
+            return TracingGamePage(
+              initialState: state.extra as TracingGameState,
+            );
+          },
+        ),
+        GoRoute(
+          path: LetterGamePage.route,
+          builder: (context, state) {
+            return LetterGamePage(
+              initialState: state.extra as LetterGameState,
+            );
           },
         ),
       ],

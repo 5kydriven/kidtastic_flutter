@@ -10,9 +10,6 @@ import '../../../widgets/widgets.dart';
 import '../bloc/bloc.dart';
 import 'view.dart';
 
-GlobalKey gameListBodyKey = GlobalKey();
-GlobalKey gameListGamesKey = GlobalKey();
-
 class GameListPage extends StatefulWidget {
   static const route = '/game-list';
   final GameListState initialState;
@@ -28,6 +25,8 @@ class GameListPage extends StatefulWidget {
 
 class _GameListPageState extends State<GameListPage> {
   final PageController _pageController = PageController();
+  final GlobalKey _gameListBodyKey = GlobalKey();
+  final GlobalKey _gameListGamesKey = GlobalKey();
   TutorialCoachMark? tutorialCoachMark;
   late GameListBloc _bloc;
 
@@ -47,7 +46,7 @@ class _GameListPageState extends State<GameListPage> {
         return [
           TargetFocus(
             identify: 'welcome',
-            keyTarget: gameListBodyKey,
+            keyTarget: _gameListBodyKey,
             shape: ShapeLightFocus.RRect,
             radius: 18,
             enableOverlayTab: true,
@@ -58,7 +57,7 @@ class _GameListPageState extends State<GameListPage> {
                   top: MediaQuery.of(context).size.height * 0.5,
                   left: MediaQuery.of(context).size.width * 0.05,
                 ),
-                builder: (_, __) {
+                builder: (_, _) {
                   return OwlGuideTemplate(
                     message:
                         'Hello ${state.student?.name}, welcome to Kidtastic!',
@@ -73,7 +72,7 @@ class _GameListPageState extends State<GameListPage> {
         return [
           TargetFocus(
             identify: 'games',
-            keyTarget: gameListGamesKey,
+            keyTarget: _gameListGamesKey,
             shape: ShapeLightFocus.RRect,
             radius: 18,
             enableOverlayTab: true,
@@ -84,7 +83,7 @@ class _GameListPageState extends State<GameListPage> {
                   top: MediaQuery.of(context).size.height * 0.5,
                   left: MediaQuery.of(context).size.width * 0.05,
                 ),
-                builder: (_, __) {
+                builder: (_, _) {
                   return OwlGuideTemplate(
                     message: 'This is where you can play games!',
                   );
@@ -113,9 +112,32 @@ class _GameListPageState extends State<GameListPage> {
       colorShadow: Colors.black,
       opacityShadow: 0.5,
       paddingFocus: 0,
-      hideSkip: true,
+      hideSkip: false,
       onClickTarget: (_) => _bloc.add(const GameListTutorialNextPressed()),
       onClickOverlay: (_) => _bloc.add(const GameListTutorialNextPressed()),
+      skipWidget: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 40,
+          vertical: 36,
+        ),
+        child: FilledButton(
+          onPressed: () {
+            _bloc.add(const GameListSfxButtonPressed());
+            tutorialCoachMark?.skip();
+          },
+          style: FilledButton.styleFrom(
+            backgroundColor: Colors.orange,
+          ),
+          child: const Text(
+            'Skip',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
+      onSkip: () => true,
     );
 
     tutorialCoachMark?.show(context: context);
@@ -191,10 +213,11 @@ class _GameListPageState extends State<GameListPage> {
                 bottom: 78,
               ),
               child: BodyContainer(
-                key: gameListBodyKey,
+                key: _gameListBodyKey,
                 text: state.student?.firstName?.toUpperCase() ?? '',
                 child: GameListBody(
                   pageController: _pageController,
+                  gamesSectionKey: _gameListGamesKey,
                 ),
               ),
             );

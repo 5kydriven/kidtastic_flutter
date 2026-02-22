@@ -185,7 +185,7 @@ class _CountingGamePageState extends State<CountingGamePage> {
                   top: MediaQuery.of(context).size.height * 0.5,
                   left: MediaQuery.of(context).size.width * 0.05,
                 ),
-                builder: (_, __) {
+                builder: (_, _) {
                   return const OwlGuideTemplate(
                     message:
                         'Hoot! Welcome to the Counting Game! Let’s go on a number adventure and see how many things we can find together!',
@@ -211,7 +211,7 @@ class _CountingGamePageState extends State<CountingGamePage> {
                   top: MediaQuery.of(context).size.height * 0.5,
                   left: MediaQuery.of(context).size.width * 0.05,
                 ),
-                builder: (_, __) {
+                builder: (_, _) {
                   return const OwlGuideTemplate(
                     message: 'First, let’s use our eyes to read the question!',
                   );
@@ -236,7 +236,7 @@ class _CountingGamePageState extends State<CountingGamePage> {
                   top: MediaQuery.of(context).size.height * 0.5,
                   left: MediaQuery.of(context).size.width * -0.05,
                 ),
-                builder: (_, __) {
+                builder: (_, _) {
                   final question = state.question[state.currentIndex].question;
 
                   final item = question
@@ -273,7 +273,7 @@ class _CountingGamePageState extends State<CountingGamePage> {
                   top: MediaQuery.of(context).size.height * 0.3,
                   left: MediaQuery.of(context).size.width * 0.05,
                 ),
-                builder: (_, __) {
+                builder: (_, _) {
                   return const OwlGuideTemplate(
                     message:
                         'Pick the button with the right number on it! You’re going to be a counting superstar. Good luck!',
@@ -300,12 +300,35 @@ class _CountingGamePageState extends State<CountingGamePage> {
 
     tutorialCoachMark = TutorialCoachMark(
       targets: _targetsForStep(state.tutorialStep),
+      skipWidget: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 40,
+          vertical: 36,
+        ),
+        child: FilledButton(
+          onPressed: () {
+            _bloc.add(const CountingGameSfxButtonPressed());
+            tutorialCoachMark?.skip();
+          },
+          style: FilledButton.styleFrom(
+            backgroundColor: Colors.orange,
+          ),
+          child: const Text(
+            'Skip',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
       colorShadow: Colors.black,
       opacityShadow: 0.5,
       paddingFocus: 0,
-      hideSkip: true,
+      hideSkip: false,
       onClickTarget: (_) => _bloc.add(const CountingGameTutorialNextPressed()),
       onClickOverlay: (_) => _bloc.add(const CountingGameTutorialNextPressed()),
+      onSkip: () => true,
     );
 
     tutorialCoachMark?.show(context: context);
@@ -375,7 +398,6 @@ class _CountingGamePageState extends State<CountingGamePage> {
                 : 0.0;
 
             return GameScaffold(
-              key: countingWelcomeKey,
               constraintsBox: 800,
               imageAssets: Assets.mathBg,
               header: GameHeaderConfig(
@@ -398,6 +420,7 @@ class _CountingGamePageState extends State<CountingGamePage> {
                 ),
               ),
               child: Card(
+                key: countingWelcomeKey,
                 elevation: 8,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(24),

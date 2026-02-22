@@ -189,7 +189,7 @@ class _PronunciationGamePageState extends State<PronunciationGamePage> {
                   top: MediaQuery.of(context).size.height * 0.5,
                   left: MediaQuery.of(context).size.width * 0.05,
                 ),
-                builder: (_, __) {
+                builder: (_, _) {
                   return const OwlGuideTemplate(
                     message:
                         'Hoot! Welcome to the Speaking Game! Let’s learn how to say new words together!',
@@ -215,7 +215,7 @@ class _PronunciationGamePageState extends State<PronunciationGamePage> {
                   top: MediaQuery.of(context).size.height * 0.5,
                   left: MediaQuery.of(context).size.width * -0.05,
                 ),
-                builder: (_, __) {
+                builder: (_, _) {
                   return const OwlGuideTemplate(
                     message:
                         'Look at the picture! Can you say the word out loud?',
@@ -241,7 +241,7 @@ class _PronunciationGamePageState extends State<PronunciationGamePage> {
                   top: MediaQuery.of(context).size.height * 0.3,
                   left: MediaQuery.of(context).size.width * 0.05,
                 ),
-                builder: (_, __) {
+                builder: (_, _) {
                   return const OwlGuideTemplate(
                     message:
                         'Tap the speaker to hear the word, then tap the mic to say it yourself!',
@@ -274,11 +274,34 @@ class _PronunciationGamePageState extends State<PronunciationGamePage> {
       colorShadow: Colors.black,
       opacityShadow: 0.5,
       paddingFocus: 0,
-      hideSkip: true,
+      hideSkip: false,
       onClickTarget: (_) =>
           _bloc.add(const PronunciationGameTutorialNextPressed()),
       onClickOverlay: (_) =>
           _bloc.add(const PronunciationGameTutorialNextPressed()),
+      skipWidget: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 40,
+          vertical: 36,
+        ),
+        child: FilledButton(
+          onPressed: () {
+            _bloc.add(const PronunciationGameSfxButtonPressed());
+            tutorialCoachMark?.skip();
+          },
+          style: FilledButton.styleFrom(
+            backgroundColor: Colors.orange,
+          ),
+          child: const Text(
+            'Skip',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
+      onSkip: () => true,
     );
 
     tutorialCoachMark?.show(context: context);
@@ -367,7 +390,6 @@ class _PronunciationGamePageState extends State<PronunciationGamePage> {
                   )
                 : 0.0;
             return GameScaffold(
-              key: pronunciationWelcomeKey,
               constraintsBox: 800,
               header: GameHeaderConfig(
                 showBack: true,
@@ -390,6 +412,7 @@ class _PronunciationGamePageState extends State<PronunciationGamePage> {
               ),
               imageAssets: Assets.pronunciationBg,
               child: Card(
+                key: pronunciationWelcomeKey,
                 color: Colors.white,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),

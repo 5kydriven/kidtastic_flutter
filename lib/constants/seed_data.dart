@@ -241,7 +241,7 @@ class SeedData {
     Question(
       question: 'circle',
       correctAnswer: 'circle',
-      image: Assets.circleBrown,
+      image: Assets.circleDarkBrown,
       difficulty: Difficulty.easy,
     ),
     Question(
@@ -744,112 +744,354 @@ class SeedData {
 
   static const colorShapes = [
     Question(
-      question: 'teal',
+      question: 'circleTeal',
       correctAnswer: 'teal',
       image: Assets.circleTeal,
       difficulty: Difficulty.easy,
     ),
     Question(
-      question: 'brown',
-      correctAnswer: 'brown',
-      image: Assets.circleBrown,
+      question: 'circleDarkBrown',
+      correctAnswer: 'dark_brown',
+      image: Assets.circleDarkBrown,
       difficulty: Difficulty.easy,
     ),
     Question(
-      question: 'violet',
+      question: 'diamondViolet',
       correctAnswer: 'violet',
       image: Assets.diamondViolet,
       difficulty: Difficulty.easy,
     ),
     Question(
-      question: 'yellow',
+      question: 'diamondYellow',
       correctAnswer: 'yellow',
       image: Assets.diamondYellow,
       difficulty: Difficulty.easy,
     ),
     Question(
-      question: 'teal',
+      question: 'heartTeal',
       correctAnswer: 'teal',
       image: Assets.heartTeal,
       difficulty: Difficulty.easy,
     ),
     Question(
-      question: 'pink',
+      question: 'heartPink',
       correctAnswer: 'pink',
       image: Assets.heartPink,
       difficulty: Difficulty.easy,
     ),
     Question(
-      question: 'brown',
+      question: 'heptagonBrown',
       correctAnswer: 'brown',
       image: Assets.heptagonBrown,
       difficulty: Difficulty.easy,
     ),
     Question(
-      question: 'green',
+      question: 'heptagonGreen',
       correctAnswer: 'green',
       image: Assets.heptagonGreen,
       difficulty: Difficulty.easy,
     ),
     Question(
-      question: 'violet',
-      correctAnswer: 'violet',
-      image: Assets.heptagonViolet,
+      question: 'heptagonPurple',
+      correctAnswer: 'purple',
+      image: Assets.heptagonPurple,
       difficulty: Difficulty.easy,
     ),
     Question(
-      question: 'brown',
+      question: 'hexagonBrown',
       correctAnswer: 'brown',
       image: Assets.hexagonBrown,
       difficulty: Difficulty.easy,
     ),
     Question(
-      question: 'violet',
+      question: 'hexagonViolet',
       correctAnswer: 'violet',
       image: Assets.hexagonViolet,
       difficulty: Difficulty.easy,
     ),
     Question(
-      question: 'pink',
+      question: 'rectanglePink',
       correctAnswer: 'pink',
       image: Assets.rectanglePink,
       difficulty: Difficulty.easy,
     ),
     Question(
-      question: 'blue',
+      question: 'squareBlue',
       correctAnswer: 'blue',
       image: Assets.squareBlue,
       difficulty: Difficulty.easy,
     ),
     Question(
-      question: 'red',
+      question: 'squareRed',
       correctAnswer: 'red',
       image: Assets.squareRed,
       difficulty: Difficulty.easy,
     ),
     Question(
-      question: 'green',
+      question: 'trapezoidGreen',
       correctAnswer: 'green',
       image: Assets.trapezoidGreen,
       difficulty: Difficulty.easy,
     ),
     Question(
-      question: 'violet',
-      correctAnswer: 'violet',
-      image: Assets.trapezoidViolet,
+      question: 'trapezoidPurple',
+      correctAnswer: 'purple',
+      image: Assets.trapezoidPurple,
       difficulty: Difficulty.easy,
     ),
     Question(
-      question: 'blue',
+      question: 'triangleBlue',
       correctAnswer: 'blue',
       image: Assets.triangleBlue,
       difficulty: Difficulty.easy,
     ),
     Question(
-      question: 'red',
+      question: 'triangleRed',
       correctAnswer: 'red',
       image: Assets.triangleRed,
       difficulty: Difficulty.easy,
     ),
   ];
+
+  static const numberTracing = [
+    Question(
+      question: 'zero',
+      correctAnswer: '0',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'one',
+      correctAnswer: '1',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'two',
+      correctAnswer: '2',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'three',
+      correctAnswer: '3',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'four',
+      correctAnswer: '4',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'five',
+      correctAnswer: '5',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'six',
+      correctAnswer: '6',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'seven',
+      correctAnswer: '7',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'eight',
+      correctAnswer: '8',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'nine',
+      correctAnswer: '9',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'ten',
+      correctAnswer: '10',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'eleven',
+      correctAnswer: '11',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'twelve',
+      correctAnswer: '12',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'thirteen',
+      correctAnswer: '13',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'fourteen',
+      correctAnswer: '14',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'fifteen',
+      correctAnswer: '15',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'sixteen',
+      correctAnswer: '16',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'seventeen',
+      correctAnswer: '17',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'eighteen',
+      correctAnswer: '18',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'nineteen',
+      correctAnswer: '19',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'twenty',
+      correctAnswer: '20',
+      difficulty: Difficulty.easy,
+    ),
+  ];
+
+  static const letterTracing = [
+    Question(
+      question: 'Aa',
+      correctAnswer: 'Aa',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'Bb',
+      correctAnswer: 'Bb',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'Cc',
+      correctAnswer: 'Cc',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'Dd',
+      correctAnswer: 'Dd',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'Ee',
+      correctAnswer: 'Ee',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'Ff',
+      correctAnswer: 'Ff',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'Gg',
+      correctAnswer: 'Gg',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'Hh',
+      correctAnswer: 'Hh',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'Ii',
+      correctAnswer: 'Ii',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'Jj',
+      correctAnswer: 'Jj',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'Kk',
+      correctAnswer: 'Kk',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'Ll',
+      correctAnswer: 'Ll',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'Mm',
+      correctAnswer: 'Mm',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'Nn',
+      correctAnswer: 'Nn',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'Oo',
+      correctAnswer: 'Oo',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'Pp',
+      correctAnswer: 'Pp',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'Qq',
+      correctAnswer: 'Qq',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'Rr',
+      correctAnswer: 'Rr',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'Ss',
+      correctAnswer: 'Ss',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'Tt',
+      correctAnswer: 'Tt',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'Uu',
+      correctAnswer: 'Uu',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'Vv',
+      correctAnswer: 'Vv',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'Ww',
+      correctAnswer: 'Ww',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'Xx',
+      correctAnswer: 'Xx',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'Yy',
+      correctAnswer: 'Yy',
+      difficulty: Difficulty.easy,
+    ),
+    Question(
+      question: 'Zz',
+      correctAnswer: 'Zz',
+      difficulty: Difficulty.easy,
+    ),
+  ];
 }
+
