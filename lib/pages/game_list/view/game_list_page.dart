@@ -10,9 +10,6 @@ import '../../../widgets/widgets.dart';
 import '../bloc/bloc.dart';
 import 'view.dart';
 
-GlobalKey gameListBodyKey = GlobalKey();
-GlobalKey gameListGamesKey = GlobalKey();
-
 class GameListPage extends StatefulWidget {
   static const route = '/game-list';
   final GameListState initialState;
@@ -28,6 +25,8 @@ class GameListPage extends StatefulWidget {
 
 class _GameListPageState extends State<GameListPage> {
   final PageController _pageController = PageController();
+  final GlobalKey _gameListBodyKey = GlobalKey();
+  final GlobalKey _gameListGamesKey = GlobalKey();
   TutorialCoachMark? tutorialCoachMark;
   late GameListBloc _bloc;
 
@@ -47,7 +46,7 @@ class _GameListPageState extends State<GameListPage> {
         return [
           TargetFocus(
             identify: 'welcome',
-            keyTarget: gameListBodyKey,
+            keyTarget: _gameListBodyKey,
             shape: ShapeLightFocus.RRect,
             radius: 18,
             enableOverlayTab: true,
@@ -73,7 +72,7 @@ class _GameListPageState extends State<GameListPage> {
         return [
           TargetFocus(
             identify: 'games',
-            keyTarget: gameListGamesKey,
+            keyTarget: _gameListGamesKey,
             shape: ShapeLightFocus.RRect,
             radius: 18,
             enableOverlayTab: true,
@@ -214,10 +213,11 @@ class _GameListPageState extends State<GameListPage> {
                 bottom: 78,
               ),
               child: BodyContainer(
-                key: gameListBodyKey,
+                key: _gameListBodyKey,
                 text: state.student?.firstName?.toUpperCase() ?? '',
                 child: GameListBody(
                   pageController: _pageController,
+                  gamesSectionKey: _gameListGamesKey,
                 ),
               ),
             );

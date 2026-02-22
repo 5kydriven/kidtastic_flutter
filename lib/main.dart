@@ -21,6 +21,7 @@ import 'constants/constants.dart';
 import 'pages/bubble_game/bubble_game.dart';
 import 'pages/game_list/game_list.dart';
 import 'pages/home/home.dart';
+import 'pages/letter_game/letter_game.dart';
 import 'pages/login/login.dart';
 import 'pages/match_game/match_game.dart';
 import 'pages/math_game/math_game.dart';
@@ -327,6 +328,14 @@ class _MyAppState extends State<MyApp> {
           builder: (context, state) {
             return TracingGamePage(
               initialState: state.extra as TracingGameState,
+            );
+          },
+        ),
+        GoRoute(
+          path: LetterGamePage.route,
+          builder: (context, state) {
+            return LetterGamePage(
+              initialState: state.extra as LetterGameState,
             );
           },
         ),

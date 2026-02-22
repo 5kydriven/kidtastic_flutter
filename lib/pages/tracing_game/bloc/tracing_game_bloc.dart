@@ -69,7 +69,7 @@ class TracingGameBloc extends Bloc<TracingGameEvent, TracingGameState> {
       case ResultStatus.success:
         final gameQuestionResult = await _gameQuestionRepository.getQuestion(
           gameId: state.game?.id ?? 0,
-          // limit: 21,
+          limit: 30,
           isRandom: false,
         );
 

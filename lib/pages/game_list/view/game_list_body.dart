@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kidtastic_flutter/pages/bubble_game/bubble_game.dart';
 import 'package:kidtastic_flutter/pages/counting_game/counting_game.dart';
-import 'package:kidtastic_flutter/pages/game_list/view/view.dart';
 import 'package:kidtastic_flutter/pages/pronunciation_game/pronunciation_game.dart';
 import 'package:kidtastic_flutter/widgets/widgets.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -11,15 +10,18 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../../../constants/constants.dart';
 import '../../../models/models.dart';
 import '../../color_game/color_game.dart';
+import '../../letter_game/letter_game.dart';
 import '../../match_game/match_game.dart';
 import '../../tracing_game/tracing_game.dart';
 import '../bloc/bloc.dart';
 
 class GameListBody extends StatelessWidget {
   final PageController pageController;
+  final GlobalKey gamesSectionKey;
   const GameListBody({
     super.key,
     required this.pageController,
+    required this.gamesSectionKey,
   });
 
   void _handleGameRoute(BuildContext context, Game game) {
@@ -98,6 +100,14 @@ class GameListBody extends StatelessWidget {
             student: state.student,
           ),
         );
+      case GameType.letterTracing:
+        context.push(
+          LetterGamePage.route,
+          extra: LetterGameState(
+            game: game,
+            student: state.student,
+          ),
+        );
       default:
         context.push(
           game.route ?? '',
@@ -141,13 +151,13 @@ class GameListBody extends StatelessWidget {
                 spacing: 24,
                 children: [
                   Container(
+                    key: gamesSectionKey,
                     width: 624,
                     height: 412,
                     padding: EdgeInsets.symmetric(
                       horizontal: 12,
                     ),
                     child: PageView.builder(
-                      clipBehavior: Clip.none,
                       controller: pageController,
                       physics: const NeverScrollableScrollPhysics(),
                       itemCount: totalPages,
@@ -159,7 +169,6 @@ class GameListBody extends StatelessWidget {
                         final pageItems = games.sublist(start, end);
 
                         return GridView.builder(
-                          key: gameListGamesKey,
                           clipBehavior: Clip.none,
                           gridDelegate:
                               const SliverGridDelegateWithFixedCrossAxisCount(

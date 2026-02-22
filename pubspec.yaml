@@ -68,6 +68,7 @@ flutter:
     - assets/color/
     - assets/letters/
     - assets/trace/
+    - assets/letter_trace/
 
   fonts:
     - family: Vag

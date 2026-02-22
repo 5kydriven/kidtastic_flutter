@@ -5,6 +5,7 @@ import 'dart:math' hide log;
 import 'package:kidtastic_flutter/constants/constants.dart';
 import 'package:kidtastic_flutter/pages/bubble_game/bubble_game.dart';
 import 'package:kidtastic_flutter/pages/counting_game/view/counting_game_page.dart';
+import 'package:kidtastic_flutter/pages/letter_game/letter_game.dart';
 import 'package:kidtastic_flutter/pages/pronunciation_game/view/pronunciation_game_page.dart';
 import 'package:kidtastic_flutter/pages/shape_game/view/shape_game_page.dart';
 import 'package:kidtastic_flutter/pages/tracing_game/view/tracing_game_page.dart';
@@ -75,9 +76,16 @@ class InitialDataSeeder {
       Game(
         name: 'Trace Space',
         category: GameType.traceSpace,
-        imageAsset: Assets.gamesBtn,
-        description: 'Learn to trace numbers and letters',
+        imageAsset: Assets.traceSpaceBtn,
+        description: 'Learn to trace numbers',
         route: TracingGamePage.route,
+      ),
+      Game(
+        name: 'Letter Tracing',
+        category: GameType.letterTracing,
+        imageAsset: Assets.letterTraceBtn,
+        description: 'Learn to trace letters',
+        route: LetterGamePage.route,
       ),
     ];
 
@@ -99,6 +107,7 @@ class InitialDataSeeder {
     await _seedBubblePop(gameIds[3]);
     await _seedColors(gameIds[4]);
     await _seedTracingSpace(gameIds[5]);
+    await _seedLetterTracing(gameIds[6]);
   }
 
   // ---------------------------
@@ -276,12 +285,25 @@ class InitialDataSeeder {
   // 🎨 Tracing Space GAME
   // ---------------------------
   Future<void> _seedTracingSpace(int gameId) async {
-    // final items = [
-    //   ...SeedData.numberTracing,
-    //   ...SeedData.letterTracing,
-    // ];
-
     final items = SeedData.numberTracing;
+
+    for (final item in items) {
+      await _gameQuestionRepository.addQuestion(
+        question: Question(
+          gameId: gameId,
+          question: item.question,
+          correctAnswer: item.correctAnswer,
+          difficulty: item.difficulty,
+        ),
+      );
+    }
+  }
+
+  // ---------------------------
+  // 🎨 Letter Tracing GAME
+  // ---------------------------
+  Future<void> _seedLetterTracing(int gameId) async {
+    final items = SeedData.letterTracing;
 
     for (final item in items) {
       await _gameQuestionRepository.addQuestion(

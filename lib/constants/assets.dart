@@ -241,4 +241,11 @@ class Assets {
   static const tracePlayBtn = 'assets/trace/trace_play_btn.png';
   static const traceQuitBtn = 'assets/trace/trace_quit_btn.png';
   static const traceLogo = 'assets/trace/trace_logo.png';
+
+  // Letter Tracing Game
+  static const letterBg = 'assets/letter_trace/letter_bg.png';
+  static const letterContainer = 'assets/letter_trace/letter_container.png';
+  static const letterLogo = 'assets/letter_trace/letter_logo.png';
+  static const playBtn = 'assets/letter_trace/play_btn.png';
+  static const quitBtn = 'assets/letter_trace/quit_btn.png';
 }
